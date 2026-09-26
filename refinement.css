@@ -437,3 +437,18 @@ dialog { border-radius: 17px; }
 @media(prefers-reduced-motion:reduce) {
   .hero, .studio-panel, .scent-dot, .card-add { transition: none; }
 }
+/* Original OREYN product photography, supplied by the brand. */
+.original-product-stage { position: relative; z-index: 2; height: 420px; padding: 0 24px; background: #fff; }
+.hero-original-photo { width: 100%; height: 100%; object-fit: contain; }
+.studio-panel:has(.original-product-stage) .studio-top { background: #fff; }
+.studio-panel:has(.original-product-stage) .scent-environment,
+.studio-panel:has(.original-product-stage) .hero-aura { display: none; }
+.original-product-photo { display: block; width: 100%; height: 100%; object-fit: contain; }
+.product-art:has(.original-product-photo), .detail-art:has(.original-product-photo) { background: #fff; }
+.product-view .original-product-photo { position: absolute; inset: 0; padding: 36px 12px 52px; }
+.detail-art > .original-product-photo { position: absolute; inset: 0; padding: 55px 20px 70px; }
+.bag-thumb .original-product-photo, .search-result .original-product-photo, .result-art .original-product-photo { background: #fff; }
+.campaign-image:has(img[src$="oreyn-original.jpg"]) { background: #fff; }
+.campaign-image img[src$="oreyn-original.jpg"] { object-fit: contain; }
+.campaign-image:has(img[src$="oreyn-original.jpg"]) .campaign-overlay { display: none; }
+@media (max-width: 760px) { .original-product-stage { height: 360px; } }

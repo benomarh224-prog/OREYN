@@ -1,6 +1,6 @@
 # OREYN — slice of life.
 
-A responsive perfume concept store built with HTML, CSS, JavaScript, and a dependency-free WebGL sculpture.
+A responsive perfume concept store built with HTML, CSS, and JavaScript, featuring the original product photograph supplied by the brand.
 
 ## Run locally
 
@@ -18,9 +18,8 @@ After pushing a change, Vercel's connected Git integration should create a deplo
 
 ## Features
 
-- Clean split-layout homepage, a dedicated 3D scent studio, readable product cards, and direct add-to-bag actions.
-- A fully modeled WebGL perfume bottle: 360° drag rotation, keyboard rotation, 80–140% zoom, removable cap and visible nozzle, and a reset control. Labels are generated locally, with no external 3D dependency.
-- Three immersive scent environments: Solar Drift's golden-hour light, After Hours' midnight chrome, and Soft Static's drifting mist. Includes illustration fallback, context-loss recovery, reduced-motion support, and an explicit pause control.
+- Clean split-layout homepage, readable product cards, and direct add-to-bag actions.
+- Original OREYN bottle photography in the hero, collection, product details, bag, search, quiz, and story. Earlier WebGL prototype source is retained but is not loaded by the page.
 - Fragrance collection with mood filters, locally saved favorites, search, detailed scent views, 50/100 ml sizes, and shareable scent URLs.
 - Three-question scent finder, discovery set, original campaign artwork, readable journal articles, and accessible FAQ accordions.
 - Persistent size-specific bag, quantity controls, gift presentation, estimated delivery, and a clearly identified order preview.

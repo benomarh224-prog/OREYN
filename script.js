@@ -24,7 +24,7 @@ let saved = new Set(Array.isArray(savedRaw) ? savedRaw.filter(id => typeof id ==
 let filter = 'all', heroId = 'solar', detailId = 'solar', detailSize = '50', giftWrap = false;
 let toastTimer, lastModalTrigger;
 const heart = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z"/></svg>';
-function bottleMarkup(id, size = '50') { const p = products[id]; return `<div class="mini-bottle" aria-hidden="true"><div class="mini-cap"></div><div class="mini-body"><b>oreyn<sup>®</sup></b><span>${p.name.toUpperCase()}</span><small class="mini-volume">EAU DE PARFUM / ${size} ML</small></div></div>`; }
+function bottleMarkup(id, size = '50') { return `<img class="original-product-photo" src="assets/oreyn-original.jpg" alt="OREYN perfume bottle" width="1024" height="1280" loading="lazy">`; }
 function notify(message, showBag = false) {
   const el = $('#toast'); el.replaceChildren();
   const text = document.createElement('span'); text.textContent = message; el.append(text);
@@ -116,7 +116,7 @@ const info = {
 };
 function openArticle(id) { const a = articles[id]; if (!a) return; $('#editorial-content').innerHTML = `<span class="eyebrow">${a.category}</span><h2>${a.title}</h2><p class="article-intro">${a.intro}</p>${a.body.map(([title, text]) => `<h3>${title}</h3><p>${text}</p>`).join('')}<button class="pill dark" data-discovery-link>Explore a new feeling <span>↗</span></button>`; openModal('#editorial-dialog'); }
 function openInfo(id) { const content = info[id]; if (!content) return; $('#editorial-content').innerHTML = `<span class="eyebrow">OREYN / THE DETAILS</span><h2>${content.title}</h2>${content.paragraphs.map(p => `<p>${p}</p>`).join('')}`; openModal('#editorial-dialog'); }
-function setHero(id) { heroId = id; const p = products[id]; $('.hero').dataset.active = id; $('#hero-name').textContent = p.name; $('#hero-tagline').textContent = p.tagline; $('#hero-descriptor').textContent = `${p.number} / ${p.descriptor}`; $('#bottle-scent').textContent = p.name.toUpperCase(); $('#bottle-number').textContent = p.number; $('#hero-counter').textContent = `${p.number.slice(1)} — 03`; $$('[data-hero]').forEach(button => { const active = button.dataset.hero === id; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); }); }
+function setHero(id) { heroId = id; const p = products[id]; $('.hero').dataset.active = id; $('#hero-name').textContent = p.name; $('#hero-tagline').textContent = p.tagline; $('#hero-descriptor').textContent = `${p.number} / ${p.descriptor}`; $('#hero-counter').textContent = `${p.number.slice(1)} — 03`; $$('[data-hero]').forEach(button => { const active = button.dataset.hero === id; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); }); }
 function closeMenu() { $('#mobile-nav').hidden = true; $('#menu-toggle').setAttribute('aria-expanded', 'false'); $('#menu-toggle').setAttribute('aria-label', 'Open navigation'); }
 document.addEventListener('click', async event => {
   const button = event.target.closest('button, a'); if (!button) return;
@@ -128,7 +128,7 @@ document.addEventListener('click', async event => {
   if (button.dataset.hero) setHero(button.dataset.hero);
   if (button.hasAttribute('data-open-quiz')) { quizAnswers = []; renderQuiz(); openModal('#quiz-dialog'); }
   if (button.hasAttribute('data-open-search')) { $('#search-input').value = ''; searchProducts(); openModal('#search-dialog'); $('#search-input').focus(); }
-  if (button.dataset.detailSize) { detailSize = button.dataset.detailSize; $$('.size-options button').forEach(el => { const active = el.dataset.detailSize === detailSize; el.classList.toggle('active', active); el.setAttribute('aria-pressed', active); }); $('#product-detail .mini-volume').textContent = `EAU DE PARFUM / ${detailSize} ML`; $('#detail-add').dataset.size = detailSize; $('#detail-add').innerHTML = `Add to bag — ${money(products[detailId].sizes[detailSize])}<span>↗</span>`; }
+  if (button.dataset.detailSize) { detailSize = button.dataset.detailSize; $$('.size-options button').forEach(el => { const active = el.dataset.detailSize === detailSize; el.classList.toggle('active', active); el.setAttribute('aria-pressed', active); }); $('#detail-add').dataset.size = detailSize; $('#detail-add').innerHTML = `Add to bag — ${money(products[detailId].sizes[detailSize])}<span>↗</span>`; }
   if (button.hasAttribute('data-quantity')) { const index = Number(button.dataset.quantity); const delta = Number(button.dataset.delta); if (cart[index]) { cart[index].quantity = Math.min(99, cart[index].quantity + delta); if (cart[index].quantity <= 0) cart.splice(index, 1); renderBag(); const next = $(`[data-quantity="${index}"][data-delta="${delta}"]:not(:disabled)`) || $('#continue-shopping'); next?.focus({ preventScroll: true }); } }
   if (button.hasAttribute('data-remove')) { cart.splice(Number(button.dataset.remove), 1); renderBag(); $('#continue-shopping').focus({ preventScroll: true }); }
   if (button.dataset.quizAnswer && quizAnswers.length < 3) { quizAnswers.push(button.dataset.quizAnswer); renderQuiz(); }
