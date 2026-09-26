@@ -10,7 +10,13 @@ npm run dev
 
 Open http://localhost:3000. Set `PORT` to choose another port. No dependency installation is required.
 
-## Included
+## Deploy on Vercel
+
+Import this repository with the repository root as the Root Directory and `main` as the production branch. `vercel.json` selects the Other preset, runs `npm run build`, and publishes `dist/`. The build copies only the public storefront and assets; `server.js` is used only for local development.
+
+After pushing a change, Vercel's connected Git integration should create a deployment. If automatic deployments are disabled, redeploy the latest commit from the Vercel dashboard. A previously deployed URL will not pick up new files until a deployment completes.
+
+## Features
 
 - Clean split-layout homepage, a dedicated 3D scent studio, readable product cards, and direct add-to-bag actions.
 - A fully modeled WebGL perfume bottle: 360° drag rotation, keyboard rotation, 80–140% zoom, removable cap and visible nozzle, and a reset control. Labels are generated locally, with no external 3D dependency.
