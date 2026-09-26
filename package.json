@@ -2,12 +2,12 @@
   "name": "oreyn",
   "version": "1.0.0",
   "private": true,
-  "description": "Oreyn — slice of life. A modern perfume concept store.",
+  "description": "OREYN perfume storefront in Tetouan",
   "scripts": {
     "build": "node build.js",
     "start": "node server.js",
     "dev": "node server.js",
-    "check": "node --check script.js && node --check scene.js && node --check viewer-state.js && node --check server.js && node --check build.js",
+    "check": "node --check script.js && node --check config.js && node --check store.js && node --check server.js && node --check build.js",
     "test": "node --test --test-isolation=none tests/*.test.js"
   }
 }

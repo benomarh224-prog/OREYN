@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = __dirname;
 const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.woff2': 'font/woff2' };
-const publicFiles = new Set(['index.html', 'style.css', 'refinement.css', 'bottle.css', 'script.js', 'scene.js', 'viewer-state.js']);
+const publicFiles = new Set(['index.html', 'shop.css', 'config.js', 'store.js', 'script.js']);
 const port = Number(process.env.PORT) || 3000;
 const server = http.createServer((req, res) => {
   let pathname;
