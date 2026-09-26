@@ -1,0 +1,439 @@
+/* Oreyn's visual system: quieter composition, legible copy, direct actions. */
+:root {
+  --paper: #f7f6f1;
+  --ink: #242820;
+  --muted: #656c5d;
+  --line: #dedfd5;
+  --orange: #dc552b;
+  --page-gutter: clamp(22px, 5vw, 80px);
+}
+body { font-size: 15px; }
+h2 { font-size: clamp(32px, 3.1vw, 48px); letter-spacing: -.055em; }
+.eyebrow { font-size: 10px; letter-spacing: 1.35px; line-height: 1.6; }
+.section-padding { padding: 88px var(--page-gutter); }
+.announcement { min-height: 34px; padding: 8px var(--page-gutter); font-size: 9px; }
+.announcement a { font-size: 11px; }
+.announcement-end { display: none; }
+.site-header { height: 88px; padding: 0 var(--page-gutter); background: #f7f6f1ed; }
+.logo { font-size: 42px; letter-spacing: -3px; }
+.desktop-nav, .desktop-nav button { font-size: 13px; }
+.desktop-nav { gap: 32px; }
+.desktop-nav a, .desktop-nav button { min-height: 44px; display: inline-flex; align-items: center; }
+.icon-button { height: 44px; width: 44px; }
+.bag-button { min-height: 44px; font-size: 13px; }
+.bag-button > span { width: 28px; height: 28px; font-size: 11px; }
+.header-actions { gap: 15px; }
+.pill { font-size: 14px; min-height: 52px; padding: 16px 23px; gap: 28px; }
+.text-link { font-size: 13px; min-height: 44px; }
+.pill:hover { transform: translateY(-2px); }
+
+/* The primary action and the product each get a clear, separate area. */
+.hero, .hero[data-active=after], .hero[data-active=soft] {
+  height: auto; min-height: 0; max-height: none; overflow: visible;
+  display: grid; grid-template-columns: .9fr 1.1fr; align-items: center;
+  gap: clamp(35px, 6vw, 95px); padding: 54px var(--page-gutter) 56px;
+  background: var(--paper); color: var(--ink); isolation: auto;
+}
+.hero-intro { padding: 12px 0; min-width: 0; }
+.hero-intro > .eyebrow { display: block; margin-bottom: 26px; }
+.hero h1 {
+  font-size: clamp(82px, 9.5vw, 150px); font-weight: 500;
+  letter-spacing: -.075em; word-spacing: normal; line-height: .99;
+  white-space: normal; margin: 0 0 30px;
+}
+.hero h1 .hero-period { display: inline; font-size: inherit; margin: 0; vertical-align: baseline; letter-spacing: inherit; color: var(--orange); }
+.hero-lede { font-size: clamp(19px, 1.65vw, 25px); letter-spacing: -.65px; line-height: 1.4; margin: 0 0 15px; }
+.hero-description { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 365px; margin: 0; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 25px; margin-top: 29px; }
+.hero-actions .text-link { border-bottom: 0; }
+.hero-small-note { display: flex; gap: 14px; align-items: center; font-size: 11px; color: var(--muted); margin: 37px 0 0; }
+.hero-small-note span { font-size: 10px; padding-right: 14px; border-right: 1px solid #b9bfb1; }
+.hero[data-active=after] .hero-intro .dark { background: var(--ink); color: var(--paper); }
+
+/* A self-contained studio keeps its controls separate from page navigation. */
+.studio-panel { position: relative; isolation: isolate; min-width: 0; overflow: hidden; border-radius: 24px; border: 1px solid #dce0d1; background: #e9ecdf; transition: background-color .7s, color .7s; }
+.studio-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 24px 0; position: relative; z-index: 4; }
+.studio-top > .eyebrow { font-size: 9px; letter-spacing: 1px; }
+.studio-badge { border: 1px solid #b2bda2; border-radius: 20px; font-size: 9px; padding: 3px 6px; margin-left: 7px; letter-spacing: 0; }
+#motion-toggle { min-height: 40px; padding: 4px 0 4px 8px; font-size: 8px; letter-spacing: .6px; display: inline-flex; align-items: center; gap: 6px; color: #5b6651; }
+#motion-toggle > span:first-child { font-size: 18px; }
+.hero-aura { inset: 80px 0 auto; width: 100%; height: 430px; translate: none; }
+.scent-environment { z-index: -1; }
+.environment-sun { width: 300px; height: 300px; top: 115px; left: 45%; opacity: .22; }
+.environment-rays { opacity: .2; }
+.environment-chrome { left: -8%; top: 95px; width: 116%; height: 240px; }
+.environment-chrome:before { opacity: .4; }
+.environment-chrome:after { display: none; }
+.environment-mist { top: 150px; left: -10%; width: 120%; filter: blur(32px); }
+.mist-two { top: 275px; }
+.product-scene { position: relative; inset: auto; width: 100%; height: 395px; perspective: 1100px; z-index: 2; }
+.product-scene canvas { inset: 0; height: calc(100% - 70px); width: 100%; }
+.studio-caption { display: none; }
+.viewer-controls { bottom: 20px; max-width: calc(100% - 28px); padding: 4px 7px; border: 1px solid #bac5b078; background: #fafbf4c9; box-shadow: none; gap: 0; }
+.viewer-controls button { width: 39px; min-width: 39px; height: 40px; font-size: 21px; }
+.viewer-controls #viewer-cap { width: auto; min-width: 95px; padding: 0 12px; font-size: 11px; }
+.viewer-controls output { min-width: 37px; font-size: 10px; }
+.control-divider { margin: 0 3px; }
+.viewer-help { bottom: 0; font-size: 8px; letter-spacing: .7px; color: #58634c; }
+.bottle-3d-ready > .bottle-shadow { bottom: 94px; opacity: .2; }
+.product-scene:not(.bottle-3d-ready) .bottle { top: -24px; scale: .69; }
+.hero-product {
+  position: relative; inset: auto; width: auto; z-index: 3; padding: 24px;
+  margin-top: 15px; border-top: 1px solid #cbd3c1;
+  background: #f5f7ee66; backdrop-filter: blur(8px);
+}
+.hero-product > .eyebrow { font-size: 9px; letter-spacing: 1px; }
+.hero-product-heading { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 4px; }
+.hero-product h2 { font-size: 29px; letter-spacing: -1px; margin: 0; }
+.hero-product .text-link { width: auto; min-height: 42px; padding: 8px 0; font-size: 12px; border-bottom: 0; gap: 13px; }
+.hero-product p { font-size: 13px; margin: 4px 0 19px; color: #66705b; }
+.scent-switcher { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin: 0; }
+.scent-switcher .scent-dot { width: auto; height: 42px; min-width: 0; border: 1px solid #b8c2ad; background: transparent; border-radius: 22px; font-size: 11px; color: #4b5840; transition: background .2s; }
+.scent-switcher .scent-dot.active { border-color: var(--ink); background: var(--ink); color: #fff; }
+.scent-dot.active:after { display: none; }
+.scent-switcher > span { display: none; }
+.hero[data-active=after] .studio-panel { background: #1c2332; color: #f0eff7; border-color: #353e51; }
+.hero[data-active=after] .hero-product { background: #273044a1; border-color: #4e5871; }
+.hero[data-active=after] .hero-product p { color: #bfc5d6; }
+.hero[data-active=after] #motion-toggle { color: #c5cbdf; }
+.hero[data-active=after] .scent-switcher .scent-dot { border-color: #606a82; color: #dbe0ec; background: transparent; }
+.hero[data-active=after] .scent-switcher .scent-dot.active { border-color: #ebebf5; background: #ebebf5; color: #222b3a; }
+.hero[data-active=soft] .studio-panel { background: #dfeae3; border-color: #cbd9ce; }
+.hero[data-active=soft] .hero-product { background: #f4f8f175; }
+
+/* Three useful shortcuts replace the moving promotional strip. */
+.quick-paths { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0 var(--page-gutter); padding: 25px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.quick-paths > a, .quick-paths > button { display: flex; align-items: center; gap: 17px; text-align: left; padding: 8px 24px; border-right: 1px solid var(--line); }
+.quick-paths > :first-child { padding-left: 0; }
+.quick-paths > :last-child { border-right: 0; }
+.path-number { font-size: 11px; color: #8a947b; }
+.quick-paths strong { display: block; font-size: 14px; font-weight: 500; letter-spacing: -.2px; }
+.quick-paths small { display: block; font-size: 12px; color: var(--muted); margin-top: 5px; }
+.quick-paths > a > span:last-child, .quick-paths > button > span:last-child { margin-left: auto; font-size: 19px; }
+.quick-paths > :hover strong { color: var(--orange); }
+
+.section-heading { margin-bottom: 30px; gap: 30px; }
+.section-heading h2 { margin-top: 13px; }
+.section-heading > p { font-size: 14px; }
+.collection-toolbar { margin-bottom: 28px; padding-bottom: 20px; }
+.filters { gap: 8px; flex-wrap: wrap; overflow: visible; }
+.filters button { font-size: 13px; min-height: 43px; padding: 10px 20px; border-color: var(--line); }
+.filters button span { font-size: 11px; }
+.collection-count { font-size: 12px; }
+.product-grid { gap: 26px; }
+.product-art { height: 370px; border-radius: 15px; }
+.art-index { font-size: 9px; letter-spacing: .9px; top: 22px; left: 22px; }
+.save-button { width: 44px; height: 44px; background: #ffffff42; }
+.product-view { inset: 40px 0 74px; }
+.product-card .mini-bottle { top: 32px; scale: 1.02; }
+.product-card .art-mood { font-size: 25px; letter-spacing: -.8px; bottom: 23px; }
+.product-info { padding-top: 20px; }
+.product-info h3 { font-size: 24px; letter-spacing: -.8px; }
+.product-info h3 button { min-height: 38px; }
+.product-info > div > span { font-size: 16px; }
+.product-info > p { font-size: 13px; line-height: 1.6; margin: 4px 0 15px; }
+.product-info-bottom { padding-top: 11px; border-top: 0; }
+.product-info .product-info-bottom > span { font-size: 10px; letter-spacing: .5px; }
+.product-info-bottom button { min-height: 38px; font-size: 12px; }
+.card-add { display: flex; width: 100%; justify-content: space-between; align-items: center; min-height: 48px; border: 1px solid #bcc3af; border-radius: 8px; padding: 12px 16px; margin-top: 12px; font-size: 13px; transition: background .2s,color .2s; }
+.card-add:hover { background: var(--ink); border-color: var(--ink); color: white; }
+.card-add span { font-size: 20px; }
+.collection-footnote { font-size: 12px; margin-top: 33px; }
+.collection-footnote button { font-size: 12px; }
+.discovery { padding-top: 15px; gap: 8%; }
+.discovery-art { height: 485px; border-radius: 18px; }
+.discovery-art > .eyebrow { font-size: 9px; }
+.discovery-copy > p { font-size: 15px; max-width: 405px; }
+.set-list { max-width: none; }
+.set-list li { font-size: 14px; padding: 15px 0; }
+.set-list li > span { font-size: 10px; }
+.set-list small { font-size: 11px; }
+.discovery-buy small { font-size: 11px; }
+.small-note { font-size: 12px; }
+.scent-finder { margin: 0 var(--page-gutter); border-radius: 22px; padding: 65px 50px; }
+.scent-finder .eyebrow { font-size: 10px; }
+.scent-finder h2 { font-size: clamp(33px,3.7vw,52px); }
+.quiz-caption { font-size: 9px; letter-spacing: .7px; }
+.finder-label { font-size: 8px; }
+.story-heading { column-gap: 9%; }
+.story-heading p { font-size: 14px; max-width: 450px; }
+.story-signature { font-size: 18px; }
+.campaign-image { border-radius: 18px; }
+.brand-values { gap: 40px; padding-top: 30px; }
+.brand-values > div > span { font-size: 9px; }
+.brand-values h3 { font-size: 23px; }
+.brand-values p { font-size: 13px; max-width: none; }
+.journal { padding-top: 5px; }
+.journal-art { border-radius: 14px; }
+.journal-meta { font-size: 9px; }
+.journal-card h3 { font-size: 24px; }
+.faq { padding-top: 60px; }
+.faq > div > p { font-size: 14px; }
+.faq summary { font-size: 15px; padding: 24px 0; }
+.faq details p { font-size: 14px; line-height: 1.8; }
+.newsletter h2 { font-size: clamp(42px,5vw,68px); letter-spacing: -.06em; }
+.newsletter label { font-size: 14px; }
+.newsletter form > p { font-size: 12px; line-height: 1.7; }
+.email-field input { font-size: 16px; min-height: 55px; }
+.email-field button { width: 50px; }
+footer { padding: 50px var(--page-gutter) 0; }
+.footer-links { gap: 70px; }
+.footer-links > div { gap: 6px; }
+.footer-links > div > span { font-size: 10px; margin-bottom: 12px; }
+.footer-links a, .footer-links button { font-size: 13px; min-height: 34px; display: inline-flex; align-items: center; }
+.footer-wordmark { font-size: 23vw; line-height: 1.12; margin-top: 15px; }
+.footer-bottom, .footer-bottom small { font-size: 9px; letter-spacing: .5px; }
+
+/* Larger type and controls throughout the shopping flow. */
+dialog { border-radius: 17px; }
+.drawer { border-radius: 17px 0 0 17px; width: min(490px,100%); }
+.dialog-heading { gap: 16px; }
+.dialog-heading h2 { font-size: 31px; }
+.close-button { width: 44px; height: 44px; }
+.detail-content { padding: 55px 35px 32px; }
+.detail-description { font-size: 14px; line-height: 1.75; }
+.detail-tagline { font-size: 21px; }
+.note-row { font-size: 13px; padding: 12px 0; }
+.note-row > span, .size-label { font-size: 10px; }
+.size-options button { min-height: 47px; font-size: 13px; border-radius: 6px; }
+.detail-bottom { font-size: 11px; line-height: 1.6; flex-wrap: wrap; }
+.detail-bottom button { font-size: 12px; min-height: 36px; }
+.detail-actions .save-button { width: 52px; height: 52px; }
+.detail-view-bag { margin-top: 12px; }
+.detail-view-bag[hidden] { display: none; }
+.product-dialog > .floating-close { margin-bottom: -62px; }
+.bag-row { grid-template-columns: 62px 1fr auto; }
+.bag-row h3 { font-size: 16px; line-height: 1.3; }
+.bag-row small { font-size: 11px; }
+.bag-row .price { font-size: 14px; }
+.quantity { gap: 8px; }
+.quantity button { width: 34px; height: 34px; border-radius: 4px; }
+.quantity span { font-size: 13px; min-width: 18px; text-align: center; }
+.quantity .remove-item { font-size: 11px; }
+.shipping-progress { font-size: 12px; line-height: 1.7; }
+.summary-line { font-size: 14px; }
+.gift-option { font-size: 13px; min-height: 44px; }
+.bag-bottom .small-note { font-size: 11px; }
+.quiz-dialog h2 { font-size: 36px; }
+.quiz-step { font-size: 11px; }
+.quiz-option { border-radius: 9px; }
+.quiz-option b { font-size: 17px; }
+.quiz-option small { font-size: 13px; line-height: 1.6; }
+.quiz-back { font-size: 13px; min-height: 44px; }
+.quiz-result p { font-size: 14px; }
+.search-input { font-size: 16px; }
+.search-result strong { font-size: 17px; }
+.search-result small { font-size: 12px; line-height: 1.5; }
+.checkout-intro, .checkout-product { font-size: 14px; }
+.checkout-product small { font-size: 12px; }
+.checkout-form label { font-size: 13px; }
+.checkout-form input { font-size: 16px; border-radius: 7px; }
+.toast { display: flex; gap: 20px; align-items: center; font-size: 13px; padding: 12px 20px; line-height: 1.5; }
+.toast.visible { pointer-events: auto; }
+.toast button { color: #fff; text-decoration: underline; min-height: 36px; white-space: nowrap; font-size: 13px; }
+
+@media(min-width:1600px) {
+  .hero, .section-padding, .site-header, footer { padding-left: max(var(--page-gutter),calc((100vw - 1440px)/2)); padding-right: max(var(--page-gutter),calc((100vw - 1440px)/2)); }
+  .quick-paths, .scent-finder { margin-left: max(var(--page-gutter),calc((100vw - 1440px)/2)); margin-right: max(var(--page-gutter),calc((100vw - 1440px)/2)); }
+  .product-card .mini-bottle { top: 32px; scale: 1.02; }
+}
+@media(max-width:1050px) {
+  .desktop-nav { gap: 19px; }
+  .desktop-nav, .desktop-nav button { font-size: 12px; }
+  .hero { gap: 30px; padding-top: 40px; padding-bottom: 40px; }
+  .hero h1 { font-size: 94px; }
+  .hero-description { font-size: 14px; }
+  .hero-actions { gap: 15px; }
+  .hero-actions .pill { font-size: 13px; gap: 18px; padding: 15px 18px; }
+  .studio-top { padding: 14px 16px 0; }
+  .studio-top > .eyebrow { font-size: 8px; }
+  .studio-badge { display: none; }
+  .product-scene { height: 370px; }
+  .viewer-controls button { width: 32px; min-width: 32px; }
+  .viewer-controls #viewer-cap { min-width: 81px; font-size: 10px; padding: 0 7px; }
+  .viewer-controls output { min-width: 30px; }
+  .hero-product { padding: 19px; }
+  .hero-product h2 { font-size: 25px; }
+  .hero-product .text-link { font-size: 11px; gap: 8px; }
+  .scent-switcher { gap: 5px; }
+  .scent-switcher .scent-dot { font-size: 10px; }
+  .quick-paths > a, .quick-paths > button { padding-right: 16px; padding-left: 16px; gap: 11px; }
+  .quick-paths strong { font-size: 13px; }
+  .quick-paths small { font-size: 11px; }
+  .path-number { display: none; }
+  .product-art { height: 325px; }
+  .product-card .mini-bottle { scale: .87; top: 16px; }
+  .product-card .art-mood { font-size: 22px; }
+  .art-index { font-size: 7px; }
+  .product-grid { gap: 20px; }
+  .product-info h3 { font-size: 21px; }
+  .product-info > p { font-size: 12px; }
+  .scent-finder { padding: 48px 32px; }
+  .footer-links { gap: 40px; }
+}
+@media(max-width:760px) {
+  :root { --page-gutter: 22px; }
+  html { scroll-padding-top: 91px; }
+  .site-header { height: 74px; }
+  .logo { font-size: 35px; }
+  .announcement { min-height: 30px; }
+  .announcement a { font-size: 10px; }
+  .desktop-nav { display: none; }
+  .header-actions { gap: 6px; }
+  .bag-button { font-size: 12px; gap: 7px; }
+  .icon-button { width: 39px; }
+  .menu-button { width: 37px; align-items: center; }
+  .mobile-nav:not([hidden]) { padding: 12px var(--page-gutter) 24px; }
+  .mobile-nav a, .mobile-nav button { font-size: 22px; }
+  .hero, .hero[data-active=after], .hero[data-active=soft] { display: flex; flex-direction: column; gap: 29px; height: auto; padding: 33px var(--page-gutter) 31px; align-items: stretch; }
+  .hero-intro { padding: 0; }
+  .hero-intro > .eyebrow { font-size: 9px; margin-bottom: 18px; }
+  .hero h1 { font-size: clamp(74px,19vw,112px); margin-bottom: 19px; line-height: .99; letter-spacing: -.075em; }
+  .hero h1 br { display: none; }
+  .hero h1 br:after { content: ' '; }
+  .hero-lede { font-size: 20px; margin-bottom: 10px; }
+  .hero-description { font-size: 14px; max-width: 470px; line-height: 1.75; }
+  .hero-actions { margin-top: 21px; gap: 21px; }
+  .hero-actions .pill { min-height: 50px; font-size: 13px; padding: 15px 18px; }
+  .hero-actions .text-link { font-size: 13px; }
+  .hero-small-note { display: none; }
+  .studio-panel { border-radius: 18px; }
+  .studio-top { padding: 13px 17px 0; }
+  .studio-top > .eyebrow { font-size: 9px; }
+  .product-scene { inset: auto; width: 100%; height: 343px; }
+  .product-scene canvas { height: calc(100% - 71px); }
+  .viewer-controls { bottom: 22px; padding: 4px 6px; }
+  .viewer-controls button { width: 32px; min-width: 32px; height: 39px; }
+  .viewer-controls #viewer-cap { min-width: 85px; font-size: 10px; }
+  .viewer-controls output { min-width: 29px; font-size: 10px; }
+  .control-divider { margin: 0 2px; }
+  .viewer-help { bottom: 3px; font-size: 7px; }
+  .product-scene:not(.bottle-3d-ready) .bottle { top: -54px; scale: .56; }
+  .hero-product { inset: auto; width: auto; margin-top: 12px; padding: 18px; }
+  .hero-product > .eyebrow { font-size: 8px; }
+  .hero-product h2 { font-size: 27px; }
+  .hero-product .text-link { font-size: 11px; }
+  .hero-product p { font-size: 12px; margin-bottom: 16px; }
+  .scent-switcher .scent-dot { height: 43px; font-size: 10px; }
+  .quick-paths { grid-template-columns: 1fr; padding: 4px 0; }
+  .quick-paths > a, .quick-paths > button { padding: 16px 0; border-right: 0; border-bottom: 1px solid var(--line); gap: 17px; }
+  .quick-paths > :last-child { border-bottom: 0; }
+  .path-number { display: inline; font-size: 11px; }
+  .quick-paths strong { font-size: 14px; }
+  .quick-paths small { font-size: 12px; }
+  .section-padding { padding: 58px var(--page-gutter); }
+  .section-heading { margin-bottom: 23px; }
+  .section-heading h2 { font-size: 33px; letter-spacing: -1.5px; margin-top: 10px; }
+  .eyebrow { font-size: 9px; }
+  .collection-toolbar { display: block; margin-bottom: 24px; padding-bottom: 17px; }
+  .filters { flex-wrap: wrap; gap: 7px; padding: 0; margin: 0; }
+  .filters button { font-size: 12px; min-height: 41px; padding: 9px 14px; }
+  .filters button span { font-size: 10px; }
+  .collection-count { display: none; }
+  .product-grid { gap: 32px; }
+  .product-art { height: 347px; border-radius: 13px; }
+  .product-card .mini-bottle { top: 17px; scale: 1; }
+  .product-card .art-mood { font-size: 25px; }
+  .art-index { font-size: 8px; }
+  .product-info { padding-top: 15px; }
+  .product-info h3 { font-size: 24px; }
+  .product-info > p { font-size: 13px; margin-bottom: 9px; }
+  .product-info .product-info-bottom > span { font-size: 10px; }
+  .card-add { margin-top: 9px; min-height: 49px; font-size: 14px; }
+  .collection-footnote { font-size: 12px; margin-top: 28px; }
+  .collection-footnote button { font-size: 12px; text-align: left; }
+  .discovery { padding-top: 8px; gap: 28px; }
+  .discovery-art { height: 405px; }
+  .discovery-box { top: 66px; scale: .85; }
+  .discovery-copy h2 { font-size: 34px; letter-spacing: -1.6px; }
+  .discovery-copy > p { font-size: 14px; }
+  .set-list small { font-size: 10px; }
+  .discovery-buy { gap: 18px; }
+  .discovery-buy .pill { font-size: 12px; gap: 20px; padding: 15px 18px; }
+  .discovery-buy small { font-size: 10px; line-height: 1.6; }
+  .scent-finder { margin: 0 var(--page-gutter); padding: 33px 24px; border-radius: 17px; gap: 22px; }
+  .scent-finder .eyebrow { font-size: 8px; }
+  .scent-finder h2 { font-size: 32px; letter-spacing: -1.5px; margin: 18px 0 24px; }
+  .quiz-caption { font-size: 8px; }
+  .finder-art { min-height: 250px; }
+  .finder-orbit { width: 250px; }
+  .finder-core { width: 105px; height: 105px; font-size: 65px; }
+  .finder-label { font-size: 6px; }
+  .story-heading h2 { font-size: 35px; }
+  .story-heading p { font-size: 14px; }
+  .campaign-image { margin: 0; border-radius: 14px; height: 350px; }
+  .brand-values { gap: 23px; }
+  .brand-values > div { padding-bottom: 23px; }
+  .brand-values p { font-size: 13px; }
+  .journal { padding-top: 0; }
+  .journal-grid { gap: 30px; }
+  .journal-art { height: 285px; }
+  .journal-card h3 { font-size: 23px; }
+  .faq { padding-top: 40px; gap: 19px; }
+  .faq summary { font-size: 14px; padding: 22px 0; line-height: 1.5; }
+  .faq details p { font-size: 13px; max-width: 100%; }
+  .newsletter { padding-top: 37px; padding-bottom: 43px; }
+  .newsletter h2 { font-size: 49px; letter-spacing: -2.7px; }
+  .newsletter label { font-size: 13px; }
+  .newsletter form { margin-top: 28px; }
+  .newsletter form > p { font-size: 11px; }
+  footer { padding-top: 38px; }
+  .footer-links { gap: 18px; margin-top: 28px; flex-wrap: wrap; }
+  .footer-links > div > span { font-size: 9px; }
+  .footer-links a, .footer-links button { font-size: 11px; min-height: 35px; }
+  .footer-wordmark { font-size: 27vw; margin-top: 22px; }
+  .footer-bottom, .footer-bottom small { font-size: 8px; line-height: 1.6; }
+  .footer-bottom small { max-width: 67%; }
+  dialog { padding: 23px; border-radius: 14px; }
+  .drawer { width: 100%; border-radius: 0; padding: 23px; }
+  .product-dialog { padding: 0; }
+  .detail-art { min-height: 265px; }
+  .detail-art .mini-bottle { top: 21px; scale: .78; }
+  .detail-art .art-mood { font-size: 20px; bottom: 20px; }
+  .detail-content { padding: 25px 22px; }
+  .detail-content h2 { font-size: 33px; }
+  .detail-description { font-size: 13px; }
+  .detail-tagline { font-size: 18px; }
+  .detail-actions .pill { font-size: 12px; gap: 12px; }
+  .note-row { font-size: 12px; }
+  .detail-bottom { font-size: 11px; }
+  .bag-row { grid-template-columns: 48px 1fr auto; gap: 11px; }
+  .bag-row h3 { font-size: 15px; }
+  .quantity { gap: 7px; }
+  .quantity .remove-item { margin-left: 3px; font-size: 10px; }
+  .quiz-dialog h2 { font-size: 30px; }
+  .quiz-option { padding: 16px 13px; }
+  .quiz-option b { font-size: 15px; }
+  .quiz-option small { font-size: 12px; }
+  .search-input { font-size: 16px; }
+  .toast { font-size: 12px; padding: 11px 16px; gap: 13px; border-radius: 14px; max-width: calc(100% - 28px); }
+  .toast button { font-size: 12px; }
+}
+@media(max-width:365px) {
+  :root { --page-gutter: 18px; }
+  .hero h1 { font-size: 72px; }
+  .hero-actions { gap: 13px; }
+  .hero-actions .pill { padding: 14px; font-size: 12px; gap: 12px; }
+  .hero-actions .text-link { font-size: 12px; gap: 10px; }
+  .studio-top { padding: 10px 12px 0; }
+  .studio-top > .eyebrow { font-size: 8px; }
+  #motion-toggle { font-size: 7px; }
+  .viewer-controls { padding: 3px 4px; max-width: calc(100% - 12px); }
+  .viewer-controls button { min-width: 27px; width: 27px; }
+  .viewer-controls #viewer-cap { min-width: 73px; font-size: 9px; padding: 0 4px; }
+  .viewer-controls output { min-width: 25px; font-size: 9px; }
+  .control-divider { margin: 0 1px; }
+  .hero-product { padding: 15px; }
+  .hero-product h2 { font-size: 24px; }
+  .hero-product .text-link { font-size: 10px; }
+  .scent-switcher .scent-dot { font-size: 9px; }
+  .filters button { padding: 8px 12px; }
+  .section-heading h2 { font-size: 29px; }
+  .finder-orbit { width: 220px; }
+  .footer-links { column-gap: 12px; }
+  .footer-links a, .footer-links button { font-size: 10px; }
+  .discovery-buy .pill { font-size: 11px; padding: 14px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .hero, .studio-panel, .scent-dot, .card-add { transition: none; }
+}
