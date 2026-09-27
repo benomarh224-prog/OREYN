@@ -49,6 +49,7 @@ function saveButton(id) { return `<button class="save-button" data-save="${id}" 
 function renderProducts() {
   const matches = Object.entries(products).filter(([id, p]) => id !== 'discovery' && (filter === 'all' || filter === 'saved' && saved.has(id) || p.family === filter));
   $('#product-grid').innerHTML = matches.map(([id, p]) => `<article class="product-card"><div class="product-art ${id}"><span class="art-index">${p.number} / ${p.descriptor}</span>${saveButton(id)}<button class="product-view" data-product="${id}" aria-label="Explore ${p.name}">${bottleMarkup(id)}</button><span class="art-mood">${p.mood}</span></div><div class="product-info"><div><h3><button data-product="${id}">${p.name}</button></h3><span>${money(p.sizes['50'])}</span></div><p>${p.notes}</p><div class="product-info-bottom"><span>EAU DE PARFUM / 50 ML</span><button data-product="${id}">View details ↗</button></div><button class="card-add" data-add="${id}" data-size="50" aria-label="Add ${p.name}, 50 ml, to bag">Add to bag · ${money(p.sizes['50'])}<span aria-hidden="true">+</span></button></div></article>`).join('') || '<div class="empty-state"><h3>A feeling worth keeping.</h3><p>Tap a heart on any scent to keep it here.</p><button class="pill dark" data-filter="all">Explore the collection <span>↗</span></button></div>';
+  prepareCarousel();
   $('#collection-count').textContent = `${matches.length} fragrance${matches.length === 1 ? '' : 's'}`;
   $('#saved-count').textContent = saved.size;
   $$('.filters [data-filter]').forEach(button => { const active = button.dataset.filter === filter; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); });
@@ -173,3 +174,56 @@ photoStage.addEventListener('pointermove', event => {
 });
 photoStage.addEventListener('pointerleave', resetPhotoTilt);
 window.addEventListener('oreyn-motion', resetPhotoTilt);
+
+function prepareCarousel() {
+  const track = $('#product-grid');
+  const originals = [...track.children];
+  if (originals.length > 1 && originals[0].classList.contains('product-card')) {
+    [...originals, ...originals].forEach(card => {
+      const copy = card.cloneNode(true);
+      copy.dataset.carouselCopy = 'true'; copy.setAttribute('aria-hidden', 'true');
+      copy.querySelectorAll('button,a').forEach(el => el.tabIndex = -1);
+      track.append(copy);
+    });
+  }
+  track.scrollLeft = 0;
+}
+(() => {
+  const track = $('#product-grid'), pause = $('#scents-pause');
+  let paused = false, hovered = false, touching = false, inView = false, last = 0, remainder = 0, idleUntil = 0;
+  function syncPause() {
+    const stopped = paused || reducedMotion.matches || window.oreynMotionPaused;
+    pause.setAttribute('aria-pressed', String(stopped));
+    pause.setAttribute('aria-label', stopped ? 'Resume fragrance carousel' : 'Pause fragrance carousel');
+    pause.textContent = stopped ? '▷' : 'Ⅱ';
+  }
+  pause.addEventListener('click', () => { paused = !paused; if (window.oreynMotionPaused && !reducedMotion.matches) { window.oreynMotionPaused = false; updateMotion(); paused = false; } syncPause(); });
+  window.addEventListener('oreyn-motion', syncPause);
+  track.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hovered = true; });
+  track.addEventListener('pointerleave', () => hovered = false);
+  track.addEventListener('pointerdown', () => touching = true);
+  window.addEventListener('pointerup', () => { if (touching) idleUntil = performance.now() + 4000; touching = false; });
+  window.addEventListener('pointercancel', () => touching = false);
+  track.addEventListener('wheel', () => idleUntil = performance.now() + 4000, { passive: true });
+  function step(direction) {
+    paused = true; syncPause();
+    const width = (track.querySelector('.product-card')?.getBoundingClientRect().width || 280) + 20;
+    track.scrollBy({ left: width * direction, behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+  }
+  $('#scents-next').addEventListener('click', () => step(1));
+  $('#scents-previous').addEventListener('click', () => step(-1));
+  track.addEventListener('keydown', e => { if (e.target === track && ['ArrowLeft','ArrowRight'].includes(e.key)) { e.preventDefault(); step(e.key === 'ArrowRight' ? 1 : -1); } });
+  if ('IntersectionObserver' in window) new IntersectionObserver(entries => { inView = entries[0].isIntersecting; }).observe(track); else inView = true;
+  function animate(now) {
+    const dt = Math.min(now - last, 50); last = now;
+    const copy = track.querySelector('[data-carousel-copy]');
+    if (copy && inView && !document.hidden && !paused && !hovered && !touching && now > idleUntil && !track.contains(document.activeElement) && !window.oreynModalOpen && !reducedMotion.matches && !window.oreynMotionPaused) {
+      const cycle = copy.offsetLeft - track.firstElementChild.offsetLeft;
+      remainder += dt * .027;
+      const pixels = Math.floor(remainder); remainder -= pixels;
+      if (cycle > 0) { track.scrollLeft += pixels; if (track.scrollLeft >= cycle) track.scrollLeft -= cycle; }
+    }
+    requestAnimationFrame(animate);
+  }
+  syncPause(); requestAnimationFrame(animate);
+})();
