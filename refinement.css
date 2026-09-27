@@ -498,3 +498,33 @@ dialog { border-radius: 17px; }
 #product-grid .empty-state { width: 100%; flex-shrink: 0; }
 @media(max-width:900px) { .collection-layout { grid-template-columns: 1fr; gap: 22px; } .collection-editorial { padding: 0; } .collection-editorial h2 { font-size: 37px; margin: 15px 0; } .collection-editorial p { font-size: 16px; } .collection-signature { margin-top: 14px; } .carousel-controls { margin-top: 20px; } #product-grid .product-card { flex-basis: min(82vw,330px); } }
 @media(max-width:365px) { .collection-editorial h2 { font-size: 30px; } #product-grid .product-card { flex-basis: 250px; } }
+
+/* Keep the introduction compact and the controls attached to the cards. */
+#collection { scroll-margin-top: 18px; }
+.collection-editorial { text-align: left; padding: 12px 0; }
+.collection-editorial h2 { font-family: var(--display); font-size: clamp(34px,3.8vw,58px); line-height: 1.12; letter-spacing: -.055em; margin: 20px 0; }
+.collection-editorial p { font-size: 15px; line-height: 1.8; margin: 0; }
+.collection-showcase .collection-toolbar { margin: 0 0 12px; padding: 0; border: 0; }
+.carousel-navigation { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.carousel-navigation .collection-count { margin: 0; font-size: 12px; }
+.carousel-navigation .carousel-controls { margin: 0; gap: 7px; }
+.carousel-navigation .carousel-controls button { width: 44px; height: 44px; font-size: 18px; }
+#product-grid { padding-top: 0; }
+#product-grid .product-art .original-product-photo { padding: 12px 8px 34px; }
+@media(max-width:900px) {
+  .collection-layout { gap: 24px; }
+  .collection-editorial { padding: 0; }
+  .collection-editorial h2 { font-size: 36px; margin: 12px 0; }
+  .collection-editorial h2 br:first-child { display: none; }
+  .collection-editorial p { font-size: 14px; line-height: 1.65; }
+  .collection-showcase .filters { gap: 5px; }
+  .collection-showcase .filters button { font-size: 11px; min-height: 40px; padding: 8px 10px; }
+  .collection-showcase .filters button span { margin-left: 4px; }
+  #product-grid .product-card { flex-basis: min(78vw,330px); }
+  #product-grid .product-art { height: 305px; }
+  #collection .collection-footnote { margin-top: 22px; }
+}
+/* Let the product photograph lead; the name remains in the card details. */
+#product-grid .product-view { inset: 28px 0 6px; }
+#product-grid .product-art .original-product-photo { padding: 0; transform: scale(1.06); }
+#product-grid .art-mood { display: none; }

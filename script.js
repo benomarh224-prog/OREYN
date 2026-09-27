@@ -208,7 +208,8 @@ function prepareCarousel() {
   function step(direction) {
     paused = true; syncPause();
     const width = (track.querySelector('.product-card')?.getBoundingClientRect().width || 280) + 20;
-    track.scrollBy({ left: width * direction, behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+    const index = direction > 0 ? Math.floor(track.scrollLeft / width + .01) + 1 : Math.ceil(track.scrollLeft / width - .01) - 1;
+    track.scrollTo({ left: Math.max(0, index * width), behavior: reducedMotion.matches ? 'instant' : 'smooth' });
   }
   $('#scents-next').addEventListener('click', () => step(1));
   $('#scents-previous').addEventListener('click', () => step(-1));
