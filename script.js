@@ -161,3 +161,15 @@ if ('IntersectionObserver' in window && !reducedMotion.matches) { const observer
 function handleRoute() { const match = location.hash.match(/^#scent\/(solar|after|soft)$/); if (match) openProduct(match[1], false); else if ($('#product-dialog').open) closeModal($('#product-dialog')); }
 window.addEventListener('hashchange', handleRoute);
 renderProducts(); renderBag(); updateMotion(); handleRoute();
+
+// Subtle photographic depth; the supplied bottle is never presented as a 360° model.
+const photoStage = $('.original-product-stage');
+function resetPhotoTilt() { photoStage.style.removeProperty('--bottle-x'); photoStage.style.removeProperty('--bottle-y'); }
+photoStage.addEventListener('pointermove', event => {
+  if (event.pointerType !== 'mouse' || reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) { resetPhotoTilt(); return; }
+  const bounds = photoStage.getBoundingClientRect();
+  photoStage.style.setProperty('--bottle-y', `${((event.clientX - bounds.left) / bounds.width - .5) * 7}deg`);
+  photoStage.style.setProperty('--bottle-x', `${(.5 - (event.clientY - bounds.top) / bounds.height) * 5}deg`);
+});
+photoStage.addEventListener('pointerleave', resetPhotoTilt);
+window.addEventListener('oreyn-motion', resetPhotoTilt);
