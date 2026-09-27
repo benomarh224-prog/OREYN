@@ -625,3 +625,8 @@ dialog { border-radius: 17px; }
   .hero .hero-product .text-link { font-size: 10px; }
 }
 @media(prefers-reduced-motion:reduce) { .hero .hero-original-photo { transition: none; transform: scale(1.12); } }
+/* Reset legacy title-span styling and keep the photograph's white seamless. */
+.hero h1 .hero-title-line { font-size: inherit; line-height: inherit; margin: 0; vertical-align: baseline; color: inherit; }
+.hero h1 .hero-title-serif { margin-top: 6px; }
+.hero .studio-panel, .hero .original-product-stage { background: #fff; }
+.hero .original-product-stage:before { background: transparent; border: 1px solid #eceee5; }
