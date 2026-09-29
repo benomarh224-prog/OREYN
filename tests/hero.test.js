@@ -5,6 +5,13 @@ const path = require('node:path');
 const vm = require('node:vm');
 const read = name => fs.readFileSync(path.join(__dirname, '..', name), 'utf8');
 
+test('a page load starts at the top instead of restoring a stale scroll position', () => {
+  const js = read('script.js');
+  assert.match(js, /history\.scrollRestoration\s*=\s*'manual'/);
+  assert.match(js, /function resetPageScroll\(\) \{ window\.scrollTo\(0, 0\); \}/);
+  assert.match(js, /window\.addEventListener\('pageshow',[\s\S]*?resetPageScroll/);
+});
+
 test('hero copy stays in normal flow without legacy positioning at any breakpoint', () => {
   for (const file of ['style.css', 'refinement.css']) {
     for (const [, selector, declarations] of read(file).matchAll(/([^{}]+)\{([^{}]*)\}/g)) {

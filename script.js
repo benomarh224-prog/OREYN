@@ -1,6 +1,10 @@
 'use strict';
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+function resetPageScroll() { window.scrollTo(0, 0); }
+resetPageScroll();
+window.addEventListener('pageshow', () => requestAnimationFrame(resetPageScroll));
 const money = value => new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value);
 const products = {
   solar: { name: 'Solar Drift', number: '001', family: 'fresh', descriptor: 'THE GOLDEN ONE', tagline: 'Sun on skin. Now bottled.', mood: 'a little sunshine<br>goes a long way.', notes: 'Bergamot · Neroli · Soft musk', top: 'Bergamot, mandarin', heart: 'Neroli, orange blossom', base: 'Soft musk, blonde woods', description: 'The windows are open. There is nowhere you need to be. Bright citrus drifts into a heart of orange blossom, settling into the soft warmth of skin. A little golden hour, whenever you need it.', keywords: 'sun sunshine sunny bright luminous citrus floral golden fresh summer morning', sizes: { '50': 89, '100': 139 } },
