@@ -667,3 +667,14 @@ dialog { border-radius: 17px; }
   .hero-refined .hero-copy { margin-top: 18px; }
 }
 @media(prefers-reduced-motion:reduce) { .hero-swatch > span:after { transition: none; } }
+
+/* A direct transition from the shopping actions into the collection. */
+.hero.hero-refined .hero-actions { margin-bottom: 0; }
+.hero.hero-refined { padding-bottom: 40px; }
+.hero-refined + #collection { padding-top: 42px; border-top: 1px solid var(--line); }
+.footer-motion { display: flex; justify-content: flex-end; padding-top: 14px; }
+.footer-motion #motion-toggle { min-height: 44px; color: inherit; font-size: 9px; }
+@media(max-width:760px) {
+  .hero.hero-refined { padding-bottom: 28px; }
+  .hero-refined + #collection { padding-top: 30px; }
+}
