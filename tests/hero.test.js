@@ -7,9 +7,28 @@ const read = name => fs.readFileSync(path.join(__dirname, '..', name), 'utf8');
 
 test('a page load starts at the top instead of restoring a stale scroll position', () => {
   const js = read('script.js');
+  const listeners = {}, scrollCalls = [], replaceCalls = [];
+  const context = {
+    performance: { getEntriesByType: () => [{ type: 'reload' }], navigation: { type: 1 } },
+    history: { scrollRestoration: 'auto', replaceState: (...args) => replaceCalls.push(args) },
+    location: { hash: '#collection', pathname: '/', search: '' },
+    window: { scrollTo: (...args) => scrollCalls.push(args), addEventListener: (type, fn) => { listeners[type] = fn; } },
+    requestAnimationFrame: fn => fn()
+  };
+  vm.createContext(context);
+  vm.runInContext(js.slice(js.indexOf('const navigationEntry'), js.indexOf('const money')), context);
+  assert.equal(context.history.scrollRestoration, 'manual');
+  assert.deepEqual(replaceCalls[0], [null, '', '/']);
+  assert.ok(scrollCalls.length >= 2);
+  assert.equal(typeof listeners.pageshow, 'function');
+  assert.equal(typeof listeners.load, 'function');
   assert.match(js, /history\.scrollRestoration\s*=\s*'manual'/);
   assert.match(js, /function resetPageScroll\(\) \{ window\.scrollTo\(0, 0\); \}/);
-  assert.match(js, /window\.addEventListener\('pageshow',[\s\S]*?resetPageScroll/);
+  assert.match(js, /pageWasReloaded[\s\S]*?history\.replaceState\(null, '', `\$\{location\.pathname\}\$\{location\.search\}`\)/);
+  assert.match(js, /window\.addEventListener\('pageshow', queuePageScrollReset/);
+  assert.match(js, /window\.addEventListener\('load', queuePageScrollReset/);
+  assert.match(js, /a\[href\^="#"\][\s\S]*?scrollToPageSection\(pageAnchor\)/);
+  assert.doesNotMatch(js, /location\.hash\s*=\s*'discovery'/);
 });
 
 test('hero copy stays in normal flow without legacy positioning at any breakpoint', () => {

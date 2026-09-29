@@ -1,10 +1,17 @@
 'use strict';
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
+const navigationEntry = performance.getEntriesByType?.('navigation')?.[0];
+const pageWasReloaded = navigationEntry?.type === 'reload' || performance.navigation?.type === 1;
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function resetPageScroll() { window.scrollTo(0, 0); }
-resetPageScroll();
-window.addEventListener('pageshow', () => requestAnimationFrame(resetPageScroll));
+function queuePageScrollReset() { resetPageScroll(); requestAnimationFrame(() => requestAnimationFrame(resetPageScroll)); }
+if (pageWasReloaded) {
+  if (location.hash) history.replaceState(null, '', `${location.pathname}${location.search}`);
+  queuePageScrollReset();
+  window.addEventListener('pageshow', queuePageScrollReset, { once: true });
+  window.addEventListener('load', queuePageScrollReset, { once: true });
+}
 const money = value => new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value);
 const products = {
   solar: { name: 'Solar Drift', number: '001', family: 'fresh', descriptor: 'THE GOLDEN ONE', tagline: 'Sun on skin. Now bottled.', mood: 'a little sunshine<br>goes a long way.', notes: 'Bergamot · Neroli · Soft musk', top: 'Bergamot, mandarin', heart: 'Neroli, orange blossom', base: 'Soft musk, blonde woods', description: 'The windows are open. There is nowhere you need to be. Bright citrus drifts into a heart of orange blossom, settling into the soft warmth of skin. A little golden hour, whenever you need it.', keywords: 'sun sunshine sunny bright luminous citrus floral golden fresh summer morning', sizes: { '50': 89, '100': 139 } },
@@ -103,6 +110,12 @@ function renderBag() {
   $('#bag-summary').innerHTML = count ? euroSummary + madSummary : '';
 }
 function continueShopping() { $$('dialog[open]').forEach(closeModal); $('#collection').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); }
+function scrollToPageSection(selector) {
+  const target = selector === '#' ? document.documentElement : $(selector);
+  if (!target) return;
+  target.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start' });
+  if (location.hash) history.replaceState(null, '', `${location.pathname}${location.search}`);
+}
 function openCheckout() {
   if (!cart.length) return; const t = cartTotals();
   const euroSummary = t.subtotal ? `<div class="summary-line"><span>Delivery estimate</span><span>${t.shipping ? money(t.shipping) : 'Complimentary'}</span></div>${t.wrapping ? `<div class="summary-line"><span>Gift presentation</span><span>${money(t.wrapping)}</span></div>` : ''}<div class="summary-line total"><span>Fragrance total</span><span>${money(t.total)}</span></div>` : '';
@@ -163,6 +176,8 @@ function setHero(id) {
 function closeMenu() { $('#mobile-nav').hidden = true; $('#menu-toggle').setAttribute('aria-expanded', 'false'); $('#menu-toggle').setAttribute('aria-label', 'Open navigation'); }
 document.addEventListener('click', async event => {
   const button = event.target.closest('button, a'); if (!button) return;
+  const pageAnchor = button.matches('a[href^="#"]') ? button.getAttribute('href') : null;
+  if (pageAnchor !== null) { event.preventDefault(); scrollToPageSection(pageAnchor); }
   if (button.hasAttribute('data-close')) closeModal(button.closest('dialog'));
   if (button.dataset.filter) { filter = button.dataset.filter; renderProducts(); }
   if (button.dataset.save) toggleSave(button.dataset.save);
@@ -179,7 +194,7 @@ document.addEventListener('click', async event => {
   if (button.hasAttribute('data-quiz-restart')) { quizAnswers = []; renderQuiz(); }
   if (button.hasAttribute('data-continue')) continueShopping();
   if (button.hasAttribute('data-view-bag')) { renderBag(); openModal('#bag-dialog'); $('#toast').classList.remove('visible'); }
-  if (button.hasAttribute('data-discovery-link')) { $$('dialog[open]').forEach(closeModal); location.hash = 'discovery'; }
+  if (button.hasAttribute('data-discovery-link')) { $$('dialog[open]').forEach(closeModal); scrollToPageSection('#discovery'); }
   if (button.dataset.article) openArticle(button.dataset.article);
   if (button.dataset.info) openInfo(button.dataset.info);
   if (button.dataset.share) { const url = `${location.origin}${location.pathname}#scent/${button.dataset.share}`; try { await navigator.clipboard.writeText(url); button.textContent = 'Link copied ✓'; } catch { button.textContent = 'Use the scent URL in your address bar'; } }
