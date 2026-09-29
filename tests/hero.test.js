@@ -10,6 +10,19 @@ test('the storefront does not render a visible skip-content control', () => {
   assert.doesNotMatch(html, /Skip to content|class="skip-link"/i);
 });
 
+test('mobile navigation is a full-height branded menu with clean links and scroll locking', () => {
+  const html = read('index.html');
+  const css = read('refinement.css');
+  const js = read('script.js');
+  assert.match(html, /class="mobile-nav-head"/);
+  assert.equal((html.match(/class="mobile-nav-link"/g) || []).length, 3);
+  assert.doesNotMatch(html.slice(html.indexOf('id="mobile-nav"'), html.indexOf('</nav>', html.indexOf('id="mobile-nav"'))), /↗/);
+  assert.match(css, /body\.menu-open \{ overflow: hidden; \}/);
+  assert.match(css, /\.mobile-nav:not\(\[hidden\]\)[\s\S]*?bottom: 0;[\s\S]*?background: var\(--ink\)/);
+  assert.match(js, /function openMenu\(\)[\s\S]*?document\.body\.classList\.add\('menu-open'\)/);
+  assert.match(js, /function closeMenu\(restoreFocus = false\)[\s\S]*?document\.body\.classList\.remove\('menu-open'\)/);
+});
+
 test('a page load starts at the top instead of restoring a stale scroll position', () => {
   const js = read('script.js');
   const listeners = {}, scrollCalls = [], replaceCalls = [];
@@ -61,7 +74,7 @@ test('every hero swatch updates its name, exclusive pressed state, announcement 
   const nodes = {'.hero': {dataset: {}}, '#hero-name': {}, '#hero-status': {}, '#hero-bottle-photo': {}, '#hero-details': {addEventListener(type, fn) { this.click = fn; }}};
   const context = {heroId: 'solar', productImages, products: Object.fromEntries(ids.map((id,i) => [id,{name:names[i]}])), $:s=>nodes[s], $$:()=>buttons, openProduct:id=>{ context.opened=id; }};
   vm.createContext(context);
-  vm.runInContext(js.slice(js.indexOf('function setHero(id)'),js.indexOf('function closeMenu()')),context);
+  vm.runInContext(js.slice(js.indexOf('function setHero(id)'),js.indexOf('function closeMenu(')),context);
   vm.runInContext(js.match(/\$\('#hero-details'\)\.addEventListener[^\n]+/)[0],context);
   ids.forEach((id,i) => {
     context.setHero(id);
