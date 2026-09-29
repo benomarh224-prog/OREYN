@@ -5,6 +5,11 @@ const path = require('node:path');
 const vm = require('node:vm');
 const read = name => fs.readFileSync(path.join(__dirname, '..', name), 'utf8');
 
+test('the storefront does not render a visible skip-content control', () => {
+  const html = read('index.html');
+  assert.doesNotMatch(html, /Skip to content|class="skip-link"/i);
+});
+
 test('a page load starts at the top instead of restoring a stale scroll position', () => {
   const js = read('script.js');
   const listeners = {}, scrollCalls = [], replaceCalls = [];
