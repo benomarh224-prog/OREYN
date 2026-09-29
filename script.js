@@ -194,6 +194,28 @@ $('#newsletter-form').addEventListener('submit', event => { event.preventDefault
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 window.oreynMotionPaused = reducedMotion.matches;
 function updateMotion() { document.body.classList.toggle('motion-paused', window.oreynMotionPaused); $('#motion-toggle').setAttribute('aria-pressed', String(window.oreynMotionPaused)); $('#motion-label').textContent = window.oreynMotionPaused ? 'RESUME MOTION' : 'PAUSE MOTION'; window.dispatchEvent(new Event('oreyn-motion')); }
+const trioTilt = $('.discovery-tilt');
+function resetTrioTilt() {
+  if (!trioTilt) return;
+  for (const property of ['--trio-rotate-x', '--trio-rotate-y', '--trio-shine-x', '--trio-shine-y']) trioTilt.style.removeProperty(property);
+  trioTilt.classList.remove('is-tilting');
+}
+if (trioTilt) {
+  trioTilt.addEventListener('pointermove', event => {
+    if (event.pointerType === 'touch' || reducedMotion.matches || window.oreynMotionPaused) return;
+    const bounds = trioTilt.getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
+    const y = Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height));
+    trioTilt.style.setProperty('--trio-rotate-x', `${(.5 - y) * 7}deg`);
+    trioTilt.style.setProperty('--trio-rotate-y', `${(x - .5) * 9}deg`);
+    trioTilt.style.setProperty('--trio-shine-x', `${x * 100}%`);
+    trioTilt.style.setProperty('--trio-shine-y', `${y * 100}%`);
+    trioTilt.classList.add('is-tilting');
+  });
+  trioTilt.addEventListener('pointerleave', resetTrioTilt);
+  trioTilt.addEventListener('pointercancel', resetTrioTilt);
+  window.addEventListener('oreyn-motion', () => { if (window.oreynMotionPaused) resetTrioTilt(); });
+}
 $('#motion-toggle').addEventListener('click', () => { window.oreynMotionPaused = !window.oreynMotionPaused; updateMotion(); });
 reducedMotion.addEventListener('change', () => { window.oreynMotionPaused = reducedMotion.matches; updateMotion(); });
 if ('IntersectionObserver' in window && !reducedMotion.matches) { const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } }), { threshold: .08 }); $$('.reveal').forEach(el => { el.classList.add('ready'); observer.observe(el); }); }

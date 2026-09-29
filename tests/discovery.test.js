@@ -7,11 +7,14 @@ const vm = require('node:vm');
 const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const source = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
+const css = fs.readFileSync(path.join(root, 'refinement.css'), 'utf8');
 
 test('OREYN Trio uses the supplied artwork and confirmed 129 DH price', () => {
   assert.match(html, /assets\/oreyn-fragrance-trio\.jpg/);
   assert.match(html, /<strong>129<\/strong> DH/);
   assert.doesNotMatch(html, /class="discovery-box"/);
+  assert.doesNotMatch(html, /class="set-list"/);
+  assert.match(html, /class="trio-scent-strip"/);
   assert.ok(fs.statSync(path.join(root, 'assets', 'oreyn-fragrance-trio.jpg')).size > 250000);
 
   const context = {};
@@ -34,4 +37,13 @@ test('cart totals keep the MAD trio separate from existing euro concept prices',
   assert.equal(context.result.madSubtotal, 129);
   assert.equal(context.result.total, 95);
   assert.equal(context.trioPrice, '129 DH');
+});
+
+test('trio artwork has layered 3D motion with a reduced-motion fallback', () => {
+  assert.match(html, /class="discovery-tilt"/);
+  assert.match(source, /trioTilt\.addEventListener\('pointermove'/);
+  assert.match(source, /reducedMotion\.matches \|\| window\.oreynMotionPaused/);
+  assert.match(css, /transform-style:\s*preserve-3d/);
+  assert.match(css, /@media\(hover:none\) and \(prefers-reduced-motion:no-preference\)/);
+  assert.match(css, /@media\(prefers-reduced-motion:reduce\)[\s\S]*?\.discovery-tilt/);
 });
