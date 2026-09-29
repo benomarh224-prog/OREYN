@@ -48,13 +48,12 @@ $$('dialog').forEach(dialog => {
 function saveButton(id) { return `<button class="save-button" data-save="${id}" aria-label="${saved.has(id) ? 'Unsave' : 'Save'} ${products[id].name}" aria-pressed="${saved.has(id)}">${heart}</button>`; }
 function renderProducts() {
   const matches = Object.entries(products).filter(([id, p]) => id !== 'discovery' && (filter === 'all' || filter === 'saved' && saved.has(id) || p.family === filter));
-  $('#product-grid').innerHTML = matches.map(([id, p]) => `<article class="product-card perfume-wide ${id}"><div class="wide-copy"><span class="wide-label">${p.number} / EAU DE PARFUM</span><h3><button data-product="${id}">${p.name}</button></h3><p>${p.notes}</p><button class="wide-details" data-product="${id}">View details ↗</button></div><button class="wide-photo" data-product="${id}" aria-label="Explore ${p.name}">${bottleMarkup(id)}</button>${saveButton(id)}<div class="wide-bottom"><div><strong>${money(p.sizes['50'])}</strong><small>50 ml</small></div><button class="wide-add" data-add="${id}" data-size="50" aria-label="Add ${p.name}, 50 ml, to bag">Add to bag <span aria-hidden="true">+</span></button></div></article>`).join('') || '<div class="empty-state"><h3>A feeling worth keeping.</h3><p>Tap a heart on any scent to keep it here.</p><button class="pill dark" data-filter="all">Explore the collection <span>↗</span></button></div>';
+  $('#product-grid').innerHTML = matches.map(([id, p]) => `<article class="product-card ${id}" data-card="${id}"><div class="card-heading"><h3><button data-product="${id}">${p.name}</button></h3><p>${p.notes}</p></div>${saveButton(id)}<button class="card-photo" data-product="${id}" aria-label="Explore ${p.name}">${bottleMarkup(id)}</button><div class="card-purchase"><div class="card-price"><strong>${money(p.sizes['50'])}</strong><span>50 ml</span></div><button class="card-bag" data-add="${id}" data-size="50" aria-label="Add ${p.name}, 50 ml, to bag">Add to bag <span aria-hidden="true">+</span></button></div></article>`).join('') || '<div class="empty-state"><h3>A feeling worth keeping.</h3><p>Tap a heart on any scent to keep it here.</p><button class="pill dark" data-filter="all">Explore the collection <span>↗</span></button></div>';
   prepareCarousel();
-  $('#collection-count').textContent = `${matches.length} fragrance${matches.length === 1 ? '' : 's'}`;
   $('#saved-count').textContent = saved.size;
   $$('.filters [data-filter]').forEach(button => { const active = button.dataset.filter === filter; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); });
 }
-function toggleSave(id) { const gridFocused = Boolean(document.activeElement?.closest('#product-grid')); saved.has(id) ? saved.delete(id) : saved.add(id); persist('oreyn-saved', [...saved]); renderProducts(); $$(`[data-save="${id}"]`).forEach(button => { button.setAttribute('aria-pressed', saved.has(id)); button.setAttribute('aria-label', `${saved.has(id) ? 'Unsave' : 'Save'} ${products[id].name}`); }); if (gridFocused) ($(`#product-grid [data-save="${id}"]`) || $(`.filters [data-filter="${filter}"]`))?.focus({ preventScroll: true }); notify(saved.has(id) ? `${products[id].name} saved to your collection` : `${products[id].name} removed from saved scents`); }
+function toggleSave(id) { const gridFocused = Boolean(document.activeElement?.closest('#product-grid')); saved.has(id) ? saved.delete(id) : saved.add(id); persist('oreyn-saved', [...saved]); renderProducts(); const savedCard = $(`[data-card="${id}"]`); if (gridFocused && savedCard) { $('#product-grid').scrollLeft = savedCard.offsetLeft - $('#product-grid').firstElementChild.offsetLeft; syncCarousel(); } $$(`[data-save="${id}"]`).forEach(button => { button.setAttribute('aria-pressed', saved.has(id)); button.setAttribute('aria-label', `${saved.has(id) ? 'Unsave' : 'Save'} ${products[id].name}`); }); if (gridFocused) ($(`#product-grid [data-save="${id}"]`) || $(`.filters [data-filter="${filter}"]`))?.focus({ preventScroll: true }); notify(saved.has(id) ? `${products[id].name} saved to your collection` : `${products[id].name} removed from saved scents`); }
 function openProduct(id, updateUrl = true) {
   if (!products[id] || id === 'discovery') return;
   detailId = id; detailSize = '50'; const p = products[id];
@@ -176,56 +175,47 @@ function handleRoute() { const match = location.hash.match(/^#scent\/(solar|afte
 window.addEventListener('hashchange', handleRoute);
 renderProducts(); renderBag(); updateMotion(); handleRoute();
 
-function prepareCarousel() {
-  const track = $('#product-grid');
-  const originals = [...track.children];
-  if (originals.length > 1 && originals[0].classList.contains('product-card')) {
-    [...originals, ...originals].forEach(card => {
-      const copy = card.cloneNode(true);
-      copy.dataset.carouselCopy = 'true'; copy.setAttribute('aria-hidden', 'true');
-      copy.querySelectorAll('button,a').forEach(el => el.tabIndex = -1);
-      track.append(copy);
-    });
-  }
-  track.scrollLeft = 0;
+function carouselCards() { return $$('#product-grid .product-card'); }
+function carouselIndex() {
+  const cards = carouselCards(), track = $('#product-grid');
+  if (!cards.length) return -1;
+  let nearest = 0, distance = Infinity;
+  cards.forEach((card, index) => {
+    const delta = Math.abs(card.offsetLeft - cards[0].offsetLeft - track.scrollLeft);
+    if (delta < distance) { nearest = index; distance = delta; }
+  });
+  return nearest;
 }
-(() => {
-  const track = $('#product-grid'), pause = $('#scents-pause');
-  let paused = false, hovered = false, touching = false, inView = false, last = 0, remainder = 0, idleUntil = 0;
-  function syncPause() {
-    const stopped = paused || reducedMotion.matches || window.oreynMotionPaused;
-    pause.setAttribute('aria-pressed', String(stopped));
-    pause.setAttribute('aria-label', stopped ? 'Resume fragrance carousel' : 'Pause fragrance carousel');
-    pause.textContent = stopped ? '▷' : 'Ⅱ';
+function syncCarousel() {
+  const count = carouselCards().length, index = carouselIndex();
+  $('#collection-count').textContent = count ? String(index + 1).padStart(2, '0') + ' / ' + String(count).padStart(2, '0') : '00 / 00';
+  $('#collection-count').setAttribute('aria-label', count ? 'Fragrance ' + (index + 1) + ' of ' + count : 'No fragrances');
+  $('#scents-previous').disabled = index <= 0;
+  $('#scents-next').disabled = index < 0 || index >= count - 1;
+}
+function sizeCarouselTail() {
+  const track = $('#product-grid'), cards = carouselCards();
+  const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+  track.style.setProperty('--carousel-tail', cards.length > 1 ? Math.max(0, track.clientWidth - 12 - cards[0].getBoundingClientRect().width - gap) + 'px' : '0px');
+  track.classList.toggle('has-many', cards.length > 1);
+}
+function prepareCarousel() {
+  sizeCarouselTail();
+  $('#product-grid').scrollLeft = 0;
+  syncCarousel();
+}
+function stepCarousel(direction) {
+  const cards = carouselCards();
+  if (!cards.length) return;
+  const index = Math.max(0, Math.min(cards.length - 1, carouselIndex() + direction));
+  $('#product-grid').scrollTo({left: cards[index].offsetLeft - cards[0].offsetLeft, behavior: reducedMotion.matches ? 'instant' : 'smooth'});
+}
+$('#scents-next').addEventListener('click', () => stepCarousel(1));
+$('#scents-previous').addEventListener('click', () => stepCarousel(-1));
+$('#product-grid').addEventListener('scroll', syncCarousel, {passive: true});
+$('#product-grid').addEventListener('keydown', event => {
+  if (event.target === $('#product-grid') && ['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+    event.preventDefault(); stepCarousel(event.key === 'ArrowRight' ? 1 : -1);
   }
-  pause.addEventListener('click', () => { paused = !paused; if (window.oreynMotionPaused && !reducedMotion.matches) { window.oreynMotionPaused = false; updateMotion(); paused = false; } syncPause(); });
-  window.addEventListener('oreyn-motion', syncPause);
-  track.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hovered = true; });
-  track.addEventListener('pointerleave', () => hovered = false);
-  track.addEventListener('pointerdown', () => touching = true);
-  window.addEventListener('pointerup', () => { if (touching) idleUntil = performance.now() + 4000; touching = false; });
-  window.addEventListener('pointercancel', () => touching = false);
-  track.addEventListener('wheel', () => idleUntil = performance.now() + 4000, { passive: true });
-  function step(direction) {
-    paused = true; syncPause();
-    const width = (track.querySelector('.product-card')?.getBoundingClientRect().width || 280) + 20;
-    const index = direction > 0 ? Math.floor(track.scrollLeft / width + .01) + 1 : Math.ceil(track.scrollLeft / width - .01) - 1;
-    track.scrollTo({ left: Math.max(0, index * width), behavior: reducedMotion.matches ? 'instant' : 'smooth' });
-  }
-  $('#scents-next').addEventListener('click', () => step(1));
-  $('#scents-previous').addEventListener('click', () => step(-1));
-  track.addEventListener('keydown', e => { if (e.target === track && ['ArrowLeft','ArrowRight'].includes(e.key)) { e.preventDefault(); step(e.key === 'ArrowRight' ? 1 : -1); } });
-  if ('IntersectionObserver' in window) new IntersectionObserver(entries => { inView = entries[0].isIntersecting; }).observe(track); else inView = true;
-  function animate(now) {
-    const dt = Math.min(now - last, 50); last = now;
-    const copy = track.querySelector('[data-carousel-copy]');
-    if (copy && inView && !document.hidden && !paused && !hovered && !touching && now > idleUntil && !track.contains(document.activeElement) && !window.oreynModalOpen && !reducedMotion.matches && !window.oreynMotionPaused) {
-      const cycle = copy.offsetLeft - track.firstElementChild.offsetLeft;
-      remainder += dt * .027;
-      const pixels = Math.floor(remainder); remainder -= pixels;
-      if (cycle > 0) { track.scrollLeft += pixels; if (track.scrollLeft >= cycle) track.scrollLeft -= cycle; }
-    }
-    requestAnimationFrame(animate);
-  }
-  syncPause(); requestAnimationFrame(animate);
-})();
+});
+window.addEventListener('resize', () => { sizeCarouselTail(); syncCarousel(); });
