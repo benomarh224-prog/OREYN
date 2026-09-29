@@ -488,3 +488,53 @@ dialog { border-radius: 17px; }
   .card-photo { aspect-ratio: 4 / 5; }
   .card-bag { flex-grow: 1; }
 }
+
+/* OREYN Trio: use the supplied product photography as the complete visual. */
+.discovery { align-items: center; }
+.discovery-art {
+  height: auto;
+  aspect-ratio: 1;
+  isolation: isolate;
+  background: #d8d0c3;
+  border: 1px solid #d7d0c4;
+  box-shadow: 0 24px 70px #4e46351c;
+}
+.discovery-photo { width: 100%; height: 100%; object-fit: cover; }
+.discovery-photo-copy {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  width: min(265px,calc(100% - 40px));
+  padding: 16px 18px;
+  border: 1px solid #f7f3e9b8;
+  border-radius: 14px;
+  background: #f5f0e5e8;
+  box-shadow: 0 12px 30px #342c1c1a;
+  backdrop-filter: blur(12px);
+}
+.discovery-photo-copy .eyebrow { color: #5e5d3a; }
+.discovery-photo-copy p { margin: 7px 0 9px; font: 500 27px/1.02 var(--display); letter-spacing: -1.2px; }
+.discovery-photo-copy small { color: var(--muted); font-size: 8px; letter-spacing: 1.05px; }
+.discovery-copy h2 { max-width: 500px; }
+.discovery-copy > p { line-height: 1.75; }
+.discovery-buy { align-items: center; flex-wrap: wrap; }
+.trio-price { display: grid; grid-template-columns: auto auto; align-items: baseline; column-gap: 7px; font-size: 14px !important; letter-spacing: .5px !important; }
+.trio-price strong { font: 500 40px/1 var(--display); letter-spacing: -2px; }
+.trio-price small { grid-column: 1 / -1; margin-top: 7px; color: var(--muted); letter-spacing: .8px; }
+.bag-thumb.discovery { background: #e7dfd1; letter-spacing: 0; }
+.bag-thumb.discovery .original-product-photo, .search-result .discovery .original-product-photo { object-fit: cover; }
+
+@media(max-width:760px) {
+  .discovery-art { height: auto; aspect-ratio: 1; border-radius: 16px; }
+  .discovery-photo-copy { left: 14px; bottom: 14px; width: min(225px,calc(100% - 28px)); padding: 13px 15px; border-radius: 12px; }
+  .discovery-photo-copy p { font-size: 23px; }
+  .discovery-copy h2 { font-size: 36px; }
+  .discovery-buy { justify-content: space-between; }
+  .trio-price strong { font-size: 36px; }
+}
+
+@media(max-width:365px) {
+  .discovery-photo-copy { width: min(205px,calc(100% - 24px)); left: 12px; bottom: 12px; padding: 11px 13px; }
+  .discovery-photo-copy p { font-size: 21px; }
+  .discovery-buy .pill { width: 100%; }
+}
