@@ -33,6 +33,16 @@ test('HEAD serves asset metadata without a body', async () => {
   assert.equal((await response.arrayBuffer()).byteLength, 0);
 });
 
+test('all three fragrance choices serve their matching bottle artwork', async () => {
+  for (const assetName of ['oreyn-solar-gold.jpg', 'oreyn-after-lavender.jpg', 'oreyn-soft-sage.jpg']) {
+    const response = await fetch(`${origin}/assets/${assetName}`);
+    assert.equal(response.status, 200, assetName);
+    assert.equal(response.headers.get('content-type'), 'image/jpeg');
+    assert.ok(Number(response.headers.get('content-length')) > 90000, assetName);
+    await response.arrayBuffer();
+  }
+});
+
 test('private project files and missing assets are not exposed', async () => {
   for (const route of ['/package.json', '/server.js', '/README.md', '/assets/missing.png', '/assets/..%5cserver.js']) {
     const response = await fetch(origin + route);

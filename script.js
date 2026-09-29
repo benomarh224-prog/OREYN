@@ -8,6 +8,11 @@ const products = {
   soft: { name: 'Soft Static', number: '003', family: 'soft', descriptor: 'THE QUIET ONE', tagline: 'Close to skin. Closer to you.', mood: 'the art of<br>doing nothing.', notes: 'Pear · Ambrette · White woods', top: 'Pear, bergamot', heart: 'Ambrette, white iris', base: 'White woods, skin musk', description: 'Fresh sheets. A slow Sunday. The lovely luxury of having nothing planned. Crisp pear melts into ambrette and whisper-soft woods. An intimate fragrance that feels like your favorite version of home.', keywords: 'quiet clean soft intimate skin delicate gentle cozy musk pear sunday', sizes: { '50': 89, '100': 139 } },
   discovery: { name: 'The Discovery Set', number: '000', family: 'all', descriptor: 'YOUR FIRST CHAPTER', notes: 'Solar Drift · After Hours · Soft Static', keywords: 'sample mini trial travel gift set discovery all', sizes: { set: 24 } }
 };
+const productImages = {
+  solar: { src: 'assets/oreyn-solar-gold.jpg', alt: 'Solar Drift OREYN perfume bottle with soft gold liquid' },
+  after: { src: 'assets/oreyn-after-lavender.jpg', alt: 'After Hours OREYN perfume bottle with muted lavender liquid' },
+  soft: { src: 'assets/oreyn-soft-sage.jpg', alt: 'Soft Static OREYN perfume bottle with pale sage green liquid' }
+};
 const sizeText = size => size === 'set' ? '3 × 2 ml' : `${size} ml`;
 function readStored(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } }
 function persist(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* The store remains usable with storage disabled. */ } }
@@ -24,7 +29,10 @@ let saved = new Set(Array.isArray(savedRaw) ? savedRaw.filter(id => typeof id ==
 let filter = 'all', heroId = 'solar', detailId = 'solar', detailSize = '50', giftWrap = false;
 let toastTimer, lastModalTrigger;
 const heart = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z"/></svg>';
-function bottleMarkup(id, size = '50') { return `<img class="original-product-photo" src="assets/oreyn-original.jpg" alt="OREYN perfume bottle" width="1024" height="1280" loading="lazy">`; }
+function bottleMarkup(id, size = '50') {
+  const image = productImages[id] || { src: 'assets/oreyn-original.jpg', alt: 'OREYN perfume bottle' };
+  return `<img class="original-product-photo" src="${image.src}" alt="${image.alt}" width="1024" height="1280" loading="lazy">`;
+}
 function notify(message, showBag = false) {
   const el = $('#toast'); el.replaceChildren();
   const text = document.createElement('span'); text.textContent = message; el.append(text);
@@ -122,12 +130,14 @@ function setHero(id) {
   const p = products[id];
   $('.hero').dataset.active = id;
   $('#hero-name').textContent = p.name;
+  const photo = $('#hero-bottle-photo');
+  photo.src = productImages[id].src;
+  photo.alt = productImages[id].alt;
   $$('[data-hero]').forEach(button => {
     const active = button.dataset.hero === id;
     button.classList.toggle('active', active);
     button.setAttribute('aria-pressed', String(active));
   });
-  // Only the original shared bottle photograph is currently supplied.
   $('#hero-status').textContent = p.name + ' selected.';
 }
 function closeMenu() { $('#mobile-nav').hidden = true; $('#menu-toggle').setAttribute('aria-expanded', 'false'); $('#menu-toggle').setAttribute('aria-label', 'Open navigation'); }

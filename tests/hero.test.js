@@ -21,9 +21,14 @@ test('every hero swatch updates its name, exclusive pressed state, announcement 
   const js = read('script.js');
   const ids = ['solar', 'after', 'soft'];
   const names = ['Solar Drift', 'After Hours', 'Soft Static'];
+  const productImages = {
+    solar: { src: 'assets/oreyn-solar-gold.jpg', alt: 'Solar Drift OREYN perfume bottle with soft gold liquid' },
+    after: { src: 'assets/oreyn-after-lavender.jpg', alt: 'After Hours OREYN perfume bottle with muted lavender liquid' },
+    soft: { src: 'assets/oreyn-soft-sage.jpg', alt: 'Soft Static OREYN perfume bottle with pale sage green liquid' }
+  };
   const buttons = ids.map(id => ({dataset: {hero: id}, classList: {toggle() {}}, attrs: {}, setAttribute(k,v) { this.attrs[k] = v; }}));
-  const nodes = {'.hero': {dataset: {}}, '#hero-name': {}, '#hero-status': {}, '#hero-details': {addEventListener(type, fn) { this.click = fn; }}};
-  const context = {heroId: 'solar', products: Object.fromEntries(ids.map((id,i) => [id,{name:names[i]}])), $:s=>nodes[s], $$:()=>buttons, openProduct:id=>{ context.opened=id; }};
+  const nodes = {'.hero': {dataset: {}}, '#hero-name': {}, '#hero-status': {}, '#hero-bottle-photo': {}, '#hero-details': {addEventListener(type, fn) { this.click = fn; }}};
+  const context = {heroId: 'solar', productImages, products: Object.fromEntries(ids.map((id,i) => [id,{name:names[i]}])), $:s=>nodes[s], $$:()=>buttons, openProduct:id=>{ context.opened=id; }};
   vm.createContext(context);
   vm.runInContext(js.slice(js.indexOf('function setHero(id)'),js.indexOf('function closeMenu()')),context);
   vm.runInContext(js.match(/\$\('#hero-details'\)\.addEventListener[^\n]+/)[0],context);
@@ -31,6 +36,8 @@ test('every hero swatch updates its name, exclusive pressed state, announcement 
     context.setHero(id);
     assert.equal(nodes['#hero-name'].textContent,names[i]);
     assert.equal(nodes['#hero-status'].textContent,names[i]+' selected.');
+    assert.equal(nodes['#hero-bottle-photo'].src,productImages[id].src);
+    assert.equal(nodes['#hero-bottle-photo'].alt,productImages[id].alt);
     assert.equal(buttons.filter(b=>b.attrs['aria-pressed']==='true').length,1);
     assert.equal(buttons[i].attrs['aria-pressed'],'true');
     nodes['#hero-details'].click(); assert.equal(context.opened,id);
