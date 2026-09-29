@@ -14,20 +14,25 @@
   <header class="site-header"><a class="logo" href="#" aria-label="Oreyn home"><img class="brand-logo" src="assets/oreyn-logo.jpg" alt="OREYN — slice of life" width="1280" height="640"></a><nav class="desktop-nav" aria-label="Main navigation"><a href="#collection">Shop</a><a href="#discovery">Discovery set</a><a href="#story">Our story</a><button data-open-quiz>Find your scent <span>↗</span></button></nav><div class="header-actions"><button class="icon-button" data-open-search aria-label="Search fragrances"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button><button class="bag-button" id="open-bag">Bag <span id="bag-count">0</span></button><button class="icon-button menu-button" id="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-nav"><span></span><span></span></button></div></header>
   <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation" hidden><a href="#collection">The collection ↗</a><a href="#discovery">Discovery set ↗</a><a href="#story">Our world ↗</a><button data-open-quiz>Find your scent ↗</button></nav>
   <main id="main">
-    <section class="hero" aria-labelledby="hero-title" data-active="solar">
-      <div class="hero-intro">
-        <span class="eyebrow"><i></i> A NEW PERSPECTIVE ON PERFUME</span>
-        <h1 id="hero-title"><span class="hero-title-line">slice</span><span class="hero-title-line hero-title-serif">of life<span class="hero-period">.</span></span></h1>
+    <section class="hero hero-refined" aria-labelledby="hero-title" data-active="solar">
+      <span class="hero-kicker eyebrow">A NEW PERSPECTIVE ON PERFUME</span>
+      <h1 id="hero-title"><span class="hero-title-line">slice</span><span class="hero-title-line hero-title-serif">of life<span class="hero-period">.</span></span></h1>
+      <div class="hero-bottle-group">
+        <div class="original-product-stage"><img class="hero-original-photo" src="assets/oreyn-original.jpg" alt="Original OREYN perfume bottle with a sculpted white cap and slice of life signature" width="1024" height="1280" fetchpriority="high"></div>
+        <div class="hero-swatches" role="group" aria-label="Choose a fragrance">
+          <button class="hero-swatch active" data-hero="solar" aria-label="Select Solar Drift" aria-pressed="true"><span aria-hidden="true"></span></button>
+          <button class="hero-swatch" data-hero="after" aria-label="Select After Hours" aria-pressed="false"><span aria-hidden="true"></span></button>
+          <button class="hero-swatch" data-hero="soft" aria-label="Select Soft Static" aria-pressed="false"><span aria-hidden="true"></span></button>
+        </div>
+        <h2 id="hero-name">Solar Drift</h2>
+        <button class="text-link" id="hero-details">Explore scent <svg class="ui-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button>
+        <span class="hero-status" id="hero-status" role="status" aria-live="polite" aria-atomic="true"></span>
+      </div>
+      <div class="hero-copy">
         <p class="hero-lede">A little more you. In every drop.</p>
         <p class="hero-description">Find the fragrance that feels like you. Make it part of your everyday.</p>
         <div class="hero-actions"><a class="pill dark" href="#collection">Shop fragrances <svg class="ui-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a><button class="text-link" data-open-quiz>Find my scent <svg class="ui-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button></div>
-        <p class="hero-small-note"><span>01 — 03</span> Eau de parfum. Without labels.</p>
-      </div>
-      <div class="studio-panel">
-        <div class="studio-top"><span class="eyebrow">THE OREYN SIGNATURE</span><button id="motion-toggle" aria-pressed="false"><span aria-hidden="true">◌</span> <span id="motion-label">PAUSE MOTION</span></button></div>
-        <div class="hero-aura"></div><div class="scent-environment" aria-hidden="true"><div class="environment-sun"></div><div class="environment-rays"></div><div class="environment-chrome"></div><div class="environment-mist mist-one"></div><div class="environment-mist mist-two"></div></div>
-        <div class="original-product-stage"><img class="hero-original-photo" src="assets/oreyn-original.jpg" alt="Original OREYN perfume bottle with a sculpted white cap and slice of life signature" width="1024" height="1280" fetchpriority="high"></div>
-        <div class="hero-product scent-selection"><div class="selection-heading"><span>FIND YOUR EVERYDAY</span><span id="hero-counter">01 — 03</span></div><div class="scent-switcher" role="group" aria-label="Choose your featured fragrance"><button class="scent-dot active" data-hero="solar" aria-label="Show Solar Drift" aria-pressed="true"><span class="scent-number" aria-hidden="true">01</span><span>Solar Drift</span></button><button class="scent-dot" data-hero="after" aria-label="Show After Hours" aria-pressed="false"><span class="scent-number" aria-hidden="true">02</span><span>After Hours</span></button><button class="scent-dot" data-hero="soft" aria-label="Show Soft Static" aria-pressed="false"><span class="scent-number" aria-hidden="true">03</span><span>Soft Static</span></button></div><div class="selection-details" aria-live="polite" aria-atomic="true"><span class="eyebrow" id="hero-descriptor">001 / THE GOLDEN ONE</span><div class="hero-product-heading"><h2 id="hero-name">Solar Drift</h2><button class="text-link" id="hero-details">Explore scent <svg class="ui-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button></div><p id="hero-tagline">Sun on skin. Now bottled.</p></div></div>
+        <button id="motion-toggle" aria-pressed="false"><span aria-hidden="true">◌</span> <span id="motion-label">PAUSE MOTION</span></button>
       </div>
     </section>
     <div class="quick-paths" aria-label="Explore Oreyn"><a href="#collection"><span class="path-number">01</span><span><strong>Your everyday scent</strong><small>Explore the collection</small></span><span aria-hidden="true">↗</span></a><a href="#discovery"><span class="path-number">02</span><span><strong>Try all three</strong><small>Discovery set · €24</small></span><span aria-hidden="true">↗</span></a><button data-open-quiz><span class="path-number">03</span><span><strong>Find your match</strong><small>Three questions. Your feeling.</small></span><span aria-hidden="true">↗</span></button></div>

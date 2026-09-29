@@ -117,7 +117,20 @@ const info = {
 };
 function openArticle(id) { const a = articles[id]; if (!a) return; $('#editorial-content').innerHTML = `<span class="eyebrow">${a.category}</span><h2>${a.title}</h2><p class="article-intro">${a.intro}</p>${a.body.map(([title, text]) => `<h3>${title}</h3><p>${text}</p>`).join('')}<button class="pill dark" data-discovery-link>Explore a new feeling <span>↗</span></button>`; openModal('#editorial-dialog'); }
 function openInfo(id) { const content = info[id]; if (!content) return; $('#editorial-content').innerHTML = `<span class="eyebrow">OREYN / THE DETAILS</span><h2>${content.title}</h2>${content.paragraphs.map(p => `<p>${p}</p>`).join('')}`; openModal('#editorial-dialog'); }
-function setHero(id) { heroId = id; const p = products[id]; $('.hero').dataset.active = id; $('#hero-name').textContent = p.name; $('#hero-tagline').textContent = p.tagline; $('#hero-descriptor').textContent = `${p.number} / ${p.descriptor}`; $('#hero-counter').textContent = `${p.number.slice(1)} — 03`; $$('[data-hero]').forEach(button => { const active = button.dataset.hero === id; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); }); }
+function setHero(id) {
+  if (!products[id] || id === 'discovery') return;
+  heroId = id;
+  const p = products[id];
+  $('.hero').dataset.active = id;
+  $('#hero-name').textContent = p.name;
+  $$('[data-hero]').forEach(button => {
+    const active = button.dataset.hero === id;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+  // Only the original shared bottle photograph is currently supplied.
+  $('#hero-status').textContent = p.name + ' selected.';
+}
 function closeMenu() { $('#mobile-nav').hidden = true; $('#menu-toggle').setAttribute('aria-expanded', 'false'); $('#menu-toggle').setAttribute('aria-label', 'Open navigation'); }
 document.addEventListener('click', async event => {
   const button = event.target.closest('button, a'); if (!button) return;
