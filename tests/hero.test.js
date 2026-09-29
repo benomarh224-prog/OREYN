@@ -43,3 +43,16 @@ test('every hero swatch updates its name, exclusive pressed state, announcement 
     nodes['#hero-details'].click(); assert.equal(context.opened,id);
   });
 });
+
+test('hero bottle has a decorative cinematic entrance and a reduced-motion fallback', () => {
+  const html = read('index.html');
+  const css = read('refinement.css');
+  assert.match(html, /class="original-product-stage hero-cinema"/);
+  for (const decoration of ['hero-bottle-aura', 'hero-bottle-mist-back', 'hero-bottle-light', 'hero-bottle-mist-front']) {
+    assert.match(html, new RegExp(`class="[^"]*${decoration}[^"]*" aria-hidden="true"`));
+  }
+  assert.match(css, /@keyframes hero-bottle-arrive/);
+  assert.match(css, /@keyframes hero-light-sweep/);
+  assert.match(css, /@keyframes hero-mist-front/);
+  assert.match(css, /@media\(prefers-reduced-motion:reduce\)[\s\S]*?\.hero-cinema \.hero-original-photo/);
+});
