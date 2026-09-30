@@ -15,7 +15,7 @@ test('homepage references working local styles, scripts, and original artwork', 
   assert.match(html, /OREYN — slice of life/);
   const urls = [...html.matchAll(/(?:src|href)="([^"#][^"]*)"/g)]
     .map(match => match[1]).filter(url => !url.startsWith('http'));
-  assert.ok(urls.includes('assets/oreyn-original.jpg'));
+  assert.ok(urls.includes('assets/oreyn-solar-gold.jpg'));
   for (const url of urls) {
     const asset = await fetch(`${origin}/${url}`);
     assert.equal(asset.status, 200, url);

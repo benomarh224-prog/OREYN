@@ -15,7 +15,7 @@ test('mobile navigation is a full-height branded menu with clean links and scrol
   const css = read('refinement.css');
   const js = read('script.js');
   assert.match(html, /class="mobile-nav-head"/);
-  assert.equal((html.match(/class="mobile-nav-link"/g) || []).length, 3);
+  assert.equal((html.match(/class="mobile-nav-link"/g) || []).length, 2);
   assert.doesNotMatch(html.slice(html.indexOf('id="mobile-nav"'), html.indexOf('</nav>', html.indexOf('id="mobile-nav"'))), /↗/);
   assert.match(css, /body\.menu-open \{ overflow: hidden; \}/);
   assert.match(css, /\.mobile-nav:not\(\[hidden\]\)[\s\S]*?bottom: 0;[\s\S]*?background: var\(--ink\)/);

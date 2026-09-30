@@ -100,7 +100,7 @@ h2 { font-size: clamp(32px, 3.1vw, 48px); letter-spacing: -.055em; }
 .discovery-buy small { font-size: 11px; }
 .small-note { font-size: 12px; }
 /* Adjacent sections share one spacing interval after the trio. */
-.discovery + .story { padding-top: 0; }
+.discovery + .faq { padding-top: 0; }
 .story-heading { column-gap: 9%; }
 .story-heading p { font-size: 14px; max-width: 450px; }
 .story-signature { font-size: 18px; }
