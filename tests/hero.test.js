@@ -10,15 +10,19 @@ test('the storefront does not render a visible skip-content control', () => {
   assert.doesNotMatch(html, /Skip to content|class="skip-link"/i);
 });
 
-test('mobile navigation is a full-height branded menu with clean links and scroll locking', () => {
+test('mobile navigation has an independent accessible shell and working storefront destinations', () => {
   const html = read('index.html');
   const css = read('refinement.css');
   const js = read('script.js');
   assert.match(html, /class="mobile-nav-head"/);
   assert.equal((html.match(/class="mobile-nav-link"/g) || []).length, 2);
-  assert.doesNotMatch(html.slice(html.indexOf('id="mobile-nav"'), html.indexOf('</nav>', html.indexOf('id="mobile-nav"'))), /↗/);
-  assert.match(css, /body\.menu-open \{ overflow: hidden; \}/);
-  assert.match(css, /\.mobile-nav:not\(\[hidden\]\)[\s\S]*?bottom: 0;[\s\S]*?background: var\(--ink\)/);
+  assert.match(html, /id="mobile-nav"[^>]*role="dialog"[^>]*aria-modal="true"/);
+  assert.match(html, /data-menu-close aria-label="Close navigation"/);
+  assert.match(html, /data-menu-filter="45dh"/);
+  assert.match(html, /class="mobile-nav-link" href="#clarity"/);
+  assert.match(css, /body\.menu-open \{ overflow: hidden; position: fixed;/);
+  assert.match(css, /\.mobile-nav:not\(\[hidden\]\)[^}]*inset: 0;/);
+  assert.doesNotMatch(js, /nav\.style\.top/);
   assert.match(js, /function openMenu\(\)[\s\S]*?document\.body\.classList\.add\('menu-open'\)/);
   assert.match(js, /function closeMenu\(restoreFocus = false\)[\s\S]*?document\.body\.classList\.remove\('menu-open'\)/);
 });

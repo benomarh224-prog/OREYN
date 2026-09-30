@@ -11,15 +11,27 @@
 </head>
 <body>
   <div class="announcement"><span>FIND YOUR EVERYDAY FRAGRANCE.</span><a href="#discovery">Meet the OREYN Trio <span>↗︎</span></a><span class="announcement-end">AN INDEPENDENT FRAGRANCE UNIVERSE</span></div>
-  <header class="site-header"><a class="logo" href="#" aria-label="Oreyn home"><img class="brand-logo" src="assets/oreyn-logo.jpg" alt="OREYN — slice of life" width="1280" height="640"></a><nav class="desktop-nav" aria-label="Main navigation"><a href="#collection">Shop</a><a href="#discovery">OREYN Trio</a><button data-open-quiz>Find your scent <span>↗︎</span></button></nav><div class="header-actions"><button class="icon-button" data-open-search aria-label="Search fragrances"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button><button class="bag-button" id="open-bag">Bag <span id="bag-count">0</span></button><button class="icon-button menu-button" id="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-nav"><span></span><span></span></button></div></header>
-  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation" hidden>
-    <div class="mobile-nav-head"><span>OREYN / MENU</span><span>slice of life.</span></div>
-    <div class="mobile-nav-links">
-      <a class="mobile-nav-link" href="#collection"><small>01</small><span>The collection</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a>
-      <a class="mobile-nav-link" href="#discovery"><small>02</small><span>OREYN Trio</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a>
+  <header class="site-header"><a class="logo" href="#" aria-label="Oreyn home"><img class="brand-logo" src="assets/oreyn-logo.jpg" alt="OREYN — slice of life" width="1280" height="640"></a><nav class="desktop-nav" aria-label="Main navigation"><a href="#collection">Shop</a><a href="#discovery">OREYN Trio</a><button data-open-quiz>Find your scent <span>↗︎</span></button></nav><div class="header-actions"><button class="icon-button" data-open-search aria-label="Search fragrances"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button><button class="bag-button" id="open-bag">Bag <span id="bag-count">0</span></button><button class="icon-button menu-button" id="menu-toggle" aria-haspopup="dialog" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-nav"><span></span><span></span></button></div></header>
+  <div id="mobile-nav" class="mobile-nav" role="dialog" aria-modal="true" aria-labelledby="menu-title" hidden>
+    <div class="mobile-nav-head">
+      <a class="logo" href="#" aria-label="OREYN home"><img class="brand-logo" src="assets/oreyn-logo.jpg" alt="OREYN — slice of life" width="1280" height="640"></a>
+      <button class="menu-close" data-menu-close aria-label="Close navigation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
     </div>
-    <div class="mobile-nav-bottom"><button class="mobile-nav-quiz" data-open-quiz><span><strong>Find your scent</strong><small>Three questions. Follow your instinct.</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><p>Three moods. One signature.</p></div>
-  </nav>
+    <div class="mobile-nav-content">
+      <div class="menu-intro"><span class="eyebrow">EXPLORE OREYN</span><h2 id="menu-title">Find your everyday<span>.</span></h2></div>
+      <button class="menu-search" data-open-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span>Search fragrances</span><span aria-hidden="true">→</span></button>
+      <nav class="mobile-nav-links" aria-label="Mobile navigation">
+        <a class="mobile-nav-link" href="#collection"><small>01</small><span><strong>The collection</strong><span>Find the fragrance that feels like you.</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a>
+        <a class="menu-trio" href="#discovery"><img src="assets/oreyn-fragrance-trio.jpg" alt="" width="1254" height="1254"><span><small>02 / THE OREYN TRIO</small><strong>Three moods.<br>One signature.</strong><span class="menu-trio-price">129 <small>DH</small></span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a>
+        <a class="mobile-nav-link" href="#clarity"><small>03</small><span><strong>A little clarity</strong><span>Your questions, answered.</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a>
+      </nav>
+      <div class="menu-shortcuts">
+        <button class="menu-price-link" data-menu-filter="45dh"><span class="menu-shortcut-top"><strong>45 <small>DH</small></strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></span><span>Explore perfumes</span></button>
+        <button class="mobile-nav-quiz" data-open-quiz><span class="menu-shortcut-top"><strong>Find your scent</strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></span><span>Take the three-question quiz</span></button>
+      </div>
+      <div class="menu-footer"><span>slice of life.</span><button data-view-bag>View my bag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 8h12l1 13H5L6 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></button></div>
+    </div>
+  </div>
   <main id="main">
     <section class="hero hero-refined" aria-labelledby="hero-title" data-active="solar">
       <span class="hero-kicker eyebrow">A NEW PERSPECTIVE ON PERFUME</span>

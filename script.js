@@ -173,31 +173,41 @@ function setHero(id) {
   });
   $('#hero-status').textContent = p.name + ' selected.';
 }
+let menuScrollY = 0;
 function closeMenu(restoreFocus = false) {
   const nav = $('#mobile-nav'), toggle = $('#menu-toggle');
+  const wasOpen = !nav.hidden;
   nav.hidden = true;
   document.body.classList.remove('menu-open');
   document.documentElement.classList.remove('menu-open');
-  $$('main, footer, .announcement, .site-header .logo, .desktop-nav, .header-actions > :not(#menu-toggle)').forEach(element => { element.inert = false; });
+  document.body.style.removeProperty('--menu-scroll-offset');
+  $$('main, footer, .announcement, .site-header').forEach(element => { element.inert = false; });
   toggle.setAttribute('aria-expanded', 'false');
   toggle.setAttribute('aria-label', 'Open navigation');
+  if (wasOpen) window.scrollTo({ top: menuScrollY, behavior: 'instant' });
   if (restoreFocus) toggle.focus({ preventScroll: true });
 }
 function openMenu() {
   const nav = $('#mobile-nav'), toggle = $('#menu-toggle');
-  nav.style.top = `${$('.site-header').getBoundingClientRect().bottom}px`;
+  if (!nav.hidden || innerWidth > 760) return;
+  menuScrollY = window.scrollY;
+  document.body.style.setProperty('--menu-scroll-offset', -menuScrollY + 'px');
   nav.hidden = false;
   document.body.classList.add('menu-open');
   document.documentElement.classList.add('menu-open');
-  $$('main, footer, .announcement, .site-header .logo, .desktop-nav, .header-actions > :not(#menu-toggle)').forEach(element => { element.inert = true; });
+  $$('main, footer, .announcement, .site-header').forEach(element => { element.inert = true; });
   toggle.setAttribute('aria-expanded', 'true');
   toggle.setAttribute('aria-label', 'Close navigation');
-  requestAnimationFrame(() => { if (!nav.hidden) nav.querySelector('.mobile-nav-link')?.focus({ preventScroll: true }); });
+  nav.querySelector('.mobile-nav-content').scrollTop = 0;
+  requestAnimationFrame(() => { if (!nav.hidden) nav.querySelector('[data-menu-close]').focus({ preventScroll: true }); });
 }
+
 document.addEventListener('click', async event => {
   const button = event.target.closest('button, a'); if (!button) return;
   const pageAnchor = button.matches('a[href^="#"]') ? button.getAttribute('href') : null;
   if (pageAnchor !== null) { event.preventDefault(); scrollToPageSection(pageAnchor); }
+  if (button.hasAttribute('data-menu-close')) closeMenu(true);
+  if (button.dataset.menuFilter) { filter = button.dataset.menuFilter; renderProducts(); scrollToPageSection('#collection'); }
   if (button.hasAttribute('data-close')) closeModal(button.closest('dialog'));
   if (button.dataset.filter) { filter = button.dataset.filter; renderProducts(); }
   if (button.dataset.save) toggleSave(button.dataset.save);
@@ -226,12 +236,12 @@ $('#checkout-button').addEventListener('click', openCheckout);
 $('#hero-details').addEventListener('click', () => openProduct(heroId));
 $('#search-input').addEventListener('input', searchProducts);
 $('#menu-toggle').addEventListener('click', () => { if ($('#mobile-nav').hidden) openMenu(); else closeMenu(true); });
-window.addEventListener('resize', () => { if (innerWidth > 760) closeMenu(); else if (!$('#mobile-nav').hidden) $('#mobile-nav').style.top = `${$('.site-header').getBoundingClientRect().bottom}px`; });
+window.addEventListener('resize', () => { if (innerWidth > 760) closeMenu(); });
 document.addEventListener('keydown', event => {
   if ($('#mobile-nav').hidden) return;
   if (event.key === 'Escape') { event.preventDefault(); closeMenu(true); }
   if (event.key === 'Tab') {
-    const controls = [$('#menu-toggle'), ...$$('#mobile-nav a, #mobile-nav button')];
+    const controls = $$('#mobile-nav a, #mobile-nav button');
     const index = controls.indexOf(document.activeElement);
     if (event.shiftKey && index <= 0) { event.preventDefault(); controls.at(-1).focus(); }
     else if (!event.shiftKey && (index === -1 || index === controls.length - 1)) { event.preventDefault(); controls[0].focus(); }
