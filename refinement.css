@@ -99,11 +99,8 @@ h2 { font-size: clamp(32px, 3.1vw, 48px); letter-spacing: -.055em; }
 .set-list small { font-size: 11px; }
 .discovery-buy small { font-size: 11px; }
 .small-note { font-size: 12px; }
-.scent-finder { margin: 0 var(--page-gutter); border-radius: 22px; padding: 65px 50px; }
-.scent-finder .eyebrow { font-size: 10px; }
-.scent-finder h2 { font-size: clamp(33px,3.7vw,52px); }
-.quiz-caption { font-size: 9px; letter-spacing: .7px; }
-.finder-label { font-size: 8px; }
+/* Adjacent sections share one spacing interval after the trio. */
+.discovery + .story { padding-top: 0; }
 .story-heading { column-gap: 9%; }
 .story-heading p { font-size: 14px; max-width: 450px; }
 .story-signature { font-size: 18px; }
@@ -185,7 +182,7 @@ dialog { border-radius: 17px; }
 .toast button { color: #fff; text-decoration: underline; min-height: 36px; white-space: nowrap; font-size: 13px; }
 
 @media(min-width:1600px) { .section-padding, .site-header, footer{ padding-left: max(var(--page-gutter),calc((100vw - 1440px)/2)); padding-right: max(var(--page-gutter),calc((100vw - 1440px)/2)); }
-  .quick-paths, .scent-finder { margin-left: max(var(--page-gutter),calc((100vw - 1440px)/2)); margin-right: max(var(--page-gutter),calc((100vw - 1440px)/2)); }
+  .quick-paths{ margin-left: max(var(--page-gutter),calc((100vw - 1440px)/2)); margin-right: max(var(--page-gutter),calc((100vw - 1440px)/2)); }
 }
 @media(max-width:1050px) {
   .desktop-nav { gap: 19px; }
@@ -207,7 +204,6 @@ dialog { border-radius: 17px; }
   .art-index { font-size: 7px; }
   .product-info h3 { font-size: 21px; }
   .product-info > p { font-size: 12px; }
-  .scent-finder { padding: 48px 32px; }
   .footer-links { gap: 40px; }
 }
 @media(max-width:760px) {
@@ -285,14 +281,6 @@ dialog { border-radius: 17px; }
   .discovery-buy { gap: 18px; }
   .discovery-buy .pill { font-size: 12px; gap: 20px; padding: 15px 18px; }
   .discovery-buy small { font-size: 10px; line-height: 1.6; }
-  .scent-finder { margin: 0 var(--page-gutter); padding: 33px 24px; border-radius: 17px; gap: 22px; }
-  .scent-finder .eyebrow { font-size: 8px; }
-  .scent-finder h2 { font-size: 32px; letter-spacing: -1.5px; margin: 18px 0 24px; }
-  .quiz-caption { font-size: 8px; }
-  .finder-art { min-height: 250px; }
-  .finder-orbit { width: 250px; }
-  .finder-core { width: 105px; height: 105px; font-size: 65px; }
-  .finder-label { font-size: 6px; }
   .story-heading h2 { font-size: 35px; }
   .story-heading p { font-size: 14px; }
   .campaign-image { margin: 0; border-radius: 14px; height: 350px; }
@@ -356,7 +344,6 @@ dialog { border-radius: 17px; }
   .control-divider { margin: 0 1px; }
   .scent-switcher .scent-dot { font-size: 9px; }
   .section-heading h2 { font-size: 29px; }
-  .finder-orbit { width: 220px; }
   .footer-links { column-gap: 12px; }
   .footer-links a, .footer-links button { font-size: 10px; }
   .discovery-buy .pill { font-size: 11px; padding: 14px; }
@@ -372,7 +359,7 @@ dialog { border-radius: 17px; }
 .campaign-image:has(img[src$="oreyn-original.jpg"]) { background: #fff; }
 .campaign-image img[src$="oreyn-original.jpg"] { object-fit: contain; }
 .campaign-image:has(img[src$="oreyn-original.jpg"]) .campaign-overlay { display: none; }
-@media (max-width: 760px) { }
+
 
 /* Official brand artwork; preserve the supplied image without redrawing it. */
 .site-header .logo, .footer-top .logo { display: block; flex: 0 0 auto; line-height: 0; }
