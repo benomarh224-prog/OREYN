@@ -13,7 +13,7 @@ test('carousel navigation and indicator handle scroll positions, boundaries and 
  }
 });
 test('filters, empty Saved, favorites and bag quantities preserve product actions',()=>{
- const nodes={'#product-grid':{},'#saved-count':{},'#detail-view-bag':{},'.filters [data-filter="all"] span':{}};
+ const nodes={'#product-grid':{},'#saved-count':{},'#detail-view-bag':{},'#compare-dialog':{open:false},'.filters [data-filter="all"] span':{}};
  const filters=['all','45dh','fresh','woody','floral','soft','saved'].map(filter=>({dataset:{filter},classList:{toggle(){}},setAttribute(k,v){this[k]=v;}}));
  const c={Set,Object,money:n=>'€'+n,bottleMarkup:()=>'<img>',saveButton:()=>'<button></button>',$:s=>nodes[s],$$:s=>s.startsWith('.filters')?filters:[],prepareCarousel(){},persist(){},notify(){},renderBag(){},document:{activeElement:null},filter:'all',saved:new Set(),cart:[]};vm.createContext(c);
  vm.runInContext(source.slice(source.indexOf('const products ='),source.indexOf('function readStored')),c);
