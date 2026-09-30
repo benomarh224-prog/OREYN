@@ -25,26 +25,32 @@ test('mobile navigation is a full-height branded menu with clean links and scrol
 
 test('a page load starts at the top instead of restoring a stale scroll position', () => {
   const js = read('script.js');
-  const listeners = {}, scrollCalls = [], replaceCalls = [];
-  const context = {
-    performance: { getEntriesByType: () => [{ type: 'reload' }], navigation: { type: 1 } },
-    history: { scrollRestoration: 'auto', replaceState: (...args) => replaceCalls.push(args) },
-    location: { hash: '#collection', pathname: '/', search: '' },
-    window: { scrollTo: (...args) => scrollCalls.push(args), addEventListener: (type, fn) => { listeners[type] = fn; } },
-    requestAnimationFrame: fn => fn()
-  };
-  vm.createContext(context);
-  vm.runInContext(js.slice(js.indexOf('const navigationEntry'), js.indexOf('const money')), context);
-  assert.equal(context.history.scrollRestoration, 'manual');
-  assert.deepEqual(replaceCalls[0], [null, '', '/']);
-  assert.ok(scrollCalls.length >= 2);
-  assert.equal(typeof listeners.pageshow, 'function');
-  assert.equal(typeof listeners.load, 'function');
-  assert.match(js, /history\.scrollRestoration\s*=\s*'manual'/);
-  assert.match(js, /function resetPageScroll\(\) \{ window\.scrollTo\(0, 0\); \}/);
-  assert.match(js, /pageWasReloaded[\s\S]*?history\.replaceState\(null, '', `\$\{location\.pathname\}\$\{location\.search\}`\)/);
-  assert.match(js, /window\.addEventListener\('pageshow', queuePageScrollReset/);
-  assert.match(js, /window\.addEventListener\('load', queuePageScrollReset/);
+  for (const [type, hash] of [['reload', '#collection'], ['navigate', ''], ['navigate', '#scent/solar']]) {
+    const listeners = {}, scrollCalls = [], replaceCalls = [];
+    const context = {
+      performance: { getEntriesByType: () => [{ type }] },
+      history: { scrollRestoration: 'auto', replaceState: (...args) => replaceCalls.push(args) },
+      location: { hash, pathname: '/', search: '?campaign=oreyn' },
+      window: { scrollTo: options => scrollCalls.push(options), addEventListener: (type, fn) => { listeners[type] = fn; } },
+      requestAnimationFrame: fn => fn()
+    };
+    vm.createContext(context);
+    vm.runInContext(read('page-start.js'), context);
+    listeners.load(); listeners.pageshow();
+    assert.equal(context.history.scrollRestoration, 'manual');
+    if (type === 'reload') assert.deepEqual(replaceCalls[0], [null, '', '/?campaign=oreyn']);
+    else assert.equal(replaceCalls.length, 0);
+    if (hash && type !== 'reload') assert.equal(scrollCalls.length, 0);
+    else {
+      assert.ok(scrollCalls.length > 1);
+      scrollCalls.forEach(options => {
+        assert.equal(options.top, 0);
+        assert.equal(options.behavior, 'instant');
+      });
+    }
+  }
+  const html = read('index.html');
+  assert.ok(html.indexOf('src="page-start.js"') < html.indexOf('<body>'));
   assert.match(js, /a\[href\^="#"\][\s\S]*?scrollToPageSection\(pageAnchor\)/);
   assert.doesNotMatch(js, /location\.hash\s*=\s*'discovery'/);
 });
