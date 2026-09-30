@@ -144,23 +144,62 @@ footer { padding: 30px var(--page-gutter) 0; }
 
 /* Larger type and controls throughout the shopping flow. */
 dialog { border-radius: 17px; }
+.motion-paused dialog[open] { animation: none; }
 .drawer { border-radius: 17px 0 0 17px; width: min(490px,100%); }
 .dialog-heading { gap: 16px; }
 .dialog-heading h2 { font-size: 31px; }
 .close-button { width: 44px; height: 44px; }
-.detail-content { padding: 55px 35px 32px; }
-.detail-description { font-size: 14px; line-height: 1.75; }
-.detail-tagline { font-size: 21px; }
-.note-row { font-size: 13px; padding: 12px 0; }
-.note-row > span, .size-label { font-size: 10px; }
-.size-options button { min-height: 47px; font-size: 13px; border-radius: 6px; }
-.detail-bottom { font-size: 11px; line-height: 1.6; flex-wrap: wrap; }
-.detail-bottom button { font-size: 12px; min-height: 36px; }
-.detail-actions .save-button { width: 52px; height: 52px; }
-.detail-view-bag { margin-top: 12px; }
+.product-dialog { width: min(920px,calc(100% - 24px)); padding: 0; max-height: 90dvh; }
+.product-detail-grid { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); align-items: start; }
+.detail-art { --card-line: #24282022; min-width: 0; padding: 24px 20px 18px; }
+.detail-art.solar { background: #efe7d3; }
+.detail-art.after { background: #e6e0ed; }
+.detail-art.soft { background: #e1e8dc; }
+.detail-art > .eyebrow { display: block; padding-right: 44px; font-size: 9px; }
+.detail-image-button { position: relative; display: block; width: 100%; height: 380px; margin-top: 10px; border-radius: 18px; background: #ffffff38; }
+.detail-image-button:before { content: ''; position: absolute; inset: 8% 12%; border: 1px solid var(--card-line); border-radius: 50%; pointer-events: none; }
+.detail-image-button .original-product-photo { width: 100%; height: 100%; padding: 12px 16px; object-fit: contain; mix-blend-mode: multiply; }
+.detail-zoom-label { position: absolute; right: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 6px 10px; border-radius: 18px; background: var(--paper); font-size: 10px; }
+.detail-zoom-label svg { width: 15px; height: 15px; }
+.detail-image-button:focus-visible { outline: 2px solid var(--orange); outline-offset: -3px; }
+.detail-content { padding: 30px 28px 20px; }
+.detail-content > .eyebrow { padding-right: 26px; font-size: 9px; }
+.detail-content h2 { margin: 9px 0 0; font-size: 34px; line-height: 1.15; letter-spacing: -1px; overflow-wrap: anywhere; }
+.detail-lede { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 10px 0 16px; }
+.scent-profile { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 0 0 16px; }
+.scent-profile > div { min-width: 0; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: #eeeee850; }
+.scent-profile dt { font-size: 9px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+.scent-profile dd { margin: 0; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.size-label { display: block; margin-bottom: 8px; font-size: 9px; letter-spacing: 1px; color: var(--muted); }
+.size-options { display: flex; gap: 8px; margin-bottom: 14px; }
+.size-options button { flex: 1; min-height: 44px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 9px; font-size: 12px; }
+.size-options button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.detail-format-note { margin: 0 0 12px; font-size: 11px; line-height: 1.6; color: var(--muted); }
+.detail-about { border-block: 1px solid var(--line); }
+.detail-about summary { display: flex; justify-content: space-between; align-items: center; min-height: 44px; padding: 9px 0; font-size: 12px; cursor: pointer; list-style: none; }
+.detail-about summary::-webkit-details-marker { display: none; }
+.detail-about summary > span { font-size: 18px; }
+.detail-about[open] summary > span { transform: rotate(45deg); }
+.detail-description { font-size: 13px; line-height: 1.65; color: var(--muted); margin: 0 0 12px; }
+.detail-links { display: flex; flex-wrap: wrap; gap: 0 18px; margin-top: 6px; }
+.detail-links button { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; font-size: 11px; color: var(--muted); }
 .detail-view-bag[hidden] { display: none; }
+.detail-purchase-bar { position: sticky; bottom: 0; z-index: 4; display: grid; grid-template-columns: minmax(70px,.7fr) minmax(0,1.5fr) 44px; align-items: center; gap: 12px; padding: 14px 24px max(14px,env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: var(--paper); box-shadow: 0 -7px 20px #24282008; }
+.detail-price-block { min-width: 0; }
+.detail-price-block small { display: block; font-size: 11px; color: var(--muted); line-height: 1.3; }
+.detail-price-block strong { display: block; font-size: 26px; font-weight: 550; line-height: 1.35; white-space: nowrap; letter-spacing: -.7px; }
+.detail-purchase-bar #detail-add { min-width: 0; justify-content: center; min-height: 48px; gap: 10px; padding: 12px 14px; font-size: 13px; white-space: nowrap; }
+.detail-purchase-bar #detail-add svg { width: 18px; height: 18px; flex: 0 0 18px; }
+.detail-purchase-bar .save-button { position: static; width: 44px; height: 44px; border: 1px solid var(--line); }
+.product-dialog button:focus-visible, .detail-about summary:focus-visible, .image-dialog button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.product-dialog .detail-image-button:focus-visible { outline-offset: -3px; }
 .product-dialog-toolbar { position: sticky; top: 0; height: 0; z-index: 5; }
 .product-dialog-toolbar .floating-close { position: absolute; top: 12px; right: 12px; background: var(--paper); box-shadow: 0 2px 12px #24282012; }
+.image-dialog { width: min(760px,calc(100% - 24px)); max-height: 92dvh; padding: 0; background: #fff; }
+.image-dialog[open] { animation: none; }
+.image-dialog-heading { display: grid; grid-template-columns: minmax(0,1fr) 44px; gap: 14px; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.image-dialog-heading h2 { margin: 0; font-size: 16px; line-height: 1.4; letter-spacing: -.4px; }
+#enlarged-product-photo { display: block; width: 100%; height: min(68dvh,640px); padding: 12px 16px; object-fit: contain; }
 .bag-row { grid-template-columns: 62px 1fr auto; }
 .bag-row h3 { font-size: 16px; line-height: 1.3; }
 .bag-row small { font-size: 11px; }
@@ -350,17 +389,16 @@ dialog { border-radius: 17px; }
   .footer-bottom small { max-width: 67%; }
   dialog { padding: 23px; border-radius: 14px; }
   .drawer { width: 100%; border-radius: 0; padding: 23px; }
-  .product-dialog { padding: 0; }
-  .detail-art { min-height: 320px; }
-  .detail-art .mini-bottle { top: 21px; scale: .78; }
-  .detail-art .art-mood { font-size: 20px; bottom: 20px; }
-  .detail-content { padding: 25px 22px; }
-  .detail-content h2 { font-size: 33px; }
-  .detail-description { font-size: 13px; }
-  .detail-tagline { font-size: 18px; }
-  .detail-actions .pill { font-size: 12px; gap: 12px; }
-  .note-row { font-size: 12px; }
-  .detail-bottom { font-size: 11px; }
+  .product-dialog, .image-dialog { padding: 0; }
+  .product-detail-grid { grid-template-columns: minmax(0,1fr); }
+  .detail-art { padding: 18px 18px 12px; }
+  .detail-image-button { height: clamp(180px,48vw,220px); margin-top: 8px; }
+  .detail-content { padding: 20px 18px 14px; }
+  .detail-content h2 { font-size: 28px; }
+  .detail-purchase-bar { grid-template-columns: minmax(65px,.7fr) minmax(0,1.5fr) 44px; gap: 8px; padding: 12px 16px max(12px,env(safe-area-inset-bottom)); }
+  .detail-price-block strong { font-size: 24px; }
+  .detail-purchase-bar #detail-add { padding: 10px; font-size: 12px; gap: 8px; }
+  .image-dialog-heading { padding: 12px 14px; }
   .bag-row { grid-template-columns: 48px minmax(0,1fr); gap: 11px; position: relative; align-items: start; }
   .bag-row .price { grid-column: 2; margin-top: -3px; }
   .bag-row h3 { font-size: 15px; }
@@ -376,6 +414,9 @@ dialog { border-radius: 17px; }
 }
 @media(max-width:365px) {
   :root { --page-gutter: 18px; }
+  .scent-profile { grid-template-columns: minmax(0,1fr); gap: 6px; }
+  .scent-profile > div { display: grid; grid-template-columns: 52px minmax(0,1fr); gap: 8px; padding: 8px; }
+  .scent-profile dt { margin: 3px 0 0; }
   .menu-trio { grid-template-columns: 80px minmax(0,1fr) 22px; gap: 10px; }
   .menu-trio > img { height: 100px; }
   .menu-trio strong { font-size: 18px; }
@@ -396,10 +437,8 @@ dialog { border-radius: 17px; }
 @media(prefers-reduced-motion:reduce) { .scent-dot, .card-add{ transition: none; }
 }
 .original-product-photo { display: block; width: 100%; height: 100%; object-fit: contain; }
-.product-art:has(.original-product-photo), .detail-art:has(.original-product-photo) { background: #fff; }
+.product-art:has(.original-product-photo) { background: #fff; }
 .product-view .original-product-photo { position: absolute; inset: 0; padding: 36px 12px 52px; }
-.detail-art > .original-product-photo { position: absolute; inset: 0; padding: 60px 20px 80px; mix-blend-mode: multiply; }
-.detail-art > .eyebrow { position: relative; z-index: 2; padding-right: 34px; }
 .bag-thumb .original-product-photo, .search-result .original-product-photo, .result-art .original-product-photo { background: #fff; }
 .campaign-image:has(img[src$="oreyn-original.jpg"]) { background: #fff; }
 .campaign-image img[src$="oreyn-original.jpg"] { object-fit: contain; }
@@ -555,7 +594,7 @@ dialog { border-radius: 17px; }
 .product-card.libre-le-parfum, .detail-art.libre-le-parfum { --card-accent: #715036; --card-line: #c2a58966; background: linear-gradient(145deg,#fcf5eb,#f0dfc9); }
 .card-heading { min-width: 0; }
 .card-brand { display: block; min-height: 32px; padding-right: 44px; margin-bottom: 6px; font-size: 10px; line-height: 1.5; letter-spacing: 1px; color: var(--card-accent); text-transform: uppercase; }
-.fragrance-source { display: inline-flex; align-items: center; margin-top: 20px; text-decoration: underline; text-underline-offset: 4px; }
+.fragrance-source { display: inline-flex; align-items: center; margin: 0 0 12px; font-size: 11px; text-decoration: underline; text-underline-offset: 4px; }
 .card-heading h3 { font-size: 23px; line-height: 1.2; letter-spacing: -.7px; margin: 0 0 5px; }
 .card-heading h3 button { display: block; width: 100%; min-height: 44px; text-align: left; overflow-wrap: anywhere; }
 .card-heading p { font-size: 12px; line-height: 1.5; margin: 0; color: #535b4b; }

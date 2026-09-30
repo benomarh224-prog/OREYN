@@ -57,9 +57,19 @@ function openModal(id) {
   const dialog = $(id); dialog.showModal(); dialog.scrollTop = 0;
   window.oreynModalOpen = true; window.dispatchEvent(new Event('oreyn-motion'));
 }
-function closeModal(dialog) { dialog.close(); if (dialog.id === 'product-dialog' && location.hash.startsWith('#scent/')) history.replaceState(null, '', location.pathname + location.search); if (lastModalTrigger?.isConnected) lastModalTrigger.focus({ preventScroll: true }); }
+function closeModal(dialog) {
+  if (dialog.id === 'image-dialog') { closeProductImage(); return; }
+  if (dialog.id === 'product-dialog' && $('#image-dialog').open) closeProductImage(false, true);
+  dialog.close();
+  if (dialog.id === 'product-dialog' && location.hash.startsWith('#scent/')) history.replaceState(null, '', location.pathname + location.search);
+  if (lastModalTrigger?.isConnected) lastModalTrigger.focus({ preventScroll: true });
+  else if (dialog.id === 'product-dialog') $(`.filters [data-filter="${filter}"]`)?.focus({ preventScroll: true });
+}
 $$('dialog').forEach(dialog => {
-  dialog.addEventListener('close', () => { window.oreynModalOpen = Boolean($('dialog[open]')); window.dispatchEvent(new Event('oreyn-motion')); });
+  dialog.addEventListener('close', () => {
+    if (dialog.id === 'image-dialog' && !dialog.open) { dialog.oreynZoomSession?.animations.forEach(animation => animation.cancel()); dialog.oreynZoomSession = null; }
+    window.oreynModalOpen = Boolean($('dialog[open]')); window.dispatchEvent(new Event('oreyn-motion'));
+  });
   dialog.addEventListener('click', event => { if (event.target === dialog) { const b = dialog.getBoundingClientRect(); if (event.clientX < b.left || event.clientX > b.right || event.clientY < b.top || event.clientY > b.bottom) closeModal(dialog); } });
   dialog.addEventListener('cancel', event => { event.preventDefault(); closeModal(dialog); });
 });
@@ -113,10 +123,55 @@ function toggleSave(id, trigger) {
   if (trigger) animateSavedHeart(trigger.isConnected ? trigger : $(`#product-grid [data-save="${id}"]`), saved.has(id));
   notify(saved.has(id) ? `${products[id].name} saved to your collection` : `${products[id].name} removed from saved scents`);
 }
+function detailAddMarkup(added = false) {
+  return added ? 'Added <span aria-hidden="true">✓</span>' : 'Add to bag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg>';
+}
+function openProductImage(id, trigger) {
+  if (!productImages[id] || !$('#product-dialog').open) return;
+  const dialog = $('#image-dialog'), image = $('#enlarged-product-photo');
+  dialog.oreynZoomSession?.animations.forEach(animation => animation.cancel());
+  dialog.oreynZoomSession = { trigger, animations: [], closing: false };
+  image.src = productImages[id].src;
+  image.alt = productImages[id].alt;
+  image.width = productImages[id].width || 1024;
+  image.height = productImages[id].height || 1280;
+  $('#image-dialog-title').textContent = products[id].name;
+  dialog.showModal(); dialog.scrollTop = 0;
+  if (!reducedMotion.matches && !window.oreynMotionPaused && typeof image.animate === 'function') {
+    dialog.oreynZoomSession.animations = [
+      dialog.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: 'ease-out' }),
+      image.animate([{ opacity: .5, transform: 'scale(.94)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 260, easing: 'cubic-bezier(.22,1,.36,1)' })
+    ];
+  }
+}
+function closeProductImage(restoreFocus = true, immediate = false) {
+  const dialog = $('#image-dialog'), session = dialog.oreynZoomSession;
+  if (!dialog.open || !session || session.closing && !immediate) return;
+  session.closing = true;
+  session.animations.forEach(animation => animation.cancel());
+  const finish = () => {
+    if (dialog.oreynZoomSession !== session) return;
+    dialog.oreynZoomSession = null;
+    dialog.close(); session.animations.forEach(animation => animation.cancel());
+    if (restoreFocus && $('#product-dialog').open && $$('dialog[open]').length === 1 && session.trigger?.isConnected) session.trigger.focus({ preventScroll: true });
+  };
+  if (immediate || reducedMotion.matches || window.oreynMotionPaused || typeof dialog.animate !== 'function') { finish(); return; }
+  const animation = dialog.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 140, easing: 'ease-in' });
+  session.animations = [animation];
+  animation.finished.then(finish, finish);
+}
 function openProduct(id, updateUrl = true) {
   if (!products[id] || id === 'discovery') return;
   detailId = id; detailSize = defaultSize(id); const p = products[id];
-  $('#product-detail').innerHTML = `<div class="product-detail-grid"><div class="detail-art ${id}"><span class="eyebrow">${p.number} / ${p.descriptor}</span>${bottleMarkup(id)}<span class="art-mood">${p.mood || ''}</span></div><div class="detail-content"><span class="eyebrow">${p.brand || 'EAU DE PARFUM / A SLICE OF LIFE'}</span><h2>${p.name}</h2><p class="detail-tagline">${p.tagline}</p><p class="detail-description">${p.description}</p><div class="note-pyramid"><div class="note-row"><span>OPENING</span>${p.top}</div><div class="note-row"><span>HEART</span>${p.heart}</div><div class="note-row"><span>LINGERING</span>${p.base}</div></div>${detailSize === 'unit' ? '<p class="small-note">Volume and presentation to be confirmed. Catalogue image shown.</p>' : '<span class="size-label">CHOOSE YOUR SIZE</span>'}<div class="size-options" role="group" aria-label="Bottle size">${Object.entries(p.sizes).map(([size, price]) => `<button data-detail-size="${size}" class="${size === detailSize ? 'active' : ''}" aria-pressed="${size === detailSize}">${sizeText(size)} · ${productMoney(id, price)}</button>`).join('')}</div><div class="detail-actions"><button class="pill dark" id="detail-add" data-add="${id}" data-size="${detailSize}">Add to bag — ${productMoney(id, p.sizes[detailSize])}<span>↗︎</span></button>${saveButton(id)}</div><button class="text-link detail-view-bag full-width" id="detail-view-bag" data-view-bag hidden>View your bag <span>↗︎</span></button><div class="detail-bottom"><span>${p.brand ? 'Explore the fragrance details.' : 'A scent without labels. For everyone.'}</span><button data-share="${id}">Copy scent link ↗︎</button></div>${p.brand ? `<a class="text-link fragrance-source" href="${p.source}" target="_blank" rel="noopener noreferrer">Fragrance profile from the brand ↗︎</a>` : '<button class="text-link" data-discovery-link style="margin-top:20px">Prefer all three? Meet the OREYN Trio ↗︎</button>'}</div></div>`;
+  $('#product-detail').innerHTML = `<div class="product-detail-grid">
+    <div class="detail-art ${id}"><span class="eyebrow">${p.number} / OREYN COLLECTION</span><button class="detail-image-button" data-zoom-product="${id}" aria-label="Enlarge ${p.name} photo" aria-haspopup="dialog" aria-controls="image-dialog">${bottleMarkup(id)}<span class="detail-zoom-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5M10 7v6M7 10h6"/></svg>View larger</span></button></div>
+    <div class="detail-content"><span class="eyebrow">${p.brand || 'OREYN / slice of life'}</span><h2>${p.cardName || p.name}</h2><p class="detail-lede">${p.tagline}</p>
+      <dl class="scent-profile"><div><dt>Opening</dt><dd>${p.top}</dd></div><div><dt>Heart</dt><dd>${p.heart}</dd></div><div><dt>Base</dt><dd>${p.base}</dd></div></dl>
+      ${detailSize === 'unit' ? '<p class="detail-format-note">Catalogue image. Volume and presentation to confirm.</p>' : `<div class="detail-format"><span class="size-label">CHOOSE YOUR SIZE</span><div class="size-options" role="group" aria-label="Bottle size">${Object.keys(p.sizes).map(size => `<button data-detail-size="${size}" class="${size === detailSize ? 'active' : ''}" aria-pressed="${size === detailSize}">${sizeText(size)}</button>`).join('')}</div></div>`}
+      <details class="detail-about"><summary>About this scent <span aria-hidden="true">+</span></summary><p class="detail-description">${p.description}</p>${p.brand ? `<a class="text-link fragrance-source" href="${p.source}" target="_blank" rel="noopener noreferrer">Fragrance profile from the brand ↗︎</a>` : ''}</details>
+      <div class="detail-links"><button data-share="${id}">Copy scent link <span aria-hidden="true">↗︎</span></button>${p.brand ? '' : '<button data-discovery-link>Explore the OREYN Trio <span aria-hidden="true">↗︎</span></button>'}<button class="detail-view-bag" id="detail-view-bag" data-view-bag hidden>View your bag <span aria-hidden="true">↗︎</span></button></div>
+    </div></div>
+    <div class="detail-purchase-bar"><div class="detail-price-block"><small id="detail-volume">${sizeText(detailSize)}</small><strong id="detail-price" aria-live="polite">${productMoney(id, p.sizes[detailSize])}</strong></div><button class="pill dark" id="detail-add" data-add="${id}" data-size="${detailSize}" aria-label="Add ${p.name}, ${sizeText(detailSize)}, to bag">${detailAddMarkup()}</button>${saveButton(id)}</div>`;
   $('#product-dialog').setAttribute('aria-label', `${p.name} fragrance details`);
   openModal('#product-dialog'); if (updateUrl) history.replaceState(null, '', `#scent/${id}`);
 }
@@ -146,7 +201,7 @@ function animateAddedProduct(id, trigger) {
     // Rapid taps still add every item; only the three newest visual flights remain.
     $$('.bag-flight-layer').slice(0, -3).forEach(el => el.remove());
     reducedMotion.addEventListener('change', cleanup);
-    const photo = trigger.closest('.product-card, .product-detail-grid, .trio-feature')?.querySelector('.card-photo, .detail-art, .discovery-photo');
+    const photo = trigger.closest('.product-card, #product-detail, .trio-feature')?.querySelector('.card-photo, .detail-art, .discovery-photo');
     const photoRect = photo?.getBoundingClientRect();
     const buttonRect = trigger.getBoundingClientRect();
     const target = bag.getBoundingClientRect();
@@ -188,7 +243,10 @@ function addToCart(id, size, trigger) {
   if (item?.quantity === 99) { notify('Maximum 99 of each size per bag.'); return; }
   item ? item.quantity++ : cart.push({ id, size, quantity: 1 }); renderBag(); notify(`${products[id].name} added to your bag`, true); const bagLink = $('#detail-view-bag'); if (bagLink) bagLink.hidden = false;
   if (trigger) animateAddedProduct(id, trigger);
-  const button = $('#detail-add'); if (button && $('#product-dialog').open) { button.innerHTML = 'Added to your bag <span>✓</span>'; setTimeout(() => { if (button.isConnected) button.innerHTML = `Add to bag — ${productMoney(detailId, products[detailId].sizes[detailSize])}<span>↗︎</span>`; }, 1400); }
+  const button = $('#detail-add'); if (button && $('#product-dialog').open) {
+    clearTimeout(button.oreynAddedTimer); button.innerHTML = detailAddMarkup(true);
+    button.oreynAddedTimer = setTimeout(() => { if (button.isConnected) button.innerHTML = detailAddMarkup(); }, 1200);
+  }
 }
 function renderBag() {
   const previousTotals = new Map($$('#bag-summary [data-bag-total]').map(el => [el.dataset.bagTotal, { value: el.dataset.value, text: el.querySelector('.bag-total-value').textContent }]));
@@ -391,11 +449,20 @@ document.addEventListener('click', async event => {
   if (button.dataset.filter) { filter = button.dataset.filter; renderProducts(); }
   if (button.dataset.save) toggleSave(button.dataset.save, button);
   if (button.dataset.product) openProduct(button.dataset.product);
+  if (button.dataset.zoomProduct) openProductImage(button.dataset.zoomProduct, button);
   if (button.dataset.add) addToCart(button.dataset.add, button.dataset.size, button);
   if (button.dataset.hero) setHero(button.dataset.hero);
   if (button.hasAttribute('data-open-quiz')) { quizAnswers = []; renderQuiz(); openModal('#quiz-dialog'); }
   if (button.hasAttribute('data-open-search')) { $('#search-input').value = ''; searchProducts(); openModal('#search-dialog'); $('#search-input').focus(); }
-  if (button.dataset.detailSize) { detailSize = button.dataset.detailSize; $$('.size-options button').forEach(el => { const active = el.dataset.detailSize === detailSize; el.classList.toggle('active', active); el.setAttribute('aria-pressed', active); }); $('#detail-add').dataset.size = detailSize; $('#detail-add').innerHTML = `Add to bag — ${productMoney(detailId, products[detailId].sizes[detailSize])}<span>↗︎</span>`; }
+  if (button.dataset.detailSize) {
+    detailSize = button.dataset.detailSize;
+    $$('.size-options button').forEach(el => { const active = el.dataset.detailSize === detailSize; el.classList.toggle('active', active); el.setAttribute('aria-pressed', active); });
+    const add = $('#detail-add'); clearTimeout(add.oreynAddedTimer);
+    add.dataset.size = detailSize; add.innerHTML = detailAddMarkup();
+    add.setAttribute('aria-label', `Add ${products[detailId].name}, ${sizeText(detailSize)}, to bag`);
+    $('#detail-price').textContent = productMoney(detailId, products[detailId].sizes[detailSize]);
+    $('#detail-volume').textContent = sizeText(detailSize);
+  }
   if (button.hasAttribute('data-quantity')) { const index = Number(button.dataset.quantity); const delta = Number(button.dataset.delta); if (cart[index]) { cart[index].quantity = Math.min(99, cart[index].quantity + delta); if (cart[index].quantity <= 0) cart.splice(index, 1); renderBag(); const next = $(`[data-quantity="${index}"][data-delta="${delta}"]:not(:disabled)`) || $('#continue-shopping'); next?.focus({ preventScroll: true }); } }
   if (button.hasAttribute('data-remove')) { cart.splice(Number(button.dataset.remove), 1); renderBag(); $('#continue-shopping').focus({ preventScroll: true }); }
   if (button.dataset.quizAnswer && quizAnswers.length < 3) { quizAnswers.push(button.dataset.quizAnswer); renderQuiz(); }
@@ -440,6 +507,7 @@ window.addEventListener('oreyn-motion', () => {
   if (!reducedMotion.matches && !window.oreynMotionPaused) return;
   $('#mobile-nav').oreynMenuAnimations?.forEach(animation => animation.cancel());
   $('#bag-summary').oreynTotalAnimations?.forEach(animation => animation.cancel());
+  $('#image-dialog').oreynZoomSession?.animations.forEach(animation => animation.cancel());
   $$('.bag-total-old').forEach(el => el.remove());
 });
 const trioTilt = $('.discovery-tilt');
