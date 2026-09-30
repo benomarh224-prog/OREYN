@@ -463,6 +463,8 @@ dialog { border-radius: 17px; }
 .hero-bottle-mist-front { z-index: 5; bottom: -3%; background: radial-gradient(ellipse at 48% 50%,rgba(255,255,250,.96) 0,rgba(239,238,222,.58) 43%,transparent 74%); animation: hero-mist-front 1.75s .18s cubic-bezier(.22,1,.36,1) both; }
 .hero-bottle-light { position: absolute; z-index: 4; top: 3%; bottom: 5%; left: 17%; width: 14%; pointer-events: none; opacity: 0; transform: translateX(-220%) skewX(-12deg); background: linear-gradient(90deg,transparent,rgba(255,255,255,.12) 22%,rgba(255,255,255,.9) 50%,rgba(255,255,255,.16) 78%,transparent); filter: blur(4px); mix-blend-mode: screen; animation: hero-light-sweep 1.15s .72s cubic-bezier(.55,.08,.32,1) both; }
 .hero-cinema .hero-original-photo { animation: hero-bottle-arrive 1.35s .08s cubic-bezier(.16,1,.3,1) both; }
+.hero-cinema.has-switched .hero-original-photo { animation: none; }
+.hero-cinema .hero-photo-outgoing { position: absolute; left: -12.5%; top: -12.5%; animation: none; pointer-events: none; }
 @keyframes hero-bottle-arrive { 0% { opacity: 0; transform: translateY(52px) scale(.91); filter: blur(8px); } 55% { opacity: 1; filter: blur(0); } 78% { transform: translateY(-4px) scale(1.006); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes hero-light-sweep { 0% { opacity: 0; transform: translateX(-220%) skewX(-12deg); } 20% { opacity: .85; } 70% { opacity: .55; } 100% { opacity: 0; transform: translateX(470%) skewX(-12deg); } }
 @keyframes hero-mist-back { 0% { opacity: 0; transform: translate3d(-7%,28px,0) scale(.72); } 42% { opacity: .92; } 100% { opacity: .34; transform: translate3d(2%,0,0) scale(1.05); } }

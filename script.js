@@ -210,17 +210,61 @@ const info = {
   contact: { title: 'Stay in our orbit.', paragraphs: ['The Oreyn world is taking shape. A dedicated customer-care address will be added when the store launches.', 'In the meantime, explore the collection or take the scent finder. We hope you find a little moment that feels like you.'] }
 };
 function openInfo(id) { const content = info[id]; if (!content) return; $('#editorial-content').innerHTML = `<span class="eyebrow">OREYN / THE DETAILS</span><h2>${content.title}</h2>${content.paragraphs.map(p => `<p>${p}</p>`).join('')}`; openModal('#editorial-dialog'); }
+async function swapHeroPhoto(photo, image) {
+  photo.oreynSwap?.cancel();
+  const stage = photo.parentElement;
+  const swap = { animations: [], ghost: null, cancel() {
+    swap.animations.forEach(animation => animation.cancel());
+    swap.ghost?.remove();
+    window.removeEventListener('oreyn-motion', stopMotion);
+    if (photo.oreynSwap === swap) photo.oreynSwap = null;
+  } };
+  const showImage = () => { photo.src = image.src; photo.alt = image.alt; };
+  const stopMotion = () => {
+    if (reducedMotion.matches || window.oreynMotionPaused) { showImage(); swap.cancel(); }
+  };
+  photo.oreynSwap = swap;
+  window.addEventListener('oreyn-motion', stopMotion);
+  try {
+    // Decode first so a slow connection never produces an empty bottle stage.
+    const incoming = new Image();
+    incoming.src = image.src;
+    await incoming.decode();
+    if (photo.oreynSwap !== swap) return;
+    stage.classList.add('has-switched');
+    const ghost = photo.cloneNode();
+    ghost.removeAttribute('id');
+    ghost.alt = '';
+    ghost.setAttribute('aria-hidden', 'true');
+    ghost.classList.add('hero-photo-outgoing');
+    swap.ghost = ghost;
+    stage.append(ghost);
+    showImage();
+    swap.animations = [
+      ghost.animate([{ opacity: 1, transform: 'translateY(0) scale(1)' }, { opacity: 0, transform: 'translateY(-8px) scale(.98)' }], { duration: 320, easing: 'ease-in-out', fill: 'forwards' }),
+      photo.animate([{ opacity: 0, transform: 'translateY(12px) scale(.97)' }, { opacity: 1, transform: 'translateY(0) scale(1)' }], { duration: 440, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' })
+    ];
+    await Promise.all(swap.animations.map(animation => animation.finished));
+  } catch {
+    if (photo.oreynSwap === swap) showImage();
+  } finally {
+    if (photo.oreynSwap === swap) swap.cancel();
+  }
+}
 function setHero(id) {
   if (!products[id] || id === 'discovery') return;
+  const changed = heroId !== id;
   heroId = id;
   const p = products[id];
   $('.hero').dataset.active = id;
   $('#hero-name').textContent = p.name;
   const photo = $('#hero-bottle-photo');
-  photo.src = productImages[id].src;
-  photo.alt = productImages[id].alt;
-  if (typeof photo.animate === 'function' && !matchMedia('(prefers-reduced-motion: reduce)').matches && !window.oreynMotionPaused) {
-    photo.animate([{ opacity: .45 }, { opacity: 1 }], { duration: 260, easing: 'ease-out' });
+  if (changed && typeof photo.animate === 'function' && !matchMedia('(prefers-reduced-motion: reduce)').matches && !window.oreynMotionPaused) {
+    swapHeroPhoto(photo, productImages[id]);
+  } else if (changed || typeof photo.animate !== 'function') {
+    photo.oreynSwap?.cancel();
+    photo.src = productImages[id].src;
+    photo.alt = productImages[id].alt;
   }
   $$('[data-hero]').forEach(button => {
     const active = button.dataset.hero === id;
