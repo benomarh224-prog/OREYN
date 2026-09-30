@@ -166,6 +166,9 @@ function setHero(id) {
   const photo = $('#hero-bottle-photo');
   photo.src = productImages[id].src;
   photo.alt = productImages[id].alt;
+  if (typeof photo.animate === 'function' && !matchMedia('(prefers-reduced-motion: reduce)').matches && !window.oreynMotionPaused) {
+    photo.animate([{ opacity: .45 }, { opacity: 1 }], { duration: 260, easing: 'ease-out' });
+  }
   $$('[data-hero]').forEach(button => {
     const active = button.dataset.hero === id;
     button.classList.toggle('active', active);
