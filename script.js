@@ -93,11 +93,64 @@ function cartTotals() {
   const shipping = subtotal === 0 || subtotal >= 120 ? 0 : 6;
   return { subtotal, madSubtotal, wrapping, shipping, total: subtotal + wrapping + shipping };
 }
-function addToCart(id, size) {
+function animateAddedProduct(id, trigger) {
+  const bag = $('#open-bag');
+  if (!bag || reducedMotion.matches || window.oreynMotionPaused || typeof bag.animate !== 'function') return;
+  // Keep the effect above native dialogs without taking focus or intercepting taps.
+  const layer = document.createElement('div');
+  layer.className = 'bag-flight-layer';
+  layer.setAttribute('aria-hidden', 'true');
+  layer.setAttribute('popover', 'manual');
+  const modal = trigger.closest('dialog');
+  (typeof layer.showPopover === 'function' ? document.body : modal || document.body).append(layer);
+  const cleanup = () => { reducedMotion.removeEventListener('change', cleanup); layer.remove(); };
+  try {
+    if (typeof layer.showPopover === 'function') layer.showPopover();
+    // Rapid taps still add every item; only the three newest visual flights remain.
+    $$('.bag-flight-layer').slice(0, -3).forEach(el => el.remove());
+    reducedMotion.addEventListener('change', cleanup);
+    const photo = trigger.closest('.product-card, .product-detail-grid, .trio-feature')?.querySelector('.card-photo, .detail-art, .discovery-photo');
+    const photoRect = photo?.getBoundingClientRect();
+    const buttonRect = trigger.getBoundingClientRect();
+    const target = bag.getBoundingClientRect();
+    const headerBottom = $('.site-header').getBoundingClientRect().bottom;
+    const visiblePhoto = photoRect && photoRect.bottom > headerBottom && photoRect.top < innerHeight && photoRect.right > 0 && photoRect.left < innerWidth;
+    const origin = visiblePhoto ? photoRect : buttonRect;
+    const startX = Math.max(36, Math.min(innerWidth - 36, origin.left + origin.width / 2));
+    const startY = visiblePhoto ? (Math.max(origin.top, headerBottom) + Math.min(origin.bottom, innerHeight)) / 2 : origin.top + origin.height / 2;
+    const endX = target.left + target.width / 2, endY = target.top + target.height / 2;
+    const flyer = document.createElement('img');
+    flyer.className = 'bag-flight-photo';
+    flyer.src = productImages[id].src;
+    flyer.alt = '';
+    flyer.draggable = false;
+    layer.append(flyer);
+    if (modal) {
+      const destination = document.createElement('span');
+      destination.className = 'bag-flight-target';
+      destination.style.left = `${endX - 22}px`;
+      destination.style.top = `${endY - 22}px`;
+      destination.append(bag.querySelector('svg').cloneNode(true));
+      layer.append(destination);
+    }
+    const flight = flyer.animate([
+      { transform: `translate(${startX - 36}px, ${startY - 44}px) scale(1) rotate(-6deg)`, opacity: 0.95 },
+      { transform: `translate(${(startX + endX) / 2 - 36}px, ${Math.max(16, (startY + endY) / 2 - 110)}px) scale(.7) rotate(8deg)`, opacity: 1, offset: 0.55 },
+      { transform: `translate(${endX - 36}px, ${endY - 44}px) scale(.14) rotate(0deg)`, opacity: 0 }
+    ], { duration: 720, easing: 'ease-in-out', fill: 'forwards' });
+    flight.finished.then(() => {
+      if (!layer.isConnected || reducedMotion.matches) return;
+      bag.querySelector('svg').animate([{ transform: 'scale(1)' }, { transform: 'scale(1.22)', offset: .4 }, { transform: 'scale(1)' }], { duration: 300, easing: 'ease-out' });
+      $('#bag-count').animate([{ background: 'var(--orange)', transform: 'scale(1.15)' }, { background: 'var(--ink)', transform: 'scale(1)' }], { duration: 400, easing: 'ease-out' });
+    }).catch(() => {}).finally(cleanup);
+  } catch { cleanup(); /* Decorative motion must never interrupt adding an item. */ }
+}
+function addToCart(id, size, trigger) {
   if (!products[id] || !Object.hasOwn(products[id].sizes, size)) return;
   const item = cart.find(item => item.id === id && item.size === size);
   if (item?.quantity === 99) { notify('Maximum 99 of each size per bag.'); return; }
   item ? item.quantity++ : cart.push({ id, size, quantity: 1 }); renderBag(); notify(`${products[id].name} added to your bag`, true); const bagLink = $('#detail-view-bag'); if (bagLink) bagLink.hidden = false;
+  if (trigger) animateAddedProduct(id, trigger);
   const button = $('#detail-add'); if (button && $('#product-dialog').open) { button.innerHTML = 'Added to your bag <span>✓</span>'; setTimeout(() => { if (button.isConnected) button.innerHTML = `Add to bag — ${productMoney(detailId, products[detailId].sizes[detailSize])}<span>↗︎</span>`; }, 1400); }
 }
 function renderBag() {
@@ -215,7 +268,7 @@ document.addEventListener('click', async event => {
   if (button.dataset.filter) { filter = button.dataset.filter; renderProducts(); }
   if (button.dataset.save) toggleSave(button.dataset.save);
   if (button.dataset.product) openProduct(button.dataset.product);
-  if (button.dataset.add) addToCart(button.dataset.add, button.dataset.size);
+  if (button.dataset.add) addToCart(button.dataset.add, button.dataset.size, button);
   if (button.dataset.hero) setHero(button.dataset.hero);
   if (button.hasAttribute('data-open-quiz')) { quizAnswers = []; renderQuiz(); openModal('#quiz-dialog'); }
   if (button.hasAttribute('data-open-search')) { $('#search-input').value = ''; searchProducts(); openModal('#search-dialog'); $('#search-input').focus(); }

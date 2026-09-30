@@ -25,6 +25,11 @@ h2 { font-size: clamp(32px, 3.1vw, 48px); letter-spacing: -.055em; }
 .bag-button { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 44px; min-height: 44px; border: 1px solid var(--line); border-radius: 50%; font-size: 13px; }
 .bag-button svg { width: 20px; height: 20px; }
 .bag-button > span { position: absolute; top: -3px; right: -3px; width: 20px; height: 20px; border: 2px solid var(--paper); background: var(--ink); color: var(--paper); font-size: 9px; line-height: 1; }
+.bag-flight-layer, .bag-flight-layer:popover-open { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; pointer-events: none; z-index: 100; overflow: visible; }
+.bag-flight-layer::backdrop { background: transparent; pointer-events: none; }
+.bag-flight-photo { position: absolute; left: 0; top: 0; width: 72px; height: 88px; padding: 5px; object-fit: contain; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); box-shadow: 0 10px 24px #24282020; will-change: transform, opacity; }
+.bag-flight-target { position: absolute; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--orange); border-radius: 50%; background: var(--paper); color: var(--ink); box-shadow: 0 0 0 5px #dc552b14; }
+.bag-flight-target svg { width: 20px; height: 20px; }
 .site-header .header-actions > .icon-button { border: 1px solid var(--line); border-radius: 50%; }
 .header-actions { gap: 15px; }
 .pill { font-size: 14px; min-height: 52px; padding: 16px 23px; gap: 28px; }
