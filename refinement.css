@@ -505,7 +505,12 @@ dialog { border-radius: 17px; }
 .product-card.solar { background: #efe7d3; }
 .product-card.after { background: #e6e0ed; }
 .product-card.soft { background: #e1e8dc; }
+.product-card.le-male, .detail-art.le-male { background: #e5e1d7; }
+.product-card.sauvage-elixir, .detail-art.sauvage-elixir { background: #e4e9e7; }
+.product-card.libre-le-parfum, .detail-art.libre-le-parfum { background: #f0e4d4; }
 .card-heading { padding-right: 42px; }
+.card-brand { display: block; margin-bottom: 6px; font-size: 10px; line-height: 1.5; letter-spacing: .7px; color: #535b4b; }
+.fragrance-source { display: inline-flex; align-items: center; margin-top: 20px; text-decoration: underline; text-underline-offset: 4px; }
 .card-heading h3 { font-size: 25px; line-height: 1.2; letter-spacing: -.7px; margin: 0 0 8px; }
 .card-heading h3 button { text-align: left; overflow-wrap: anywhere; }
 .card-heading p { font-size: 13px; line-height: 1.6; margin: 0; color: #535b4b; }
