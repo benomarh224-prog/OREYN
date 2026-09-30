@@ -191,13 +191,43 @@ function addToCart(id, size, trigger) {
   const button = $('#detail-add'); if (button && $('#product-dialog').open) { button.innerHTML = 'Added to your bag <span>✓</span>'; setTimeout(() => { if (button.isConnected) button.innerHTML = `Add to bag — ${productMoney(detailId, products[detailId].sizes[detailSize])}<span>↗︎</span>`; }, 1400); }
 }
 function renderBag() {
+  const previousTotals = new Map($$('#bag-summary [data-bag-total]').map(el => [el.dataset.bagTotal, { value: el.dataset.value, text: el.querySelector('.bag-total-value').textContent }]));
+  $('#bag-summary').oreynTotalAnimations?.forEach(animation => animation.cancel());
   persist('oreyn-cart-v2', cart); const count = cart.reduce((sum, item) => sum + item.quantity, 0); const t = cartTotals();
   $('#bag-count').textContent = count; $('#drawer-count').textContent = `(${count})`; $('#checkout-button').disabled = count === 0;
   $('#shipping-progress').innerHTML = t.subtotal ? `<div class="shipping-progress">${t.subtotal >= 120 ? 'Your preview includes complimentary delivery.' : `${money(120 - t.subtotal)} away from complimentary delivery in this preview.`}<div><i style="width:${Math.min(t.subtotal / 120 * 100, 100)}%"></i></div></div>` : '';
   $('#bag-items').innerHTML = cart.map((item, index) => { const p = products[item.id]; return `<div class="bag-row"><div class="bag-thumb ${item.id}">${bottleMarkup(item.id, item.size)}</div><div><h3>${p.name}</h3><small>${sizeText(item.size)} / ${item.id === 'discovery' ? 'THREE FRAGRANCES' : p.brand || 'EAU DE PARFUM'}</small><div class="quantity"><button data-quantity="${index}" data-delta="-1" aria-label="Remove one ${p.name}, ${sizeText(item.size)}">−</button><span>${item.quantity}</span><button data-quantity="${index}" data-delta="1" aria-label="Add one ${p.name}, ${sizeText(item.size)}" ${item.quantity >= 99 ? 'disabled' : ''}>+</button><button class="remove-item" data-remove="${index}" aria-label="Remove ${p.name}, ${sizeText(item.size)}, from bag">Remove</button></div></div><span class="price">${productMoney(item.id, p.sizes[item.size] * item.quantity)}</span></div>`; }).join('') || '<div class="empty-state"><span class="star-mark">✳</span><h3>A little possibility.</h3><p>Your bag is waiting for its first feeling.</p><button class="pill dark" data-continue>Explore the collection <span>↗︎</span></button></div>';
-  const euroSummary = t.subtotal ? `<label class="gift-option"><input type="checkbox" id="gift-wrap" ${giftWrap ? 'checked' : ''}> Make individual scents a gift <span style="margin-left:auto">+ €5</span></label><div class="summary-line"><span>Individual scents subtotal</span><span>${money(t.subtotal)}</span></div><div class="summary-line"><span>Delivery estimate</span><span>${t.shipping ? money(t.shipping) : 'Complimentary'}</span></div>${t.wrapping ? `<div class="summary-line"><span>Gift presentation</span><span>${money(t.wrapping)}</span></div>` : ''}<div class="summary-line total"><span>Fragrance total</span><span>${money(t.total)}</span></div>` : '';
-  const madSummary = t.madSubtotal ? `<div class="summary-line total"><span>Total (MAD)</span><span>${dirham(t.madSubtotal)}</span></div>` : '';
+  const euroSummary = t.subtotal ? `<label class="gift-option"><input type="checkbox" id="gift-wrap" ${giftWrap ? 'checked' : ''}> Make individual scents a gift <span style="margin-left:auto">+ €5</span></label><div class="summary-line"><span>Individual scents subtotal</span><span>${money(t.subtotal)}</span></div><div class="summary-line"><span>Delivery estimate</span><span>${t.shipping ? money(t.shipping) : 'Complimentary'}</span></div>${t.wrapping ? `<div class="summary-line"><span>Gift presentation</span><span>${money(t.wrapping)}</span></div>` : ''}<div class="summary-line total"><span>Fragrance total</span><span class="bag-total-amount" data-bag-total="EUR" data-value="${t.total}"><span class="bag-total-value">${money(t.total)}</span></span></div>` : '';
+  const madSummary = t.madSubtotal ? `<div class="summary-line total"><span>Total (MAD)</span><span class="bag-total-amount" data-bag-total="MAD" data-value="${t.madSubtotal}"><span class="bag-total-value">${dirham(t.madSubtotal)}</span></span></div>` : '';
   $('#bag-summary').innerHTML = count ? euroSummary + madSummary : '';
+  animateBagTotals(previousTotals);
+}
+function animateBagTotals(previousTotals) {
+  const summary = $('#bag-summary');
+  summary.oreynTotalAnimations = [];
+  if (!$('#bag-dialog').open) return;
+  const amounts = $$('#bag-summary [data-bag-total]');
+  if (amounts.length !== previousTotals.size || amounts.some(el => previousTotals.get(el.dataset.bagTotal)?.value !== el.dataset.value)) {
+    $('#bag-total-status').textContent = amounts.length ? 'Bag totals updated: ' + amounts.map(el => el.querySelector('.bag-total-value').textContent).join('; ') + '.' : 'Your bag is empty.';
+  }
+  if (reducedMotion.matches || window.oreynMotionPaused) return;
+  amounts.forEach(amount => {
+    const previous = previousTotals.get(amount.dataset.bagTotal);
+    if (!previous || previous.value === amount.dataset.value) return;
+    const value = amount.querySelector('.bag-total-value');
+    if (typeof value.animate !== 'function') return;
+    const ghost = document.createElement('span');
+    ghost.className = 'bag-total-old';
+    ghost.textContent = previous.text;
+    ghost.setAttribute('aria-hidden', 'true');
+    amount.append(ghost);
+    const animations = [
+      ghost.animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-4px)' }], { duration: 120, easing: 'ease-out', fill: 'forwards' }),
+      value.animate([{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 180, delay: 120, easing: 'ease-out', fill: 'backwards' })
+    ];
+    summary.oreynTotalAnimations.push(...animations);
+    Promise.all(animations.map(animation => animation.finished)).catch(() => {}).finally(() => { ghost.remove(); animations.forEach(animation => animation.cancel()); });
+  });
 }
 function continueShopping() { $$('dialog[open]').forEach(closeModal); $('#collection').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); }
 function scrollToPageSection(selector) {
@@ -314,6 +344,8 @@ let menuScrollY = 0;
 function closeMenu(restoreFocus = false) {
   const nav = $('#mobile-nav'), toggle = $('#menu-toggle');
   const wasOpen = !nav.hidden;
+  nav.oreynMenuAnimations?.forEach(animation => animation.cancel());
+  nav.oreynMenuAnimations = [];
   nav.hidden = true;
   document.body.classList.remove('menu-open');
   document.documentElement.classList.remove('menu-open');
@@ -323,6 +355,15 @@ function closeMenu(restoreFocus = false) {
   toggle.setAttribute('aria-label', 'Open navigation');
   if (wasOpen) window.scrollTo({ top: menuScrollY, behavior: 'instant' });
   if (restoreFocus) toggle.focus({ preventScroll: true });
+}
+function animateMenu(nav) {
+  if (reducedMotion.matches || window.oreynMotionPaused || typeof nav.animate !== 'function') return;
+  nav.oreynMenuAnimations = [...nav.querySelectorAll('.menu-intro, .menu-search, .mobile-nav-links > *, .menu-shortcuts > *, .menu-footer')].map((item, index) => item.animate([
+    { opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }
+  ], { duration: 300, delay: index * 28, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' }));
+  nav.querySelectorAll('.menu-close-line').forEach((line, index) => {
+    nav.oreynMenuAnimations.push(line.animate([{ transform: 'none' }, { transform: `translateY(${index ? -3 : 3}px) rotate(${index ? -45 : 45}deg)` }], { duration: 220, easing: 'ease-in-out' }));
+  });
 }
 function openMenu() {
   const nav = $('#mobile-nav'), toggle = $('#menu-toggle');
@@ -336,6 +377,7 @@ function openMenu() {
   toggle.setAttribute('aria-expanded', 'true');
   toggle.setAttribute('aria-label', 'Close navigation');
   nav.querySelector('.mobile-nav-content').scrollTop = 0;
+  animateMenu(nav);
   requestAnimationFrame(() => { if (!nav.hidden) nav.querySelector('[data-menu-close]').focus({ preventScroll: true }); });
 }
 
@@ -373,6 +415,12 @@ $('#checkout-button').addEventListener('click', openCheckout);
 $('#hero-details').addEventListener('click', () => openProduct(heroId));
 $('#search-input').addEventListener('input', searchProducts);
 $('#menu-toggle').addEventListener('click', () => { if ($('#mobile-nav').hidden) openMenu(); else closeMenu(true); });
+$('#mobile-nav').addEventListener('focusin', event => {
+  // Keyboard users see the focused link immediately, even during the stagger.
+  $('#mobile-nav').oreynMenuAnimations?.forEach(animation => {
+    if (animation.effect?.target.contains(event.target)) animation.cancel();
+  });
+});
 window.addEventListener('resize', () => { if (innerWidth > 760) closeMenu(); });
 document.addEventListener('keydown', event => {
   if ($('#mobile-nav').hidden) return;
@@ -388,6 +436,12 @@ document.addEventListener('touchmove', event => { if (!$('#mobile-nav').hidden &
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 window.oreynMotionPaused = reducedMotion.matches;
 function updateMotion() { document.body.classList.toggle('motion-paused', window.oreynMotionPaused); $('#motion-toggle').setAttribute('aria-pressed', String(window.oreynMotionPaused)); $('#motion-label').textContent = window.oreynMotionPaused ? 'RESUME MOTION' : 'PAUSE MOTION'; window.dispatchEvent(new Event('oreyn-motion')); }
+window.addEventListener('oreyn-motion', () => {
+  if (!reducedMotion.matches && !window.oreynMotionPaused) return;
+  $('#mobile-nav').oreynMenuAnimations?.forEach(animation => animation.cancel());
+  $('#bag-summary').oreynTotalAnimations?.forEach(animation => animation.cancel());
+  $$('.bag-total-old').forEach(el => el.remove());
+});
 const trioTilt = $('.discovery-tilt');
 function resetTrioTilt() {
   if (!trioTilt) return;
