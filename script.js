@@ -64,6 +64,24 @@ $$('dialog').forEach(dialog => {
   dialog.addEventListener('cancel', event => { event.preventDefault(); closeModal(dialog); });
 });
 function saveButton(id) { return `<button class="save-button" data-save="${id}" aria-label="${saved.has(id) ? 'Unsave' : 'Save'} ${products[id].name}" aria-pressed="${saved.has(id)}">${heart}</button>`; }
+function animateSavedHeart(button, isSaved) {
+  const icon = button?.querySelector('svg');
+  if (!icon || typeof icon.animate !== 'function' || reducedMotion.matches || window.oreynMotionPaused) return;
+  icon.oreynHeartPulse?.cancel();
+  const frames = isSaved
+    ? [{ transform: 'scale(1)' }, { transform: 'scale(.82)', offset: .2 }, { transform: 'scale(1.24)', offset: .55 }, { transform: 'scale(1)' }]
+    : [{ transform: 'scale(1)' }, { transform: 'scale(.88)', offset: .4 }, { transform: 'scale(1)' }];
+  const pulse = icon.animate(frames, { duration: isSaved ? 420 : 220, easing: 'ease-in-out' });
+  icon.oreynHeartPulse = pulse;
+  const stopMotion = () => { if (reducedMotion.matches || window.oreynMotionPaused) pulse.cancel(); };
+  const cleanup = () => {
+    window.removeEventListener('oreyn-motion', stopMotion);
+    if (icon.oreynHeartPulse === pulse) icon.oreynHeartPulse = null;
+  };
+  window.addEventListener('oreyn-motion', stopMotion);
+  pulse.onfinish = cleanup;
+  pulse.oncancel = cleanup;
+}
 function renderProducts() {
   const matches = Object.entries(products).filter(([id, p]) => id !== 'discovery' && (filter === 'all' || filter === 'saved' && saved.has(id) || filter === '45dh' && p.currency === 'MAD' && p.sizes[defaultSize(id)] === 45 || p.family === filter));
   $('#product-grid').innerHTML = matches.map(([id, p]) => {
@@ -75,7 +93,26 @@ function renderProducts() {
   $('.filters [data-filter="all"] span').textContent = String(Object.keys(products).filter(id => id !== 'discovery').length).padStart(2, '0');
   $$('.filters [data-filter]').forEach(button => { const active = button.dataset.filter === filter; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); });
 }
-function toggleSave(id) { const gridFocused = Boolean(document.activeElement?.closest('#product-grid')); saved.has(id) ? saved.delete(id) : saved.add(id); persist('oreyn-saved', [...saved]); renderProducts(); const savedCard = $(`[data-card="${id}"]`); if (gridFocused && savedCard) { $('#product-grid').scrollLeft = savedCard.offsetLeft - $('#product-grid').firstElementChild.offsetLeft; syncCarousel(); } $$(`[data-save="${id}"]`).forEach(button => { button.setAttribute('aria-pressed', saved.has(id)); button.setAttribute('aria-label', `${saved.has(id) ? 'Unsave' : 'Save'} ${products[id].name}`); }); if (gridFocused) ($(`#product-grid [data-save="${id}"]`) || $(`.filters [data-filter="${filter}"]`))?.focus({ preventScroll: true }); notify(saved.has(id) ? `${products[id].name} saved to your collection` : `${products[id].name} removed from saved scents`); }
+function toggleSave(id, trigger) {
+  const gridFocused = Boolean(document.activeElement?.closest('#product-grid'));
+  saved.has(id) ? saved.delete(id) : saved.add(id);
+  persist('oreyn-saved', [...saved]);
+  // Keep the tapped heart and carousel position stable while its fill animates.
+  if (filter === 'saved') renderProducts();
+  else $('#saved-count').textContent = saved.size;
+  const savedCard = $(`[data-card="${id}"]`);
+  if (filter === 'saved' && gridFocused && savedCard) {
+    $('#product-grid').scrollLeft = savedCard.offsetLeft - $('#product-grid').firstElementChild.offsetLeft;
+    syncCarousel();
+  }
+  $$(`[data-save="${id}"]`).forEach(button => {
+    button.setAttribute('aria-pressed', saved.has(id));
+    button.setAttribute('aria-label', `${saved.has(id) ? 'Unsave' : 'Save'} ${products[id].name}`);
+  });
+  if (filter === 'saved' && gridFocused) ($(`#product-grid [data-save="${id}"]`) || $('.filters [data-filter="saved"]'))?.focus({ preventScroll: true });
+  if (trigger) animateSavedHeart(trigger.isConnected ? trigger : $(`#product-grid [data-save="${id}"]`), saved.has(id));
+  notify(saved.has(id) ? `${products[id].name} saved to your collection` : `${products[id].name} removed from saved scents`);
+}
 function openProduct(id, updateUrl = true) {
   if (!products[id] || id === 'discovery') return;
   detailId = id; detailSize = defaultSize(id); const p = products[id];
@@ -310,7 +347,7 @@ document.addEventListener('click', async event => {
   if (button.dataset.menuFilter) { filter = button.dataset.menuFilter; renderProducts(); scrollToPageSection('#collection'); }
   if (button.hasAttribute('data-close')) closeModal(button.closest('dialog'));
   if (button.dataset.filter) { filter = button.dataset.filter; renderProducts(); }
-  if (button.dataset.save) toggleSave(button.dataset.save);
+  if (button.dataset.save) toggleSave(button.dataset.save, button);
   if (button.dataset.product) openProduct(button.dataset.product);
   if (button.dataset.add) addToCart(button.dataset.add, button.dataset.size, button);
   if (button.dataset.hero) setHero(button.dataset.hero);

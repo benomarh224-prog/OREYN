@@ -82,6 +82,9 @@ h2 { font-size: clamp(32px, 3.1vw, 48px); letter-spacing: -.055em; }
 .product-art { height: 370px; border-radius: 15px; }
 .art-index { font-size: 9px; letter-spacing: .9px; top: 22px; left: 22px; }
 .save-button { width: 44px; height: 44px; background: #ffffff42; }
+.save-button svg { fill: transparent; transform-origin: center; transition: fill .18s ease; }
+.motion-paused .save-button svg { transition: none; }
+@media(prefers-reduced-motion:reduce) { .save-button svg { transition: none; } }
 .product-view { inset: 40px 0 74px; }
 .product-info { padding-top: 20px; }
 .product-info h3 { font-size: 24px; letter-spacing: -.8px; }
