@@ -685,6 +685,11 @@ function stepCarousel(direction) {
 $('#scents-next').addEventListener('click', () => stepCarousel(1));
 $('#scents-previous').addEventListener('click', () => stepCarousel(-1));
 $('#product-grid').addEventListener('scroll', syncCarousel, {passive: true});
+// A scroll container can retain :focus-visible after a touch on the same element.
+document.addEventListener('pointerdown', () => $('#product-grid').classList.add('pointer-focus'), { passive: true });
+document.addEventListener('keydown', event => {
+  if (!event.altKey && !event.ctrlKey && !event.metaKey) $('#product-grid').classList.remove('pointer-focus');
+});
 $('#product-grid').addEventListener('keydown', event => {
   if (event.target === $('#product-grid') && ['ArrowLeft', 'ArrowRight'].includes(event.key)) {
     event.preventDefault(); stepCarousel(event.key === 'ArrowRight' ? 1 : -1);

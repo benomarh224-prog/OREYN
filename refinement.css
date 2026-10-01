@@ -649,6 +649,8 @@ dialog { border-radius: 17px; }
 .carousel-controls button { width: 44px; height: 44px; font-size: 18px; border-radius: 50%; }
 .carousel-controls button:not(:disabled):hover { background: #e9e9df; }
 #product-grid { display: flex; position: relative; gap: 16px; padding: 6px 6px 14px; direction: ltr; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: 6px; scrollbar-width: thin; scrollbar-color: #c6ccbc transparent; align-items: stretch; }
+#product-grid:focus { outline: none; }
+#product-grid:focus-visible:not(.pointer-focus) { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 10px; }
 #product-grid.has-many:after { content: ''; flex: 0 0 var(--carousel-tail,0px); }
 .product-card { --card-accent: var(--ink); --card-line: #24282022; flex: 0 0 min(82%,320px); min-width: 0; display: flex; flex-direction: column; position: relative; isolation: isolate; scroll-snap-align: start; border-radius: 20px; padding: 18px; color: var(--ink); border: 1px solid var(--card-line); box-shadow: 0 5px 12px #24282008; }
 .product-card.solar { background: #efe7d3; }
