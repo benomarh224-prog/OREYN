@@ -65,7 +65,7 @@ function closeModal(dialog) {
   dialog.close();
   if (dialog.id === 'product-dialog' && location.hash.startsWith('#scent/')) history.replaceState(null, '', location.pathname + location.search);
   if (lastModalTrigger?.isConnected) lastModalTrigger.focus({ preventScroll: true });
-  else if (dialog.id === 'product-dialog') $(`.filters [data-filter="${filter}"]`)?.focus({ preventScroll: true });
+  else if (dialog.id === 'product-dialog') focusCollectionFilter();
 }
 $$('dialog').forEach(dialog => {
   dialog.addEventListener('close', () => {
@@ -109,9 +109,9 @@ function animateFilteredCards() {
     return rect.right > bounds.left && rect.left < bounds.right;
   }).forEach((card, index) => {
     const animation = card.animate([
-      { opacity: .35, transform: 'translateY(4px)' },
-      { opacity: 1, transform: 'translateY(0)' }
-    ], { duration: 240, delay: Math.min(index * 30, 60), easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' });
+      { opacity: .65 },
+      { opacity: 1 }
+    ], { duration: 180, delay: Math.min(index * 20, 40), easing: 'ease-out', fill: 'backwards' });
     animations.push(animation);
     animation.onfinish = animation.oncancel = () => {
       if (track.oreynFilterAnimations === animations) animations.splice(animations.indexOf(animation), 1);
@@ -129,7 +129,26 @@ function renderProducts(animate = false) {
   $('#saved-count').textContent = saved.size;
   $('.filters [data-filter="all"] span').textContent = String(Object.keys(products).filter(id => id !== 'discovery').length).padStart(2, '0');
   $$('.filters [data-filter]').forEach(button => { const active = button.dataset.filter === filter; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); });
+  syncMobileFilter();
   if (animate) animateFilteredCards();
+}
+function syncMobileFilter() {
+  const select = $('#mobile-scent-filter');
+  if (!select) return;
+  select.value = filter;
+  select.querySelector('[value="all"]').textContent = `All scents (${Object.keys(products).length - 1})`;
+  select.querySelector('[value="saved"]').textContent = `Saved (${saved.size})`;
+}
+function focusCollectionFilter() {
+  const mobileSelect = $('#mobile-scent-filter');
+  const target = mobileSelect?.getClientRects().length ? mobileSelect : $(`.filters [data-filter="${filter}"]`);
+  target?.focus({ preventScroll: true });
+}
+function setCollectionFilter(next) {
+  if (!['all', '45dh', 'fresh', 'woody', 'floral', 'soft', 'saved'].includes(next)) return;
+  if (filter === next) { prepareCarousel(); return; }
+  filter = next;
+  renderProducts(true);
 }
 function toggleSave(id, trigger) {
   const gridFocused = Boolean(document.activeElement?.closest('#product-grid'));
@@ -138,6 +157,7 @@ function toggleSave(id, trigger) {
   // Keep the tapped heart and carousel position stable while its fill animates.
   if (filter === 'saved') renderProducts();
   else $('#saved-count').textContent = saved.size;
+  syncMobileFilter();
   const savedCard = $(`[data-card="${id}"]`);
   if (filter === 'saved' && gridFocused && savedCard) {
     $('#product-grid').scrollLeft = savedCard.offsetLeft - $('#product-grid').firstElementChild.offsetLeft;
@@ -147,7 +167,11 @@ function toggleSave(id, trigger) {
     button.setAttribute('aria-pressed', saved.has(id));
     button.setAttribute('aria-label', `${saved.has(id) ? 'Unsave' : 'Save'} ${products[id].name}`);
   });
-  if (filter === 'saved' && gridFocused) ($(`#product-grid [data-save="${id}"]`) || $('.filters [data-filter="saved"]'))?.focus({ preventScroll: true });
+  if (filter === 'saved' && gridFocused) {
+    const nextHeart = $(`#product-grid [data-save="${id}"]`);
+    if (nextHeart) nextHeart.focus({ preventScroll: true });
+    else focusCollectionFilter();
+  }
   if (trigger) animateSavedHeart(trigger.isConnected ? trigger : $(`#product-grid [data-save="${id}"]`), saved.has(id));
   notify(saved.has(id) ? `${products[id].name} saved to your collection` : `${products[id].name} removed from saved scents`);
 }
@@ -504,11 +528,11 @@ document.addEventListener('click', async event => {
   const pageAnchor = button.matches('a[href^="#"]') ? button.getAttribute('href') : null;
   if (pageAnchor !== null) { event.preventDefault(); scrollToPageSection(pageAnchor); }
   if (button.hasAttribute('data-menu-close')) closeMenu(true);
-  if (button.dataset.menuFilter) { if (filter !== button.dataset.menuFilter) { filter = button.dataset.menuFilter; renderProducts(true); } scrollToPageSection('#collection'); }
+  if (button.dataset.menuFilter) { setCollectionFilter(button.dataset.menuFilter); scrollToPageSection('#collection'); }
   if (button.hasAttribute('data-close')) closeModal(button.closest('dialog'));
-  if (button.dataset.filter && filter !== button.dataset.filter) {
-    filter = button.dataset.filter; renderProducts(true);
-    if (!button.isConnected) $(`.filters [data-filter="${filter}"]`)?.focus({ preventScroll: true });
+  if (button.dataset.filter) {
+    setCollectionFilter(button.dataset.filter);
+    if (!button.isConnected) focusCollectionFilter();
   }
   if (button.dataset.save) toggleSave(button.dataset.save, button);
   if (button.dataset.product) openProduct(button.dataset.product);
@@ -541,6 +565,7 @@ document.addEventListener('click', async event => {
 });
 document.addEventListener('change', event => {
   const select = event.target;
+  if (select.id === 'mobile-scent-filter') setCollectionFilter(select.value);
   if (select.hasAttribute('data-compare-slot')) {
     const slot = Number(select.dataset.compareSlot), id = select.value;
     if (!products[id] || id === 'discovery' || id === compareIds[1 - slot]) return;
@@ -646,7 +671,9 @@ function sizeCarouselTail() {
 }
 function prepareCarousel() {
   sizeCarouselTail();
-  $('#product-grid').scrollLeft = 0;
+  const track = $('#product-grid');
+  if (typeof track.scrollTo === 'function') track.scrollTo({ left: 0, behavior: 'instant' });
+  else track.scrollLeft = 0;
   syncCarousel();
 }
 function stepCarousel(direction) {

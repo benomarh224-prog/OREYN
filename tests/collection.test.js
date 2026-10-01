@@ -14,6 +14,8 @@ test('carousel navigation and indicator handle scroll positions, boundaries and 
 });
 test('filters, empty Saved, favorites and bag quantities preserve product actions',()=>{
  const nodes={'#product-grid':{},'#saved-count':{},'#detail-view-bag':{},'#compare-dialog':{open:false},'.filters [data-filter="all"] span':{}};
+ const mobileOptions={'[value="all"]':{},'[value="saved"]':{}};
+ nodes['#mobile-scent-filter']={querySelector:selector=>mobileOptions[selector]};
  const filters=['all','45dh','fresh','woody','floral','soft','saved'].map(filter=>({dataset:{filter},classList:{toggle(){}},setAttribute(k,v){this[k]=v;}}));
  const c={Set,Object,money:n=>'€'+n,bottleMarkup:()=>'<img>',saveButton:()=>'<button></button>',$:s=>nodes[s],$$:s=>s.startsWith('.filters')?filters:[],prepareCarousel(){},persist(){},notify(){},renderBag(){},document:{activeElement:null},filter:'all',saved:new Set(),cart:[]};vm.createContext(c);
  vm.runInContext(source.slice(source.indexOf('const products ='),source.indexOf('function readStored')),c);
@@ -21,14 +23,17 @@ test('filters, empty Saved, favorites and bag quantities preserve product action
  vm.runInContext(source.slice(source.indexOf('function addToCart('),source.indexOf('function renderBag(')),c);
  c.renderProducts();assert.equal((nodes['#product-grid'].innerHTML.match(/data-card=/g)||[]).length,6);
  assert.equal(nodes['.filters [data-filter="all"] span'].textContent,'06');
- for(const [family,count] of [['fresh',1],['woody',3],['floral',1],['soft',1],['45dh',3]]){c.filter=family;c.renderProducts();assert.equal((nodes['#product-grid'].innerHTML.match(/data-card=/g)||[]).length,count);assert.equal(filters.find(f=>f.dataset.filter===family)['aria-pressed'],true);}
+ for(const [family,count] of [['fresh',1],['woody',3],['floral',1],['soft',1],['45dh',3]]){c.filter=family;c.renderProducts();assert.equal((nodes['#product-grid'].innerHTML.match(/data-card=/g)||[]).length,count);assert.equal(filters.find(f=>f.dataset.filter===family)['aria-pressed'],true);assert.equal(nodes['#mobile-scent-filter'].value,family);}
  assert.equal((nodes['#product-grid'].innerHTML.match(/45 DH/g)||[]).length,3);
  assert.doesNotMatch(nodes['#product-grid'].innerHTML,/50 ml|undefined|NaN/);
  c.filter='saved';c.renderProducts();assert.match(nodes['#product-grid'].innerHTML,/empty-state/);
  c.toggleSave('after');assert.match(nodes['#product-grid'].innerHTML,/data-card="after"/);assert.equal(nodes['#saved-count'].textContent,1);
+ assert.equal(mobileOptions['[value="saved"]'].textContent,'Saved (1)');
  c.toggleSave('after');assert.match(nodes['#product-grid'].innerHTML,/empty-state/);
  c.toggleSave('sauvage-elixir');assert.match(nodes['#product-grid'].innerHTML,/data-card="sauvage-elixir"/);
  c.toggleSave('sauvage-elixir');assert.match(nodes['#product-grid'].innerHTML,/empty-state/);
+ assert.equal(mobileOptions['[value="saved"]'].textContent,'Saved (0)');
+ c.reducedMotion={matches:true};c.window={oreynMotionPaused:false};c.setCollectionFilter('soft');assert.match(nodes['#product-grid'].innerHTML,/data-card="soft"/);assert.equal(nodes['#mobile-scent-filter'].value,'soft');c.setCollectionFilter('unknown');assert.equal(c.filter,'soft');
  c.addToCart('solar','50');c.addToCart('solar','50');assert.equal(c.cart[0].quantity,2);assert.equal(c.cart[0].size,'50');
 });
 

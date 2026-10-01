@@ -1,5 +1,14 @@
 # Oreyn validation
 
+## Mobile collection filters — October 2026
+
+- The reported incorrect mobile filtering was not reproduced in the previous deployment with Chromium or WebKit. All seven filters returned the expected catalogue entries in those checks.
+- Phone screens now use a labelled native selector. Desktop filter buttons and the native selection stay synchronized, including the Saved count.
+- Result transitions now change opacity only. There is no animated card transform inside the scroll-snap carousel. Selecting a filter resets its carousel using an explicit instant scroll.
+- Verified all seven filters at 320, 375, 390, 430, 768, and 1440 px in Chromium with touch support and WebKit with iPhone settings: expected products, exclusive filter state, first-card alignment, and no horizontal page overflow.
+- Verified rapid navigation/filter changes, empty Saved recovery, favorite removal focus, bag actions, and reduced-motion behavior. Browser automation is not a test on a physical iPhone.
+- `npm run check`, `npm test` (24 passing tests), and the static build passed. The filter regression test checks synchronization of the native selection and Saved count.
+
 ## 360° scent-studio upgrade
 
 - Browser-verified: drag rotation, keyboard arrows, cap lift/replacement, zoom, reset, and manual interaction while ambient motion is paused.

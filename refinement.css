@@ -636,6 +636,7 @@ dialog { border-radius: 17px; }
 .collection-editorial p { color: var(--muted); font-size: 14px; margin: 0; }
 .collection-showcase { min-width: 0; }
 .collection-toolbar { margin-bottom: 10px; }
+.mobile-filter-control { display: none; }
 .filters { display: flex; flex-wrap: wrap; gap: 6px; }
 .filters button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 24px; font-size: 12px; transition: background-color .18s ease,color .18s ease,border-color .18s ease; }
 .motion-paused .filters button { transition: none; }
@@ -691,6 +692,11 @@ dialog { border-radius: 17px; }
   .filters button { font-size: 12px; padding-inline: 11px; }
 }
 @media(max-width:600px) {
+  .collection-toolbar .filters { display: none; }
+  .mobile-filter-control { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.25fr); align-items: center; gap: 12px; }
+  .mobile-filter-control label { font-size: 12px; color: var(--muted); }
+  .mobile-filter-control select { width: 100%; min-width: 0; min-height: 48px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); }
+  .mobile-filter-control select:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
   .product-card { flex-basis: min(82%,290px); padding: 16px; border-radius: 19px; }
   .product-card .save-button { top: 10px; right: 10px; }
   .card-heading h3 { font-size: 22px; }
