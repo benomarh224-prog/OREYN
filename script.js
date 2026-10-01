@@ -1,15 +1,14 @@
 'use strict';
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
-const money = value => new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value);
 const products = {
   'le-male': { name: 'Jean Paul Gaultier Le Male Le Parfum', cardName: 'Le Male Le Parfum', brand: 'Jean Paul Gaultier', number: '004', family: 'woody', descriptor: 'JEAN PAUL GAULTIER', tagline: 'Cardamom, iris, and a warm vanilla finish.', notes: 'Cardamom · Lavender & iris · Vanilla', top: 'Cardamom', heart: 'Lavender, iris', base: 'Vanilla', description: 'A woody fragrance with a spicy opening, a lavender and iris heart, and a warm vanilla base. Contact us to confirm the offered volume and presentation.', keywords: 'jean paul gaultier jpg le male parfum cardamom lavender iris vanilla woody', currency: 'MAD', sizes: { unit: 45 }, source: 'https://www.jeanpaulgaultier.com/ww/en/p/range-le-male/le-male-le-parfum-eau-de-parfum-intense-000000000065156533' },
   'sauvage-elixir': { name: 'Dior Sauvage Elixir', cardName: 'Sauvage Elixir', brand: 'Dior', number: '005', family: 'woody', descriptor: 'DIOR', tagline: 'Spices, lavender, and rich woods.', notes: 'Grapefruit & spices · Lavender · Woods', top: 'Grapefruit, cinnamon, nutmeg, cardamom', heart: 'Lavender', base: 'Rich woods, licorice, vetiver, patchouli', description: 'Spicy grapefruit meets lavender and a rich woody base. Contact us to confirm the offered volume and presentation.', keywords: 'dior sauvage elixir grapefruit spices lavender woods woody', currency: 'MAD', sizes: { unit: 45 }, source: 'https://www.dior.com/en_int/beauty/products/sauvage-elixir-C099700242.html' },
   'libre-le-parfum': { name: 'YSL Libre Le Parfum', cardName: 'Libre Le Parfum', brand: 'Yves Saint Laurent', number: '006', family: 'floral', descriptor: 'YVES SAINT LAURENT', tagline: 'Floral lavender with a warm saffron accent.', notes: 'Saffron · Orange blossom · Lavender', top: 'Bergamot, mandarin, ginger, saffron accord', heart: 'Lavender, orange blossom', base: 'Vetiver, tonka bean, honey accord, vanilla', description: 'Lavender and orange blossom meet a warm saffron accord. Contact us to confirm the offered volume and presentation.', keywords: 'ysl yves saint laurent libre parfum floral saffron orange blossom lavender', currency: 'MAD', sizes: { unit: 45 }, source: 'https://www.yslbeauty.com/int/fragrance/feminine-fragrance/libre/libre-le-parfum/WW-51020YSL.html' },
-  solar: { name: 'Solar Drift', number: '001', family: 'fresh', descriptor: 'THE GOLDEN ONE', tagline: 'Sun on skin. Now bottled.', mood: 'a little sunshine<br>goes a long way.', notes: 'Bergamot · Neroli · Soft musk', top: 'Bergamot, mandarin', heart: 'Neroli, orange blossom', base: 'Soft musk, blonde woods', description: 'The windows are open. There is nowhere you need to be. Bright citrus drifts into a heart of orange blossom, settling into the soft warmth of skin. A little golden hour, whenever you need it.', keywords: 'sun sunshine sunny bright luminous citrus floral golden fresh summer morning', sizes: { '50': 89, '100': 139 } },
-  after: { name: 'After Hours', number: '002', family: 'woody', descriptor: 'THE UNEXPECTED ONE', tagline: 'Stay a little longer.', mood: 'one more<br>last night.', notes: 'Black tea · Iris · Sandalwood', top: 'Black tea, pink pepper', heart: 'Iris, violet leaf', base: 'Sandalwood, amber', description: 'The city is quieter now. The conversation is getting better. Smoky tea and a spark of pepper unfold into powdery iris and warm, textured woods. For the nights that become stories.', keywords: 'night evening deep dark warm woody amber smoky tea mysterious', sizes: { '50': 89, '100': 139 } },
-  soft: { name: 'Soft Static', number: '003', family: 'soft', descriptor: 'THE QUIET ONE', tagline: 'Close to skin. Closer to you.', mood: 'the art of<br>doing nothing.', notes: 'Pear · Ambrette · White woods', top: 'Pear, bergamot', heart: 'Ambrette, white iris', base: 'White woods, skin musk', description: 'Fresh sheets. A slow Sunday. The lovely luxury of having nothing planned. Crisp pear melts into ambrette and whisper-soft woods. An intimate fragrance that feels like your favorite version of home.', keywords: 'quiet clean soft intimate skin delicate gentle cozy musk pear sunday', sizes: { '50': 89, '100': 139 } },
-  discovery: { name: 'The OREYN Trio', number: '000', family: 'all', descriptor: 'THREE MOODS. ONE SIGNATURE.', notes: 'Solar Drift · After Hours · Soft Static', keywords: 'trio pack box gift set discovery all three fragrances', currency: 'MAD', sizes: { set: 129 } }
+  solar: { name: 'Solar Drift', number: '001', family: 'fresh', descriptor: 'THE GOLDEN ONE', tagline: 'Sun on skin. Now bottled.', mood: 'a little sunshine<br>goes a long way.', notes: 'Bergamot · Neroli · Soft musk', top: 'Bergamot, mandarin', heart: 'Neroli, orange blossom', base: 'Soft musk, blonde woods', description: 'The windows are open. There is nowhere you need to be. Bright citrus drifts into a heart of orange blossom, settling into the soft warmth of skin. A little golden hour, whenever you need it.', keywords: 'sun sunshine sunny bright luminous citrus floral golden fresh summer morning', currency: 'MAD', sizes: { '50': 45, '100': 45 } },
+  after: { name: 'After Hours', number: '002', family: 'woody', descriptor: 'THE UNEXPECTED ONE', tagline: 'Stay a little longer.', mood: 'one more<br>last night.', notes: 'Black tea · Iris · Sandalwood', top: 'Black tea, pink pepper', heart: 'Iris, violet leaf', base: 'Sandalwood, amber', description: 'The city is quieter now. The conversation is getting better. Smoky tea and a spark of pepper unfold into powdery iris and warm, textured woods. For the nights that become stories.', keywords: 'night evening deep dark warm woody amber smoky tea mysterious', currency: 'MAD', sizes: { '50': 45, '100': 45 } },
+  soft: { name: 'Soft Static', number: '003', family: 'soft', descriptor: 'THE QUIET ONE', tagline: 'Close to skin. Closer to you.', mood: 'the art of<br>doing nothing.', notes: 'Pear · Ambrette · White woods', top: 'Pear, bergamot', heart: 'Ambrette, white iris', base: 'White woods, skin musk', description: 'Fresh sheets. A slow Sunday. The lovely luxury of having nothing planned. Crisp pear melts into ambrette and whisper-soft woods. An intimate fragrance that feels like your favorite version of home.', keywords: 'quiet clean soft intimate skin delicate gentle cozy musk pear sunday', currency: 'MAD', sizes: { '50': 45, '100': 45 } },
+  discovery: { name: 'The OREYN Trio', number: '000', family: 'all', descriptor: 'THREE MOODS. ONE SIGNATURE.', notes: 'Solar Drift · After Hours · Soft Static', keywords: 'trio pack box gift set discovery all three fragrances', currency: 'MAD', sizes: { set: 45 } }
 };
 const productImages = {
   'le-male': { src: 'assets/le-male-le-parfum.jpg', alt: 'Jean Paul Gaultier Le Male Le Parfum catalogue bottle', width: 800, height: 800 },
@@ -23,7 +22,7 @@ const productImages = {
 const sizeText = size => size === 'set' ? 'OREYN Trio' : size === 'unit' ? 'Size to confirm' : `${size} ml`;
 const defaultSize = id => Object.keys(products[id].sizes)[0];
 const dirham = value => `${new Intl.NumberFormat('en-MA', { maximumFractionDigits: 0 }).format(value)} DH`;
-const productMoney = (id, value) => products[id]?.currency === 'MAD' ? dirham(value) : money(value);
+const productMoney = (id, value) => dirham(value);
 function readStored(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } }
 function persist(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* The store remains usable with storage disabled. */ } }
 const rawCart = readStored('oreyn-cart-v2', []);
@@ -36,7 +35,7 @@ if (!cart.length && localStorageAvailable() && localStorage.getItem('oreyn-cart-
 function localStorageAvailable() { try { return Boolean(window.localStorage); } catch { return false; } }
 const savedRaw = readStored('oreyn-saved', []);
 let saved = new Set(Array.isArray(savedRaw) ? savedRaw.filter(id => typeof id === 'string' && Object.hasOwn(products, id) && id !== 'discovery') : []);
-let filter = 'all', heroId = 'solar', detailId = 'solar', detailSize = '50', giftWrap = false;
+let filter = 'all', heroId = 'solar', detailId = 'solar', detailSize = '50';
 let toastTimer, lastModalTrigger;
 let compareIds = ['le-male', 'sauvage-elixir'];
 let compareSizes = compareIds.map(defaultSize);
@@ -256,14 +255,8 @@ function openProduct(id, updateUrl = true) {
   openModal('#product-dialog'); if (updateUrl) history.replaceState(null, '', `#scent/${id}`);
 }
 function cartTotals() {
-  let subtotal = 0, madSubtotal = 0;
-  cart.forEach(item => {
-    const value = products[item.id].sizes[item.size] * item.quantity;
-    products[item.id].currency === 'MAD' ? madSubtotal += value : subtotal += value;
-  });
-  const wrapping = giftWrap && subtotal > 0 ? 5 : 0;
-  const shipping = subtotal === 0 || subtotal >= 120 ? 0 : 6;
-  return { subtotal, madSubtotal, wrapping, shipping, total: subtotal + wrapping + shipping };
+  const subtotal = cart.reduce((sum, item) => sum + products[item.id].sizes[item.size] * item.quantity, 0);
+  return { subtotal, total: subtotal };
 }
 function animateAddedProduct(id, trigger) {
   const bag = $('#open-bag');
@@ -337,11 +330,8 @@ function renderBag() {
   $('#bag-summary').oreynTotalAnimations?.forEach(animation => animation.cancel());
   persist('oreyn-cart-v2', cart); const count = cart.reduce((sum, item) => sum + item.quantity, 0); const t = cartTotals();
   $('#bag-count').textContent = count; $('#drawer-count').textContent = `(${count})`; $('#bag-dialog .bag-bottom').hidden = count === 0; $('#checkout-button').disabled = count === 0;
-  $('#shipping-progress').innerHTML = t.subtotal ? `<div class="shipping-progress">${t.subtotal >= 120 ? 'Your preview includes complimentary delivery.' : `${money(120 - t.subtotal)} away from complimentary delivery in this preview.`}<div><i style="width:${Math.min(t.subtotal / 120 * 100, 100)}%"></i></div></div>` : '';
   $('#bag-items').innerHTML = cart.map((item, index) => { const p = products[item.id]; return `<div class="bag-row"><div class="bag-thumb ${item.id}">${bottleMarkup(item.id, item.size)}</div><div><h3>${p.name}</h3><small>${sizeText(item.size)} / ${item.id === 'discovery' ? 'THREE FRAGRANCES' : p.brand || 'EAU DE PARFUM'}</small><div class="quantity"><button data-quantity="${index}" data-delta="-1" aria-label="Remove one ${p.name}, ${sizeText(item.size)}">−</button><span>${item.quantity}</span><button data-quantity="${index}" data-delta="1" aria-label="Add one ${p.name}, ${sizeText(item.size)}" ${item.quantity >= 99 ? 'disabled' : ''}>+</button><button class="remove-item" data-remove="${index}" aria-label="Remove ${p.name}, ${sizeText(item.size)}, from bag">Remove</button></div></div><span class="price">${productMoney(item.id, p.sizes[item.size] * item.quantity)}</span></div>`; }).join('') || emptyBagMarkup();
-  const euroSummary = t.subtotal ? `<label class="gift-option"><input type="checkbox" id="gift-wrap" ${giftWrap ? 'checked' : ''}> Make individual scents a gift <span style="margin-left:auto">+ €5</span></label><div class="summary-line"><span>Individual scents subtotal</span><span>${money(t.subtotal)}</span></div><div class="summary-line"><span>Delivery estimate</span><span>${t.shipping ? money(t.shipping) : 'Complimentary'}</span></div>${t.wrapping ? `<div class="summary-line"><span>Gift presentation</span><span>${money(t.wrapping)}</span></div>` : ''}<div class="summary-line total"><span>Fragrance total</span><span class="bag-total-amount" data-bag-total="EUR" data-value="${t.total}"><span class="bag-total-value">${money(t.total)}</span></span></div>` : '';
-  const madSummary = t.madSubtotal ? `<div class="summary-line total"><span>Total (MAD)</span><span class="bag-total-amount" data-bag-total="MAD" data-value="${t.madSubtotal}"><span class="bag-total-value">${dirham(t.madSubtotal)}</span></span></div>` : '';
-  $('#bag-summary').innerHTML = count ? euroSummary + madSummary : '';
+  $('#bag-summary').innerHTML = count ? `<div class="summary-line total"><span>Total (MAD)</span><span class="bag-total-amount" data-bag-total="MAD" data-value="${t.total}"><span class="bag-total-value">${dirham(t.total)}</span></span></div>` : '';
   animateBagTotals(previousTotals);
 }
 function animateBagTotals(previousTotals) {
@@ -386,9 +376,8 @@ function scrollToPageSection(selector) {
 }
 function openCheckout() {
   if (!cart.length) return; const t = cartTotals();
-  const euroSummary = t.subtotal ? `<div class="summary-line"><span>Delivery estimate</span><span>${t.shipping ? money(t.shipping) : 'Complimentary'}</span></div>${t.wrapping ? `<div class="summary-line"><span>Gift presentation</span><span>${money(t.wrapping)}</span></div>` : ''}<div class="summary-line total"><span>Fragrance total</span><span>${money(t.total)}</span></div>` : '';
-  const madSummary = t.madSubtotal ? `<div class="summary-line total"><span>Total (MAD)</span><span>${dirham(t.madSubtotal)}</span></div>` : '';
-  $('#checkout-content').innerHTML = `<p class="checkout-intro">A look at your next chapter. This is a concept-store preview: no order is placed, no payment is taken, and nothing is sent to a server.</p><div class="checkout-lines">${cart.map(item => `<div class="checkout-product"><div>${products[item.id].name}<small>${sizeText(item.size)} · Quantity ${item.quantity}</small></div><span>${productMoney(item.id, products[item.id].sizes[item.size] * item.quantity)}</span></div>`).join('')}${euroSummary}${madSummary}</div><form class="checkout-form" id="preview-form"><label for="preview-name">Make this preview yours (optional first name)</label><input id="preview-name" placeholder="Your first name" autocomplete="off" maxlength="40"><button class="pill dark full-width" type="submit">Finish my preview <span>↗︎</span></button></form>`;
+  const summary = `<div class="summary-line total"><span>Total (MAD)</span><span>${dirham(t.total)}</span></div>`;
+  $('#checkout-content').innerHTML = `<p class="checkout-intro">A look at your next chapter. This is a concept-store preview: no order is placed, no payment is taken, and nothing is sent to a server.</p><div class="checkout-lines">${cart.map(item => `<div class="checkout-product"><div>${products[item.id].name}<small>${sizeText(item.size)} · Quantity ${item.quantity}</small></div><span>${productMoney(item.id, products[item.id].sizes[item.size] * item.quantity)}</span></div>`).join('')}${summary}</div><form class="checkout-form" id="preview-form"><label for="preview-name">Make this preview yours (optional first name)</label><input id="preview-name" placeholder="Your first name" autocomplete="off" maxlength="40"><button class="pill dark full-width" type="submit">Finish my preview <span>↗︎</span></button></form>`;
   openModal('#checkout-dialog');
   $('#preview-form').addEventListener('submit', event => { event.preventDefault(); const name = $('#preview-name').value.trim(); $('#checkout-content').innerHTML = '<div class="preview-success"><span class="star-mark">✳</span><h3 id="preview-title"></h3><p>Your preview is complete. Your chosen scents are still saved in your bag, ready for your next visit.</p><p>No order has been placed and no personal details have been saved.</p><button class="pill dark" data-continue>Back to your world <span>↗︎</span></button></div>'; $('#preview-title').textContent = name ? `A little more you, ${name}.` : 'A little more you.'; $('#preview-title').tabIndex = -1; $('#preview-title').focus(); });
 }
@@ -413,7 +402,7 @@ function searchProducts() {
   $('#search-results').innerHTML = matches.map(([id, p]) => `<button class="search-result" ${id === 'discovery' ? 'data-discovery-link' : `data-product="${id}"`}><div class="${id}">${bottleMarkup(id)}</div><div><strong>${p.name}</strong><small>${p.notes}</small></div><span>↗︎</span></button>`).join('') || '<p class="search-empty">No scent found just yet. Try a note like “iris” or a feeling like “warm”.</p>';
 }
 const info = {
-  shipping: { title: 'The finer details.', paragraphs: ['Oreyn is currently a concept store. Products, prices, delivery estimates, and gift presentation are shown to demonstrate the shopping experience. Orders and shipments are not available.', 'The bag preview uses €6 estimated delivery, waived at a merchandise subtotal of €120. Gift presentation adds €5. These are preview values, not live shipping terms.', 'Actual delivery regions, dispatch times, and return conditions will be published before the store begins accepting orders.'] },
+  shipping: { title: 'The finer details.', paragraphs: ['OREYN is preparing to launch. Explore the fragrances and build your bag; orders and shipments are not available yet.', 'Delivery fees, delivery times, and return conditions will be confirmed before orders open.'] },
   privacy: { title: 'Your space. Your privacy.', paragraphs: ['This concept site stores your bag and saved fragrances in your browser using localStorage so they can remain available when you return. You can remove individual items or clear the site’s browser data at any time.', 'Search and scent-finder answers stay in this page. The optional name in the order preview is not stored or sent to a server. No newsletter signup is available.', 'Google Fonts supplies the site’s typography and may receive standard connection information such as your IP address. No analytics or advertising scripts have been added.'] },
   terms: { title: 'A note on this experience.', paragraphs: ['Oreyn is an original perfume-store concept. The fragrance compositions, prices, product imagery, and editorial content illustrate a proposed brand experience.', 'Adding items to your bag or completing an order preview does not create an order or a contract. No payment details are requested and no payments are processed.', 'Final product specifications, ingredients, pricing, availability, and sale terms will need to be confirmed before a commercial launch.'] },
   contact: { title: 'Stay in our orbit.', paragraphs: ['The Oreyn world is taking shape. A dedicated customer-care address will be added when the store launches.', 'In the meantime, explore the collection or take the scent finder. We hope you find a little moment that feels like you.'] }
@@ -580,7 +569,7 @@ document.addEventListener('change', event => {
     $(`[data-compare-size="${slot}"]`).focus({ preventScroll: true });
     $('#compare-status').textContent = `${products[compareIds[slot]].name}, ${sizeText(compareSizes[slot])}, ${productMoney(compareIds[slot], products[compareIds[slot]].sizes[compareSizes[slot]])}.`;
   }
-  if (event.target.id === 'gift-wrap') { giftWrap = event.target.checked; renderBag(); $('#gift-wrap')?.focus(); } });
+});
 $('#open-bag').addEventListener('click', () => { renderBag(); openModal('#bag-dialog'); });
 $('#continue-shopping').addEventListener('click', continueShopping);
 $('#checkout-button').addEventListener('click', openCheckout);

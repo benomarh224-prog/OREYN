@@ -21,7 +21,8 @@ test('comparison keeps two distinct fragrances and uses catalogue prices and siz
   assert.notEqual(vm.runInContext('compareIds[0]', c), vm.runInContext('compareIds[1]', c));
   c.openComparison('solar');
   vm.runInContext("compareSizes[0] = '100'; renderComparison();", c);
-  assert.match(nodes['#compare-content'].innerHTML, /€139/);
+  assert.match(nodes['#compare-content'].innerHTML, /45 DH/);
+  assert.doesNotMatch(nodes['#compare-content'].innerHTML, /€/);
   assert.match(nodes['#compare-content'].innerHTML, /data-add="solar" data-size="100"/);
   assert.match(nodes['#compare-content'].innerHTML, /option value="100" selected/);
   assert.doesNotMatch(nodes['#compare-content'].innerHTML, /undefined|NaN/);

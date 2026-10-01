@@ -9,9 +9,10 @@ const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const source = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'refinement.css'), 'utf8');
 
-test('OREYN Trio uses the supplied artwork and confirmed 129 DH price', () => {
+test('OREYN Trio uses the supplied artwork and updated 45 DH price', () => {
   assert.match(html, /assets\/oreyn-fragrance-trio\.jpg/);
-  assert.match(html, /<strong>129<\/strong> DH/);
+  assert.match(html, /<strong>45<\/strong> DH/);
+  assert.match(html, /class="menu-trio-price">45 <small>DH/);
   assert.doesNotMatch(html, /class="discovery-box"/);
   assert.doesNotMatch(html, /class="set-list"/);
   assert.match(html, /class="trio-scent-strip"/);
@@ -23,20 +24,19 @@ test('OREYN Trio uses the supplied artwork and confirmed 129 DH price', () => {
   vm.runInContext(`${data}\nglobalThis.trio = products.discovery; globalThis.trioImage = productImages.discovery;`, context);
   assert.equal(context.trio.name, 'The OREYN Trio');
   assert.equal(context.trio.currency, 'MAD');
-  assert.equal(context.trio.sizes.set, 129);
+  assert.equal(context.trio.sizes.set, 45);
   assert.equal(context.trioImage.src, 'assets/oreyn-fragrance-trio.jpg');
 });
 
-test('cart totals keep the MAD trio separate from existing euro concept prices', () => {
-  const context = { cart: [{ id: 'solar', size: '50', quantity: 1 }, { id: 'discovery', size: 'set', quantity: 1 }], giftWrap: false };
+test('cart totals combine fragrances and the trio in MAD', () => {
+  const context = { cart: [{ id: 'solar', size: '50', quantity: 1 }, { id: 'discovery', size: 'set', quantity: 1 }] };
   vm.createContext(context);
   const data = source.slice(source.indexOf('const products ='), source.indexOf('function readStored'));
   const totals = source.slice(source.indexOf('function cartTotals()'), source.indexOf('function addToCart('));
-  vm.runInContext(`${data}\n${totals}\nglobalThis.result = cartTotals(); globalThis.trioPrice = productMoney('discovery', 129);`, context);
-  assert.equal(context.result.subtotal, 89);
-  assert.equal(context.result.madSubtotal, 129);
-  assert.equal(context.result.total, 95);
-  assert.equal(context.trioPrice, '129 DH');
+  vm.runInContext(`${data}\n${totals}\nglobalThis.result = cartTotals(); globalThis.trioPrice = productMoney('discovery', products.discovery.sizes.set);`, context);
+  assert.equal(context.result.subtotal, 90);
+  assert.equal(context.result.total, 90);
+  assert.equal(context.trioPrice, '45 DH');
 });
 
 test('trio artwork has layered 3D motion with a reduced-motion fallback', () => {

@@ -23,9 +23,9 @@ test('filters, empty Saved, favorites and bag quantities preserve product action
  vm.runInContext(source.slice(source.indexOf('function addToCart('),source.indexOf('function renderBag(')),c);
  c.renderProducts();assert.equal((nodes['#product-grid'].innerHTML.match(/data-card=/g)||[]).length,6);
  assert.equal(nodes['.filters [data-filter="all"] span'].textContent,'06');
- for(const [family,count] of [['fresh',1],['woody',3],['floral',1],['soft',1],['45dh',3]]){c.filter=family;c.renderProducts();assert.equal((nodes['#product-grid'].innerHTML.match(/data-card=/g)||[]).length,count);assert.equal(filters.find(f=>f.dataset.filter===family)['aria-pressed'],true);assert.equal(nodes['#mobile-scent-filter'].value,family);}
- assert.equal((nodes['#product-grid'].innerHTML.match(/45 DH/g)||[]).length,3);
- assert.doesNotMatch(nodes['#product-grid'].innerHTML,/50 ml|undefined|NaN/);
+ for(const [family,count] of [['fresh',1],['woody',3],['floral',1],['soft',1],['45dh',6]]){c.filter=family;c.renderProducts();assert.equal((nodes['#product-grid'].innerHTML.match(/data-card=/g)||[]).length,count);assert.equal(filters.find(f=>f.dataset.filter===family)['aria-pressed'],true);assert.equal(nodes['#mobile-scent-filter'].value,family);}
+ assert.equal((nodes['#product-grid'].innerHTML.match(/45 DH/g)||[]).length,6);
+ assert.doesNotMatch(nodes['#product-grid'].innerHTML,/€|undefined|NaN/);
  c.filter='saved';c.renderProducts();assert.match(nodes['#product-grid'].innerHTML,/empty-state/);
  c.toggleSave('after');assert.match(nodes['#product-grid'].innerHTML,/data-card="after"/);assert.equal(nodes['#saved-count'].textContent,1);
  assert.equal(mobileOptions['[value="saved"]'].textContent,'Saved (1)');
@@ -37,12 +37,13 @@ test('filters, empty Saved, favorites and bag quantities preserve product action
  c.addToCart('solar','50');c.addToCart('solar','50');assert.equal(c.cart[0].quantity,2);assert.equal(c.cart[0].size,'50');
 });
 
-test('the three added fragrances cost 45 MAD and preserve an unconfirmed volume through cart totals',()=>{
- const c={cart:[{id:'le-male',size:'unit',quantity:1},{id:'sauvage-elixir',size:'unit',quantity:1},{id:'libre-le-parfum',size:'unit',quantity:1}],giftWrap:false};vm.createContext(c);
+test('all fragrances cost 45 MAD, with quantity-aware totals and preserved sizes',()=>{
+ const c={cart:[{id:'le-male',size:'unit',quantity:1},{id:'sauvage-elixir',size:'unit',quantity:1},{id:'libre-le-parfum',size:'unit',quantity:1}]};vm.createContext(c);
  vm.runInContext(source.slice(source.indexOf('const products ='),source.indexOf('function readStored')),c);
  vm.runInContext(source.slice(source.indexOf('function cartTotals()'),source.indexOf('function addToCart(')),c);
  vm.runInContext("globalThis.catalogue = products; globalThis.images = productImages; globalThis.total = cartTotals(); globalThis.volume = sizeText('unit');",c);
- assert.equal(c.total.madSubtotal,135);assert.equal(c.total.subtotal,0);assert.equal(c.total.shipping,0);assert.equal(c.volume,'Size to confirm');
+ assert.equal(c.total.total,135);assert.equal(c.total.subtotal,135);assert.equal(c.volume,'Size to confirm');
+ for(const product of Object.values(c.catalogue)){assert.equal(product.currency,'MAD');for(const price of Object.values(product.sizes))assert.equal(price,45);}
  for(const id of ['le-male','sauvage-elixir','libre-le-parfum']){assert.equal(c.catalogue[id].currency,'MAD');assert.deepEqual(Object.keys(c.catalogue[id].sizes),['unit']);assert.equal(c.catalogue[id].sizes.unit,45);assert.ok(fs.existsSync(path.join(__dirname,'..',c.images[id].src)));}
- c.cart.push({id:'discovery',size:'set',quantity:1},{id:'solar',size:'50',quantity:1});vm.runInContext('globalThis.total = cartTotals();',c);assert.equal(c.total.madSubtotal,264);assert.equal(c.total.subtotal,89);
+ c.cart.push({id:'discovery',size:'set',quantity:1},{id:'solar',size:'50',quantity:1},{id:'solar',size:'100',quantity:2});vm.runInContext('globalThis.total = cartTotals();',c);assert.equal(c.total.total,315);assert.equal(c.total.subtotal,315);
 });

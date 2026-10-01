@@ -52,3 +52,12 @@ Verified in Edge at desktop and 390 px mobile widths:
 ## Boundaries
 
 No commerce, payments, email marketing, or shipping backend is connected. Product and policy copy is clearly identified as a concept. No live order, email subscription, or payment was submitted.
+# Pricing update — 1 October 2026
+
+- All six fragrances, every existing size option, and the OREYN Trio now use 45 DH pricing. The Trio's homepage and menu prices match its bag price.
+- Replaced mixed EUR/MAD bag totals with one MAD total; removed legacy euro delivery and gift fees from the bag, preview, and delivery information. Ordering remains a preview pending launch.
+- Chromium verification at 390 px and 1440 px: six 45 DH cards; the 45 DH filter returns six products; no horizontal page overflow.
+- Checked Solar Drift's 50 ml and 100 ml details at 45 DH, a brand perfume at 45 DH, and comparison of Solar Drift 100 ml with Sauvage Elixir at 45 DH each.
+- Added a 100 ml bottle, increased quantity to two, and verified 90 DH in the bag and order preview. Reload preserved its size, quantity, and 90 DH total. Adding the Trio produced 135 DH; adding Le Male produced 180 DH.
+- Inspected the desktop bag screenshot. No real order was placed. The phone checks used browser emulation, not a physical phone.
+- `npm run check`, `npm test` (24 passed), `npm run build`, and `git diff --check` passed.
