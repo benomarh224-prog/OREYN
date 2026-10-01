@@ -94,7 +94,32 @@ function animateSavedHeart(button, isSaved) {
   pulse.onfinish = cleanup;
   pulse.oncancel = cleanup;
 }
-function renderProducts() {
+function stopFilterTransition() {
+  const track = $('#product-grid'), animations = track.oreynFilterAnimations || [];
+  track.oreynFilterAnimations = [];
+  animations.forEach(animation => animation.cancel());
+}
+function animateFilteredCards() {
+  const track = $('#product-grid');
+  if (reducedMotion.matches || window.oreynMotionPaused || typeof track.animate !== 'function') return;
+  const bounds = track.getBoundingClientRect(), animations = [];
+  track.oreynFilterAnimations = animations;
+  [...track.children].filter(card => {
+    const rect = card.getBoundingClientRect();
+    return rect.right > bounds.left && rect.left < bounds.right;
+  }).forEach((card, index) => {
+    const animation = card.animate([
+      { opacity: .35, transform: 'translateY(4px)' },
+      { opacity: 1, transform: 'translateY(0)' }
+    ], { duration: 240, delay: Math.min(index * 30, 60), easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' });
+    animations.push(animation);
+    animation.onfinish = animation.oncancel = () => {
+      if (track.oreynFilterAnimations === animations) animations.splice(animations.indexOf(animation), 1);
+    };
+  });
+}
+function renderProducts(animate = false) {
+  stopFilterTransition();
   const matches = Object.entries(products).filter(([id, p]) => id !== 'discovery' && (filter === 'all' || filter === 'saved' && saved.has(id) || filter === '45dh' && p.currency === 'MAD' && p.sizes[defaultSize(id)] === 45 || p.family === filter));
   $('#product-grid').innerHTML = matches.map(([id, p]) => {
     const size = defaultSize(id);
@@ -104,6 +129,7 @@ function renderProducts() {
   $('#saved-count').textContent = saved.size;
   $('.filters [data-filter="all"] span').textContent = String(Object.keys(products).filter(id => id !== 'discovery').length).padStart(2, '0');
   $$('.filters [data-filter]').forEach(button => { const active = button.dataset.filter === filter; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); });
+  if (animate) animateFilteredCards();
 }
 function toggleSave(id, trigger) {
   const gridFocused = Boolean(document.activeElement?.closest('#product-grid'));
@@ -478,9 +504,12 @@ document.addEventListener('click', async event => {
   const pageAnchor = button.matches('a[href^="#"]') ? button.getAttribute('href') : null;
   if (pageAnchor !== null) { event.preventDefault(); scrollToPageSection(pageAnchor); }
   if (button.hasAttribute('data-menu-close')) closeMenu(true);
-  if (button.dataset.menuFilter) { filter = button.dataset.menuFilter; renderProducts(); scrollToPageSection('#collection'); }
+  if (button.dataset.menuFilter) { if (filter !== button.dataset.menuFilter) { filter = button.dataset.menuFilter; renderProducts(true); } scrollToPageSection('#collection'); }
   if (button.hasAttribute('data-close')) closeModal(button.closest('dialog'));
-  if (button.dataset.filter) { filter = button.dataset.filter; renderProducts(); }
+  if (button.dataset.filter && filter !== button.dataset.filter) {
+    filter = button.dataset.filter; renderProducts(true);
+    if (!button.isConnected) $(`.filters [data-filter="${filter}"]`)?.focus({ preventScroll: true });
+  }
   if (button.dataset.save) toggleSave(button.dataset.save, button);
   if (button.dataset.product) openProduct(button.dataset.product);
   if (button.hasAttribute('data-open-compare')) openComparison(button.dataset.openCompare);
@@ -556,6 +585,7 @@ window.oreynMotionPaused = reducedMotion.matches;
 function updateMotion() { document.body.classList.toggle('motion-paused', window.oreynMotionPaused); $('#motion-toggle').setAttribute('aria-pressed', String(window.oreynMotionPaused)); $('#motion-label').textContent = window.oreynMotionPaused ? 'RESUME MOTION' : 'PAUSE MOTION'; window.dispatchEvent(new Event('oreyn-motion')); }
 window.addEventListener('oreyn-motion', () => {
   if (!reducedMotion.matches && !window.oreynMotionPaused) return;
+  stopFilterTransition();
   $('#mobile-nav').oreynMenuAnimations?.forEach(animation => animation.cancel());
   $('#bag-summary').oreynTotalAnimations?.forEach(animation => animation.cancel());
   $('#image-dialog').oreynZoomSession?.animations.forEach(animation => animation.cancel());

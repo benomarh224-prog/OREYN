@@ -17,7 +17,7 @@ test('filters, empty Saved, favorites and bag quantities preserve product action
  const filters=['all','45dh','fresh','woody','floral','soft','saved'].map(filter=>({dataset:{filter},classList:{toggle(){}},setAttribute(k,v){this[k]=v;}}));
  const c={Set,Object,money:n=>'€'+n,bottleMarkup:()=>'<img>',saveButton:()=>'<button></button>',$:s=>nodes[s],$$:s=>s.startsWith('.filters')?filters:[],prepareCarousel(){},persist(){},notify(){},renderBag(){},document:{activeElement:null},filter:'all',saved:new Set(),cart:[]};vm.createContext(c);
  vm.runInContext(source.slice(source.indexOf('const products ='),source.indexOf('function readStored')),c);
- vm.runInContext(source.slice(source.indexOf('function renderProducts()'),source.indexOf('function openProduct(')),c);
+ vm.runInContext(source.slice(source.indexOf('function stopFilterTransition()'),source.indexOf('function openProduct(')),c);
  vm.runInContext(source.slice(source.indexOf('function addToCart('),source.indexOf('function renderBag(')),c);
  c.renderProducts();assert.equal((nodes['#product-grid'].innerHTML.match(/data-card=/g)||[]).length,6);
  assert.equal(nodes['.filters [data-filter="all"] span'].textContent,'06');

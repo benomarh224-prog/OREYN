@@ -637,7 +637,9 @@ dialog { border-radius: 17px; }
 .collection-showcase { min-width: 0; }
 .collection-toolbar { margin-bottom: 10px; }
 .filters { display: flex; flex-wrap: wrap; gap: 6px; }
-.filters button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 24px; font-size: 12px; }
+.filters button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 24px; font-size: 12px; transition: background-color .18s ease,color .18s ease,border-color .18s ease; }
+.motion-paused .filters button { transition: none; }
+@media(prefers-reduced-motion:reduce) { .filters button { transition: none; } }
 .filters button span { margin-left: 5px; font-size: 10px; }
 .filters button.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .carousel-navigation { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 6px; }
