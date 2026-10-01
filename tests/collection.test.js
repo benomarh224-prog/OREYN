@@ -43,7 +43,7 @@ test('all fragrances cost 45 MAD, with quantity-aware totals and preserved sizes
  vm.runInContext(source.slice(source.indexOf('function cartTotals()'),source.indexOf('function addToCart(')),c);
  vm.runInContext("globalThis.catalogue = products; globalThis.images = productImages; globalThis.total = cartTotals(); globalThis.volume = sizeText('unit');",c);
  assert.equal(c.total.total,135);assert.equal(c.total.subtotal,135);assert.equal(c.volume,'Size to confirm');
- for(const product of Object.values(c.catalogue)){assert.equal(product.currency,'MAD');for(const price of Object.values(product.sizes))assert.equal(price,45);}
+ for(const [id,product] of Object.entries(c.catalogue)){assert.equal(product.currency,'MAD');for(const price of Object.values(product.sizes))assert.equal(price,id==='discovery'?129:45);}
  for(const id of ['le-male','sauvage-elixir','libre-le-parfum']){assert.equal(c.catalogue[id].currency,'MAD');assert.deepEqual(Object.keys(c.catalogue[id].sizes),['unit']);assert.equal(c.catalogue[id].sizes.unit,45);assert.ok(fs.existsSync(path.join(__dirname,'..',c.images[id].src)));}
- c.cart.push({id:'discovery',size:'set',quantity:1},{id:'solar',size:'50',quantity:1},{id:'solar',size:'100',quantity:2});vm.runInContext('globalThis.total = cartTotals();',c);assert.equal(c.total.total,315);assert.equal(c.total.subtotal,315);
+ c.cart.push({id:'discovery',size:'set',quantity:1},{id:'solar',size:'50',quantity:1},{id:'solar',size:'100',quantity:2});vm.runInContext('globalThis.total = cartTotals();',c);assert.equal(c.total.total,399);assert.equal(c.total.subtotal,399);
 });

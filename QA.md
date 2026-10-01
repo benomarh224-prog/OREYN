@@ -1,5 +1,10 @@
 # Oreyn validation
 
+## Trio price correction — 1 October 2026
+
+- Restored the OREYN Trio to 129 DH in product data, the homepage, and mobile menu; individual fragrances remain 45 DH for every existing size.
+- Updated price regression checks: one individual fragrance plus one Trio totals 174 DH. Syntax checks, 24 tests, the build asset check, and `git diff --check` passed.
+
 ## Mobile collection filters — October 2026
 
 - The reported incorrect mobile filtering was not reproduced in the previous deployment with Chromium or WebKit. All seven filters returned the expected catalogue entries in those checks.
