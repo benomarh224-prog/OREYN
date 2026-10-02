@@ -353,9 +353,10 @@ function animateBagTotals(previousTotals) {
     ghost.textContent = previous.text;
     ghost.setAttribute('aria-hidden', 'true');
     amount.append(ghost);
+    const direction = Number(amount.dataset.value) >= Number(previous.value) ? 1 : -1;
     const animations = [
-      ghost.animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-4px)' }], { duration: 120, easing: 'ease-out', fill: 'forwards' }),
-      value.animate([{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 180, delay: 120, easing: 'ease-out', fill: 'backwards' })
+      ghost.animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: `translateY(${-direction * 8}px)` }], { duration: 160, easing: 'ease-out', fill: 'forwards' }),
+      value.animate([{ opacity: 0, transform: `translateY(${direction * 8}px)` }, { opacity: 1, transform: 'translateY(0)' }], { duration: 300, delay: 100, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' })
     ];
     summary.oreynTotalAnimations.push(...animations);
     Promise.all(animations.map(animation => animation.finished)).catch(() => {}).finally(() => { ghost.remove(); animations.forEach(animation => animation.cancel()); });
@@ -449,6 +450,22 @@ async function swapHeroPhoto(photo, image) {
     if (photo.oreynSwap === swap) swap.cancel();
   }
 }
+function animateHeroSelection(id) {
+  const name = $('#hero-name');
+  name.oreynSelectionAnimations?.forEach(animation => animation.cancel());
+  name.oreynSelectionAnimations = [];
+  if (reducedMotion.matches || window.oreynMotionPaused) return;
+  const circle = $(`[data-hero="${id}"] > span`);
+  const animations = [
+    name.animate([{ opacity: .45, transform: 'translateY(5px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 300, easing: 'cubic-bezier(.22,1,.36,1)' }),
+    circle.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.22)', offset: .4 }, { transform: 'scale(1)' }], { duration: 380, easing: 'ease-in-out' })
+  ];
+  name.oreynSelectionAnimations = animations;
+  Promise.all(animations.map(animation => animation.finished)).catch(() => {}).finally(() => {
+    animations.forEach(animation => animation.cancel());
+    if (name.oreynSelectionAnimations === animations) name.oreynSelectionAnimations = [];
+  });
+}
 function setHero(id) {
   if (!products[id] || id === 'discovery') return;
   const changed = heroId !== id;
@@ -470,6 +487,7 @@ function setHero(id) {
     button.setAttribute('aria-pressed', String(active));
   });
   $('#hero-status').textContent = p.name + ' selected.';
+  if (changed && typeof $('#hero-name').animate === 'function') animateHeroSelection(id);
 }
 let menuScrollY = 0;
 function closeMenu(restoreFocus = false) {
@@ -602,6 +620,7 @@ window.addEventListener('oreyn-motion', () => {
   stopFilterTransition();
   $('#mobile-nav').oreynMenuAnimations?.forEach(animation => animation.cancel());
   $('#bag-summary').oreynTotalAnimations?.forEach(animation => animation.cancel());
+  $('#hero-name').oreynSelectionAnimations?.forEach(animation => animation.cancel());
   $('#image-dialog').oreynZoomSession?.animations.forEach(animation => animation.cancel());
   $$('.bag-total-old').forEach(el => el.remove());
 });

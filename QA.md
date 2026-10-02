@@ -1,5 +1,13 @@
 # Oreyn validation
 
+## Swatch feedback and bag total motion — 3 October 2026
+
+- Added a small pulse to the newly selected fragrance circle and a 300 ms fade/slide to its name. Selection, image updates, and live announcements remain immediate. Rapid selections cancel prior animations.
+- Refined the existing bag total transition: amounts move upward when increasing and downward when decreasing, with a smooth 400 ms overall transition. Actual totals update immediately; decorative outgoing numbers remain hidden from assistive technology.
+- Chromium at 390 px: verified circle/name animations, rapid selections, exclusive selection, 45→90→45 DH quantity changes, five rapid increases to 270 DH, and cancellation during a change to 315 DH. No leftover number overlays. Verified motion pause and reduced-motion suppression for both effects.
+- Checked desktop selection at 1440 px without page overflow. No runtime errors. Tests used browser viewport emulation, not a physical phone.
+- JavaScript checks, 24 tests, build asset validation, and `git diff --check` passed.
+
 ## Frameless hero bottle — 3 October 2026
 
 - Removed the hero's oval border, clipped frame, colored halo, mist, and tinted backdrop. The photography stage is transparent and composites its white studio background into the cream page with `mix-blend-mode: multiply`; source photographs are unchanged.
