@@ -1,5 +1,12 @@
 # Oreyn validation
 
+## Card-to-details photo transition — 3 October 2026
+
+- A fully visible, loaded card photo moves and resizes into the details image over 420 ms. A decorative, non-interactive manual popover keeps the real photo above the dialog; the final image returns immediately when the animation ends. The dialog suppresses its competing entrance animation for this flow.
+- Keyboard focus stays inside the dialog and returns to the card on close. Escape, resize, scrolling, motion pause, and opening another modal cancel the transition and clean up its layer. Reduced motion, unsupported popovers, offscreen images, and direct scent URLs use the ordinary details flow.
+- Chromium: inspected the mobile transition mid-flight; verified completion, Escape/focus restoration, resizing while active, pausing while active, reduced motion, Add to bag, and direct scent URLs. Verified details and 50/100 ml controls at 320, 375, 390, 430, 768, and 1440 px with no horizontal page overflow or hidden final image. No runtime errors. These were browser viewport checks, not a physical-phone test.
+- Syntax checks, 24 tests, production build, and `git diff --check` passed. Pricing is unchanged.
+
 ## Swatch feedback and bag total motion — 3 October 2026
 
 - Added a small pulse to the newly selected fragrance circle and a 300 ms fade/slide to its name. Selection, image updates, and live announcements remain immediate. Rapid selections cancel prior animations.

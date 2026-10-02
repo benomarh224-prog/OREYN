@@ -27,6 +27,8 @@ h2 { font-size: clamp(32px, 3.1vw, 48px); letter-spacing: -.055em; }
 .bag-button > span { position: absolute; top: -3px; right: -3px; width: 20px; height: 20px; border: 2px solid var(--paper); background: var(--ink); color: var(--paper); font-size: 9px; line-height: 1; }
 .bag-flight-layer, .bag-flight-layer:popover-open { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; pointer-events: none; z-index: 100; overflow: visible; }
 .bag-flight-layer::backdrop { background: transparent; pointer-events: none; }
+.product-photo-transition-layer { mix-blend-mode: multiply; }
+.product-flight-photo { position: absolute; object-fit: contain; max-width: none; margin: 0; pointer-events: none; }
 .bag-flight-photo { position: absolute; left: 0; top: 0; width: 72px; height: 88px; padding: 5px; object-fit: contain; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); box-shadow: 0 10px 24px #24282020; will-change: transform, opacity; }
 .bag-flight-target { position: absolute; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--orange); border-radius: 50%; background: var(--paper); color: var(--ink); box-shadow: 0 0 0 5px #dc552b14; }
 .bag-flight-target svg { width: 20px; height: 20px; }
@@ -150,6 +152,7 @@ dialog { border-radius: 17px; }
 .dialog-heading h2 { font-size: 31px; }
 .close-button { width: 44px; height: 44px; }
 .product-dialog { width: min(920px,calc(100% - 24px)); padding: 0; max-height: 90dvh; }
+.product-dialog.is-photo-transition[open] { animation: none; }
 .product-detail-grid { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); align-items: start; }
 .detail-art { --card-line: #24282022; min-width: 0; padding: 24px 20px 18px; }
 .detail-art.solar { background: #efe7d3; }
