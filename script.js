@@ -605,7 +605,65 @@ window.addEventListener('oreyn-motion', () => {
   $('#image-dialog').oreynZoomSession?.animations.forEach(animation => animation.cancel());
   $$('.bag-total-old').forEach(el => el.remove());
 });
+// Tilt the photography stage, leaving selectors and text in their normal flow.
+const heroStage = $('.hero-cinema');
+let heroPointer = null, heroFrame = 0, heroPosition;
+function resetHeroTilt() {
+  cancelAnimationFrame(heroFrame); heroFrame = 0; heroPointer = null;
+  heroStage?.classList.remove('is-following');
+  heroStage?.style.removeProperty('--bottle-rotate-x');
+  heroStage?.style.removeProperty('--bottle-rotate-y');
+}
+function followHeroPointer(event) {
+  if (!heroStage || reducedMotion.matches || window.oreynMotionPaused || !event.isPrimary || (event.pointerType !== 'mouse' && event.pointerId !== heroPointer)) return;
+  const bounds = heroStage.getBoundingClientRect();
+  heroPosition = {
+    x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
+    y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height))
+  };
+  if (heroFrame) return;
+  heroFrame = requestAnimationFrame(() => {
+    heroFrame = 0;
+    heroStage.style.setProperty('--bottle-rotate-x', `${(.5 - heroPosition.y) * 5}deg`);
+    heroStage.style.setProperty('--bottle-rotate-y', `${(heroPosition.x - .5) * 7}deg`);
+    heroStage.classList.add('is-following');
+  });
+}
+if (heroStage) {
+  // Passive listeners let the browser keep native scrolling and pinch zoom.
+  heroStage.addEventListener('pointerdown', event => { if (event.isPrimary) { heroPointer = event.pointerId; followHeroPointer(event); } }, { passive: true });
+  heroStage.addEventListener('pointermove', followHeroPointer, { passive: true });
+  for (const event of ['pointerup', 'pointercancel', 'pointerleave']) heroStage.addEventListener(event, resetHeroTilt, { passive: true });
+  window.addEventListener('scroll', resetHeroTilt, { passive: true });
+  window.addEventListener('blur', resetHeroTilt);
+  window.addEventListener('oreyn-motion', () => { if (reducedMotion.matches || window.oreynMotionPaused) resetHeroTilt(); });
+}
 const trioTilt = $('.discovery-tilt');
+let trioVisible = false, trioShinePlayed = false;
+function playTrioShine() {
+  if (!trioTilt || !trioVisible || trioShinePlayed || document.hidden || reducedMotion.matches || window.oreynMotionPaused) return;
+  trioShinePlayed = true;
+  trioTilt.classList.add('is-shining');
+}
+if (trioTilt) {
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => {
+      trioVisible = entries[0].isIntersecting && entries[0].intersectionRatio >= .35;
+      if (!trioVisible) trioTilt.classList.remove('is-shining');
+      playTrioShine();
+    }, { threshold: [0, .35] }).observe(trioTilt);
+  } else { trioVisible = true; playTrioShine(); }
+  trioTilt.addEventListener('animationend', event => { if (event.animationName === 'trio-light-sweep') trioTilt.classList.remove('is-shining'); });
+  window.addEventListener('oreyn-motion', () => {
+    if (reducedMotion.matches || window.oreynMotionPaused) trioTilt.classList.remove('is-shining');
+    else playTrioShine();
+  });
+}
+document.addEventListener('visibilitychange', () => {
+  resetHeroTilt();
+  if (document.hidden) trioTilt?.classList.remove('is-shining');
+  else playTrioShine();
+});
 function resetTrioTilt() {
   if (!trioTilt) return;
   for (const property of ['--trio-rotate-x', '--trio-rotate-y', '--trio-shine-x', '--trio-shine-y']) trioTilt.style.removeProperty(property);

@@ -1,5 +1,13 @@
 # Oreyn validation
 
+## Bottle interaction and Trio light sweep — 3 October 2026
+
+- The hero photography tilts gently with mouse movement or an active touch. Selector controls stay stationary. Pointer release, cancellation, leaving the image, scrolling, and window blur restore its resting position. Passive handlers preserve vertical scrolling and pinch zoom.
+- The Trio gets one diagonal light sweep when at least 35% of its artwork enters the viewport. It does not loop or replay after pausing. Reduced motion and the site's motion control disable the new effects.
+- Chromium: checked mouse response/reset, a fragrance image change, the sweep's start/end, cancellation while playing, and reduced-motion behavior.
+- Touch emulation: checked pointer cancellation and a native CDP touch swipe over the hero; the page scrolled and the tilt reset. No horizontal overflow at 320, 375, 390, 430, 768, or 1440 px. Swatches remained beneath the image. Inspected the 390 px hero screenshot; the complete bottle remained visible. This was not a physical-phone test.
+- `npm run check`, `npm test` (24 passed), `npm run build`, and `git diff --check` passed. Prices remain 45 DH per fragrance and 129 DH for the Trio.
+
 ## Trio price correction — 1 October 2026
 
 - Restored the OREYN Trio to 129 DH in product data, the homepage, and mobile menu; individual fragrances remain 45 DH for every existing size.
