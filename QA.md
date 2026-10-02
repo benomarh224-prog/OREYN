@@ -1,5 +1,12 @@
 # Oreyn validation
 
+## Frameless hero bottle — 3 October 2026
+
+- Removed the hero's oval border, clipped frame, colored halo, mist, and tinted backdrop. The photography stage is transparent and composites its white studio background into the cream page with `mix-blend-mode: multiply`; source photographs are unchanged.
+- Retained the bottle entrance, light sweep, interactive tilt, and fragrance crossfade. Removed the unused decoration styles and keyframes.
+- Chromium: visually inspected the complete bottle at 390 px; checked all three image changes and exclusive swatch states, mouse tilt/reset, and reduced motion. No page overflow at 320, 375, 390, 430, 768, or 1440 px; controls remained below the bottle. No runtime errors. Browser viewport checks were not physical-phone testing.
+- Syntax checks, 24 tests, the production build, and `git diff --check` passed.
+
 ## Bottle interaction and Trio light sweep — 3 October 2026
 
 - The hero photography tilts gently with mouse movement or an active touch. Selector controls stay stationary. Pointer release, cancellation, leaving the image, scrolling, and window blur restore its resting position. Passive handlers preserve vertical scrolling and pinch zoom.
