@@ -52,7 +52,6 @@ function notify(message, showBag = false) {
   toastTimer = setTimeout(() => { if (!el.contains(document.activeElement)) el.classList.remove('visible'); }, showBag ? 6000 : 3200);
 }
 function openModal(id) {
-  $('#product-dialog').oreynPhotoTransition?.cancel();
   if (!$('dialog[open]')) lastModalTrigger = document.activeElement?.closest('#mobile-nav') ? $('#menu-toggle') : document.activeElement;
   $$('dialog[open]').forEach(dialog => dialog.close());
   closeMenu();
@@ -60,7 +59,6 @@ function openModal(id) {
   window.oreynModalOpen = true; window.dispatchEvent(new Event('oreyn-motion'));
 }
 function closeModal(dialog) {
-  if (dialog.id === 'product-dialog') dialog.oreynPhotoTransition?.cancel();
   if (dialog.id === 'image-dialog') { closeProductImage(); return; }
   if (dialog.id === 'product-dialog' && $('#image-dialog').open) closeProductImage(false, true);
   dialog.close();
@@ -70,7 +68,6 @@ function closeModal(dialog) {
 }
 $$('dialog').forEach(dialog => {
   dialog.addEventListener('close', () => {
-    if (dialog.id === 'product-dialog' && !dialog.open) { dialog.oreynPhotoTransition?.cancel(); dialog.classList.remove('is-photo-transition'); }
     if (dialog.id === 'image-dialog' && !dialog.open) { dialog.oreynZoomSession?.animations.forEach(animation => animation.cancel()); dialog.oreynZoomSession = null; }
     window.oreynModalOpen = Boolean($('dialog[open]')); window.dispatchEvent(new Event('oreyn-motion'));
   });
@@ -242,57 +239,8 @@ function closeProductImage(restoreFocus = true, immediate = false) {
   session.animations = [animation];
   animation.finished.then(finish, finish);
 }
-function captureProductPhoto(trigger) {
-  const image = trigger?.closest('[data-card]')?.querySelector('.card-photo img');
-  if (!image?.complete || !image.naturalWidth || reducedMotion.matches || window.oreynMotionPaused || typeof image.animate !== 'function' || typeof HTMLElement.prototype.showPopover !== 'function') return null;
-  const bounds = image.getBoundingClientRect();
-  if (bounds.width <= 0 || bounds.height <= 0 || bounds.top < 0 || bounds.bottom > innerHeight || bounds.left < 0 || bounds.right > innerWidth) return null;
-  return { image, bounds, padding: getComputedStyle(image).padding };
-}
-function animateProductPhoto(source) {
-  const dialog = $('#product-dialog'), target = dialog.querySelector('.detail-image-button img');
-  if (!source || !target || reducedMotion.matches || window.oreynMotionPaused) return;
-  const layer = document.createElement('div');
-  layer.className = 'bag-flight-layer product-photo-transition-layer';
-  layer.setAttribute('popover', 'manual'); layer.setAttribute('aria-hidden', 'true');
-  const photo = source.image.cloneNode();
-  photo.removeAttribute('id'); photo.alt = ''; photo.className = 'product-flight-photo';
-  photo.removeAttribute('loading'); layer.append(photo); document.body.append(layer);
-  let frame = 0, animation;
-  const session = { cancel() {
-    cancelAnimationFrame(frame); animation?.cancel(); target.style.removeProperty('opacity'); layer.remove();
-    window.removeEventListener('resize', session.cancel);
-    window.removeEventListener('scroll', session.cancel);
-    dialog.removeEventListener('scroll', session.cancel);
-    if (dialog.oreynPhotoTransition === session) dialog.oreynPhotoTransition = null;
-  } };
-  dialog.oreynPhotoTransition = session;
-  try { layer.showPopover(); } catch { session.cancel(); return; }
-  const start = source.bounds;
-  Object.assign(photo.style, { left: `${start.left}px`, top: `${start.top}px`, width: `${start.width}px`, height: `${start.height}px`, padding: source.padding });
-  target.style.opacity = '0';
-  // The dialog must finish its layout before measuring the destination.
-  frame = requestAnimationFrame(() => {
-    if (!dialog.open || reducedMotion.matches || window.oreynMotionPaused) { session.cancel(); return; }
-    const end = target.getBoundingClientRect();
-    try {
-      animation = photo.animate([
-        { left: `${start.left}px`, top: `${start.top}px`, width: `${start.width}px`, height: `${start.height}px`, padding: source.padding },
-        { left: `${end.left}px`, top: `${end.top}px`, width: `${end.width}px`, height: `${end.height}px`, padding: getComputedStyle(target).padding }
-      ], { duration: 420, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' });
-      animation.finished.then(session.cancel, session.cancel);
-    } catch { session.cancel(); }
-  });
-  window.addEventListener('resize', session.cancel, { passive: true });
-  window.addEventListener('scroll', session.cancel, { passive: true });
-  dialog.addEventListener('scroll', session.cancel, { passive: true });
-}
-function openProduct(id, updateUrl = true, trigger = null) {
+function openProduct(id, updateUrl = true) {
   if (!products[id] || id === 'discovery') return;
-  const source = captureProductPhoto(trigger);
-  const dialog = $('#product-dialog');
-  dialog.oreynPhotoTransition?.cancel();
-  dialog.classList.toggle('is-photo-transition', Boolean(source));
   detailId = id; detailSize = defaultSize(id); const p = products[id];
   $('#product-detail').innerHTML = `<div class="product-detail-grid">
     <div class="detail-art ${id}"><span class="eyebrow">${p.number} / OREYN COLLECTION</span><button class="detail-image-button" data-zoom-product="${id}" aria-label="Enlarge ${p.name} photo" aria-haspopup="dialog" aria-controls="image-dialog">${bottleMarkup(id)}<span class="detail-zoom-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5M10 7v6M7 10h6"/></svg>View larger</span></button></div>
@@ -305,7 +253,6 @@ function openProduct(id, updateUrl = true, trigger = null) {
     <div class="detail-purchase-bar"><div class="detail-price-block"><small id="detail-volume">${sizeText(detailSize)}</small><strong id="detail-price" aria-live="polite">${productMoney(id, p.sizes[detailSize])}</strong></div><button class="pill dark" id="detail-add" data-add="${id}" data-size="${detailSize}" aria-label="Add ${p.name}, ${sizeText(detailSize)}, to bag">${detailAddMarkup()}</button>${saveButton(id)}</div>`;
   $('#product-dialog').setAttribute('aria-label', `${p.name} fragrance details`);
   openModal('#product-dialog'); if (updateUrl) history.replaceState(null, '', `#scent/${id}`);
-  animateProductPhoto(source);
 }
 function cartTotals() {
   const subtotal = cart.reduce((sum, item) => sum + products[item.id].sizes[item.size] * item.quantity, 0);
@@ -595,7 +542,7 @@ document.addEventListener('click', async event => {
     if (!button.isConnected) focusCollectionFilter();
   }
   if (button.dataset.save) toggleSave(button.dataset.save, button);
-  if (button.dataset.product) openProduct(button.dataset.product, true, button);
+  if (button.dataset.product) openProduct(button.dataset.product);
   if (button.hasAttribute('data-open-compare')) openComparison(button.dataset.openCompare);
   if (button.dataset.zoomProduct) openProductImage(button.dataset.zoomProduct, button);
   if (button.dataset.add) addToCart(button.dataset.add, button.dataset.size, button);
@@ -674,7 +621,6 @@ window.addEventListener('oreyn-motion', () => {
   $('#mobile-nav').oreynMenuAnimations?.forEach(animation => animation.cancel());
   $('#bag-summary').oreynTotalAnimations?.forEach(animation => animation.cancel());
   $('#hero-name').oreynSelectionAnimations?.forEach(animation => animation.cancel());
-  $('#product-dialog').oreynPhotoTransition?.cancel();
   $('#image-dialog').oreynZoomSession?.animations.forEach(animation => animation.cancel());
   $$('.bag-total-old').forEach(el => el.remove());
 });

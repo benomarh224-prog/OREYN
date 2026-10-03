@@ -1,5 +1,11 @@
 # Oreyn validation
 
+## Simplified product opening — 4 October 2026
+
+- Removed the card-to-details flying photo, manual popover layer, and its lifecycle code after the user disliked the visual result. Details now open with only a 180 ms opacity fade; the photograph is visible immediately.
+- Chromium at 390 and 1440 px: verified opening, no flying layer or hidden image, Escape/focus restoration, size selection, Add to bag, and no desktop horizontal page overflow. Reduced motion disables the fade. No runtime errors. These were viewport checks, not physical-phone testing.
+- Syntax checks, 24 tests, build validation, and `git diff --check` passed. Earlier hero, swatch, bag, and Trio effects remain intact.
+
 ## Card-to-details photo transition — 3 October 2026
 
 - A fully visible, loaded card photo moves and resizes into the details image over 420 ms. A decorative, non-interactive manual popover keeps the real photo above the dialog; the final image returns immediately when the animation ends. The dialog suppresses its competing entrance animation for this flow.
