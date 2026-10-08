@@ -699,6 +699,41 @@ dialog { border-radius: 17px; }
   .card-bag { flex-grow: 1; }
 }
 
+/* Oud and musk: a compact typographic presentation until catalogue details arrive. */
+.essentials { padding-block: 24px; }
+.essentials-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; margin-bottom: 16px; }
+.essentials-heading .eyebrow { flex-shrink: 0; color: var(--muted); font-size: 9px; }
+.essentials-heading h2 { margin: 0; font-size: clamp(23px,2.4vw,32px); font-weight: 500; letter-spacing: -.9px; }
+.essentials-heading h2 > span { color: var(--orange); }
+.essentials-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.essentials-card { min-width: 0; padding: 22px 26px; border: 1px solid transparent; border-radius: 19px; }
+.essentials-oud { color: #f3eee1; background: #2c3229; border-color: #424a3b; }
+.essentials-musk { color: var(--ink); background: #ece6da; border-color: #ded7c9; }
+.essentials-card-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.essentials-card-top .eyebrow { font-size: 9px; letter-spacing: 1.4px; }
+.essentials-oud .essentials-card-top { color: #d6c394; }
+.essentials-musk .essentials-card-top { color: #66664f; }
+.essentials-mark { font: italic 500 26px/1 'Cormorant Garamond',Georgia,serif; }
+.essentials-card-name { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-top: 22px; }
+.essentials-card-name h3 { margin: 0; font: italic 500 clamp(42px,4.8vw,65px)/1.15 'Cormorant Garamond',Georgia,serif; letter-spacing: -1.5px; }
+.essentials-card-name > span { font-size: 20px; }
+.essentials-card-details { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #24282026; font-size: 11px; line-height: 1.5; color: #62624e; }
+.essentials-oud .essentials-card-details { color: #d8d8c8; border-color: #f3eee130; }
+.essentials-size { display: inline-block; padding: 3px 8px; border: 1px solid #c6bdab; border-radius: 16px; font-size: 11px; line-height: 1.4; color: var(--ink); white-space: nowrap; }
+@media(max-width:600px) {
+  .essentials { padding-block: 20px; }
+  .essentials-heading { display: block; margin-bottom: 14px; }
+  .essentials-heading h2 { font-size: 23px; margin-top: 6px; line-height: 1.2; }
+  .essentials-grid { gap: 10px; }
+  .essentials-card { padding: 16px; border-radius: 16px; }
+  .essentials-card-top .eyebrow { font-size: 8px; letter-spacing: .8px; }
+  .essentials-mark { font-size: 22px; }
+  .essentials-card-name { flex-wrap: wrap; align-items: center; gap: 0 8px; padding-top: 18px; }
+  .essentials-card-name h3 { font-size: 40px; letter-spacing: -.9px; }
+  .essentials-card-name > span { font-size: 16px; }
+  .essentials-card-details { margin-top: 12px; padding-top: 10px; gap: 6px; font-size: 10px; }
+}
+
 /* The trio reads as one gift presentation, with unobstructed photography. */
 .trio-feature { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); align-items: center; gap: 0; max-width: 1100px; margin-inline: auto; padding: 10px; border: 1px solid #ded7c9; border-radius: 28px; background: #f0ece3; box-shadow: 0 18px 50px #4e46350a; }
 .discovery-art { height: auto; aspect-ratio: 1; overflow: visible; perspective: 1200px; background: transparent; border: 0; border-radius: 20px; box-shadow: none; }

@@ -1,5 +1,16 @@
 # Oreyn validation
 
+## Oud and musk publication — 9 October 2026
+
+- Prepared the category section for publication at the user's request. Musk uses the generic category name and the confirmed 10 ml volume. Its price is explicitly pending; Oud size and price remain pending. No invented product photograph, scent notes, or purchasable item with an unknown price was added.
+- Added compact metadata rows and a volume badge; removed the previous generic contact note. Scoped the hero's 45 DH wording to the existing perfume collection, so it does not imply a confirmed musk price.
+- Chromium at 320, 375, 390, 430, 768, and 1440 px: verified the volume and pricing state, side-by-side cards, natural text wrapping, no overlapping section boundaries, and no page overflow. Card heights are 166–221 px. No runtime errors. Syntax, all 24 tests, production build, and whitespace checks passed.
+
+## Oud and musk category draft — 9 October 2026
+
+- Added a compact two-card section after the collection: dark green/gold Oud and cream Musk, with English and Arabic category names. It is a local draft and has not been committed or deployed. No products, photos, notes, volumes, prices, or availability have been invented for these categories. Specific product names, sizes, and prices remain pending the user's answer.
+- Chromium at 320, 375, 390, 430, 768, and 1440 px: cards stay side by side, text wraps without clipping, card heights remain 120–169 px, section boundaries do not overlap, and the page has no horizontal overflow. No runtime errors. Syntax and build checks passed.
+
 ## Editorial hero refinement — 9 October 2026
 
 - Rebalanced the hero typography and bottle proportions; added Cormorant Garamond with a Georgia fallback for the italic slogan. Simplified the swatches and details link, made shopping the primary action, and added the confirmed 45 DH perfume / 129 DH Trio prices. Original photographs and all existing motion and selection behavior remain intact.
