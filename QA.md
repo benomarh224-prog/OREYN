@@ -1,5 +1,13 @@
 # Oreyn validation
 
+## Editorial hero refinement — 9 October 2026
+
+- Rebalanced the hero typography and bottle proportions; added Cormorant Garamond with a Georgia fallback for the italic slogan. Simplified the swatches and details link, made shopping the primary action, and added the confirmed 45 DH perfume / 129 DH Trio prices. Original photographs and all existing motion and selection behavior remain intact.
+- Chromium with touch emulation at 320, 375, 390, 430, 768, and 1440 px: checked normal-flow section boundaries, complete bottle framing, centered controls beneath the bottle, 44 px swatch targets, and no horizontal page overflow. All three choices updated the image, name, exclusive pressed state, announcement, and correct details dialog without changing hero height. Photo crossfades completed without leftover outgoing images.
+- Verified visible keyboard focus, Escape to close details, reduced-motion suppression, Shop scrolling, adding a 45 DH perfume to the bag, and opening the scent finder. No browser runtime errors. These were emulated browser checks, not physical-phone testing.
+- Syntax checks, all 24 tests, build, and whitespace validation passed. The HTTP tests required execution outside the restricted socket sandbox.
+- Requested Higgsfield design generation did not start: the connected service requires a Basic plan or higher. The hero was implemented directly in the existing project; no generated asset or replacement hosting project was created.
+
 ## Simplified product opening — 4 October 2026
 
 - Removed the card-to-details flying photo, manual popover layer, and its lifecycle code after the user disliked the visual result. Details now open with only a 180 ms opacity fade; the photograph is visible immediately.
