@@ -659,12 +659,14 @@ dialog { border-radius: 17px; }
 .card-heading h3 button { display: block; width: 100%; min-height: 44px; text-align: left; overflow-wrap: anywhere; }
 .card-heading p { font-size: 12px; line-height: 1.5; margin: 0; color: #535b4b; }
 .product-card .save-button { top: 12px; right: 12px; width: 44px; height: 44px; border: 1px solid var(--card-line); background: #ffffff70; }
-.card-photo { position: relative; display: grid; place-items: center; width: 100%; aspect-ratio: 5 / 4; margin: 10px 0; border-radius: 15px; background: #ffffff38; overflow: hidden; }
-.card-scenery { position: absolute; inset: 0; background: url('assets/oreyn-essentials-art.webp') right center / 200% 100%; opacity: .18; pointer-events: none; }
-.product-card.le-male .card-scenery, .product-card.after .card-scenery { background-position: left center; }
-.card-photo .original-product-photo { position: relative; z-index: 1; min-height: 0; width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; padding: 8px; }
+.card-photo { position: relative; display: grid; place-items: center; width: 100%; aspect-ratio: 5 / 4; margin: 10px 0; border-radius: 15px; background: transparent; overflow: hidden; }
+.card-bottle { position: absolute; inset: 0; display: grid; place-items: center; perspective: 800px; mix-blend-mode: multiply; transform: rotateX(var(--scent-tilt-x, 0deg)) rotateY(var(--scent-tilt-y, 0deg)); transition: transform 280ms ease-out; pointer-events: none; }
+.card-glint { position: absolute; inset: 0; z-index: 1; background: linear-gradient(110deg, transparent 38%, #fff0 42%, #ffffff50 49%, #fff0 56%, transparent 60%); opacity: 0; pointer-events: none; }
+.card-photo .original-product-photo { position: relative; min-height: 0; width: 100%; height: 100%; object-fit: contain; padding: 8px; }
 .product-card:not(.brand-card) .card-photo .original-product-photo { width: 100%; height: 120%; max-width: none; padding: 0; object-fit: contain; }
 .card-photo-arrow { position: absolute; z-index: 2; bottom: 10px; right: 10px; width: 30px; height: 30px; padding: 7px; border-radius: 50%; background: #ffffffb8; }
+.motion-paused .card-bottle { transform: none; transition: none; }
+@media (prefers-reduced-motion: reduce) { .card-bottle { transform: none; transition: none; } }
 
 .card-purchase { margin-top: auto; display: flex; flex-direction: column; gap: 10px; padding-top: 12px; border-top: 1px solid var(--card-line); }
 .card-price { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 10px; }

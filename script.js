@@ -106,22 +106,45 @@ function stopScentPhotoMotion() {
   const animations = track.oreynScentAnimations || [];
   track.oreynScentAnimations = [];
   animations.forEach(animation => animation.cancel());
+  $$('.card-bottle').forEach(bottle => {
+    bottle.style.removeProperty('--scent-tilt-x');
+    bottle.style.removeProperty('--scent-tilt-y');
+  });
 }
 function animateScentPhoto(card, direction = 1, reset = true) {
   if (reset) stopScentPhotoMotion();
   if (!card?.querySelector || reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) return;
-  const photo = card.querySelector('.original-product-photo'), scenery = card.querySelector('.card-scenery');
+  const photo = card.querySelector('.original-product-photo'), glint = card.querySelector('.card-glint');
   if (!photo?.complete || !photo.naturalWidth || typeof photo.animate !== 'function') return;
   const bounds = card.getBoundingClientRect();
   if (bounds.bottom <= 0 || bounds.top >= innerHeight) return;
   const animations = $('#product-grid').oreynScentAnimations ||= [];
   const play = (element, frames) => {
-    const animation = element.animate(frames, { duration: 520, easing: 'cubic-bezier(.22,1,.36,1)' });
+    const animation = element.animate(frames, { duration: 760, easing: 'cubic-bezier(.22,1,.36,1)' });
     animations.push(animation);
     animation.onfinish = animation.oncancel = () => { const index = animations.indexOf(animation); if (index !== -1) animations.splice(index, 1); };
   };
-  play(photo, [{ opacity: .72, transform: `translateX(${direction * 18}px) scale(.985)` }, { opacity: 1, transform: 'translateX(0) scale(1)' }]);
-  if (scenery) play(scenery, [{ opacity: .08, transform: `translateX(${-direction * 14}px)` }, { opacity: .18, transform: 'translateX(0)' }]);
+  play(photo, [
+    { opacity: .88, transform: `translateY(7px) rotateY(${direction * 9}deg) rotateZ(${direction * -1.2}deg) scale(.97)` },
+    { opacity: 1, transform: `translateY(-2px) rotateY(${-direction * 2}deg) rotateZ(0deg) scale(1)`, offset: .65 },
+    { opacity: 1, transform: 'translateY(0) rotateY(0deg) rotateZ(0deg) scale(1)' }
+  ]);
+  if (glint) play(glint, [
+    { opacity: 0, transform: 'translateX(-85%)', offset: 0 },
+    { opacity: .45, transform: 'translateX(-15%)', offset: .3 },
+    { opacity: .3, transform: 'translateX(35%)', offset: .65 },
+    { opacity: 0, transform: 'translateX(85%)', offset: 1 }
+  ]);
+}
+function tiltScentPhoto(event) {
+  if (event.pointerType !== 'mouse' || !matchMedia('(hover: hover) and (pointer: fine)').matches || reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) return;
+  const stage = event.target.closest('.card-photo'), bottle = stage?.querySelector('.card-bottle');
+  if (!bottle) return;
+  const bounds = stage.getBoundingClientRect();
+  const x = Math.max(-.5, Math.min(.5, (event.clientX - bounds.left) / bounds.width - .5));
+  const y = Math.max(-.5, Math.min(.5, (event.clientY - bounds.top) / bounds.height - .5));
+  bottle.style.setProperty('--scent-tilt-x', `${(-y * 5).toFixed(2)}deg`);
+  bottle.style.setProperty('--scent-tilt-y', `${(x * 8).toFixed(2)}deg`);
 }
 function queueScentPhotoMotion() {
   const track = $('#product-grid');
@@ -160,7 +183,7 @@ function renderProducts(animate = false) {
   const matches = Object.entries(products).filter(([id, p]) => id !== 'discovery' && (filter === 'all' || filter === 'saved' && saved.has(id) || filter === '45dh' && p.currency === 'MAD' && p.sizes[defaultSize(id)] === 45 || p.family === filter));
   $('#product-grid').innerHTML = matches.map(([id, p]) => {
     const size = defaultSize(id);
-    return `<article class="product-card ${id}${p.brand ? ' brand-card' : ''}" data-card="${id}"><div class="card-heading"><span class="card-brand">${p.brand || 'OREYN SIGNATURE'}</span><h3><button data-product="${id}" aria-label="Explore ${p.name}">${p.cardName || p.name}</button></h3><p>${p.notes}</p></div>${saveButton(id)}<button class="card-photo" data-product="${id}" aria-label="Explore ${p.name}"><span class="card-scenery" aria-hidden="true"></span>${bottleMarkup(id)}<svg class="card-photo-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><div class="card-purchase"><div class="card-price${p.currency === 'MAD' ? ' confirmed-price' : ''}"><strong>${productMoney(id, p.sizes[size])}</strong><span>${sizeText(size)}</span></div><button class="card-bag" data-add="${id}" data-size="${size}" aria-label="Add ${p.name}, ${sizeText(size)}, to bag">Add to bag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></button></div></article>`;
+    return `<article class="product-card ${id}${p.brand ? ' brand-card' : ''}" data-card="${id}"><div class="card-heading"><span class="card-brand">${p.brand || 'OREYN SIGNATURE'}</span><h3><button data-product="${id}" aria-label="Explore ${p.name}">${p.cardName || p.name}</button></h3><p>${p.notes}</p></div>${saveButton(id)}<button class="card-photo" data-product="${id}" aria-label="Explore ${p.name}"><span class="card-bottle">${bottleMarkup(id)}</span><span class="card-glint" aria-hidden="true"></span><svg class="card-photo-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><div class="card-purchase"><div class="card-price${p.currency === 'MAD' ? ' confirmed-price' : ''}"><strong>${productMoney(id, p.sizes[size])}</strong><span>${sizeText(size)}</span></div><button class="card-bag" data-add="${id}" data-size="${size}" aria-label="Add ${p.name}, ${sizeText(size)}, to bag">Add to bag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></button></div></article>`;
   }).join('') || '<div class="empty-state"><h3>A feeling worth keeping.</h3><p>Tap a heart on any scent to keep it here.</p><button class="pill dark" data-filter="all">Explore the collection <span>↗︎</span></button></div>';
   prepareCarousel();
   $('#saved-count').textContent = saved.size;
@@ -792,6 +815,14 @@ $('#scents-previous').addEventListener('click', () => stepCarousel(-1));
 $('#product-grid').addEventListener('scroll', syncCarousel, {passive: true});
 $('#product-grid').addEventListener('scroll', queueScentPhotoMotion, {passive: true});
 $('#product-grid').addEventListener('pointerdown', stopScentPhotoMotion, {passive: true});
+$('#product-grid').addEventListener('pointermove', tiltScentPhoto, {passive: true});
+$('#product-grid').addEventListener('pointerout', event => {
+  const stage = event.target.closest('.card-photo');
+  if (!stage || stage.contains(event.relatedTarget)) return;
+  const bottle = stage.querySelector('.card-bottle');
+  bottle?.style.removeProperty('--scent-tilt-x');
+  bottle?.style.removeProperty('--scent-tilt-y');
+}, {passive: true});
 window.addEventListener('oreyn-motion', () => {
   if (reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) stopScentPhotoMotion();
 });

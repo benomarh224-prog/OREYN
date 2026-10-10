@@ -1,5 +1,12 @@
 # Oreyn validation
 
+## Refined collection bottle motion — 11 October 2026
+
+- Removed the cloth artwork and its legacy CSS from perfume cards. Kept pastel card colors with a transparent photo stage. Added a restrained 760 ms bottle rotation/settle and a single light sweep after swipe/arrow navigation or filtering. Original photos, dimensions and catalogue prices are unchanged.
+- Added gentle pointer tilt for mouse devices, with return to neutral on exit. Touch scrolling remains native. Pause, reduced motion, modal opening, rapid filtering and resize cancel or suppress effects; motion never changes card geometry.
+- Chromium touch emulation at 320, 375, 390, 430, 768 and 1440 px: no horizontal page overflow. Verified forward/reverse arrows, native touch swipe, filters, empty and populated Saved, favorites, Add to bag, details/Escape, stable card height, motion cleanup and pause/resume. Desktop mouse tilt/reset and reduced-motion suppression passed. Visually inspected mobile still/moving and desktop screenshots. No runtime errors. Tests were browser emulation, not a physical phone.
+- Syntax validation, all 24 existing tests, production build and whitespace checks passed.
+
 ## Fragrance collection motion — 10 October 2026
 
 - Added a subtle 520 ms photo entrance and counter-moving decorative background when a fragrance card settles after native scrolling or arrow navigation, and when filters change. Reused the existing abstract material artwork; original bottle photographs, card dimensions, prices and shopping controls are preserved.
