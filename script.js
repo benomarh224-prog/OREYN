@@ -118,23 +118,38 @@ function animateScentPhoto(card, direction = 1, reset = true) {
   if (!photo?.complete || !photo.naturalWidth || typeof photo.animate !== 'function') return;
   const bounds = card.getBoundingClientRect();
   if (bounds.bottom <= 0 || bounds.top >= innerHeight) return;
-  const animations = $('#product-grid').oreynScentAnimations ||= [];
-  const play = (element, frames) => {
-    const animation = element.animate(frames, { duration: 760, easing: 'cubic-bezier(.22,1,.36,1)' });
-    animations.push(animation);
-    animation.onfinish = animation.oncancel = () => { const index = animations.indexOf(animation); if (index !== -1) animations.splice(index, 1); };
-  };
-  play(photo, [
-    { opacity: .88, transform: `translateY(7px) rotateY(${direction * 9}deg) rotateZ(${direction * -1.2}deg) scale(.97)` },
-    { opacity: 1, transform: `translateY(-2px) rotateY(${-direction * 2}deg) rotateZ(0deg) scale(1)`, offset: .65 },
-    { opacity: 1, transform: 'translateY(0) rotateY(0deg) rotateZ(0deg) scale(1)' }
+  playScentMotion(photo, [
+    { opacity: .6, transform: `translateX(${direction * 34}px) rotateY(${direction * 6}deg) scale(.975)` },
+    { opacity: 1, transform: 'translateX(0) rotateY(0deg) scale(1)' }
   ]);
-  if (glint) play(glint, [
+  if (glint) playScentMotion(glint, [
     { opacity: 0, transform: 'translateX(-85%)', offset: 0 },
     { opacity: .45, transform: 'translateX(-15%)', offset: .3 },
     { opacity: .3, transform: 'translateX(35%)', offset: .65 },
     { opacity: 0, transform: 'translateX(85%)', offset: 1 }
   ]);
+}
+function playScentMotion(element, frames, duration = 640) {
+  if (!element || typeof element.animate !== 'function') return;
+  const animations = $('#product-grid').oreynScentAnimations ||= [];
+  const animation = element.animate(frames, { duration, easing: 'cubic-bezier(.22,1,.36,1)' });
+  animations.push(animation);
+  animation.onfinish = animation.oncancel = () => { const index = animations.indexOf(animation); if (index !== -1) animations.splice(index, 1); };
+}
+function transitionScents(card, previous, direction) {
+  stopScentPhotoMotion();
+  if (!card || card === previous || reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) return;
+  const colour = card.querySelector('.card-colour'), outgoing = previous?.querySelector('.original-product-photo');
+  if (colour && previous) {
+    // Fade the real previous palette over the new card's unchanged base palette.
+    colour.style.background = getComputedStyle(previous).background;
+    playScentMotion(colour, [{ opacity: .85 }, { opacity: 0 }]);
+  }
+  if (outgoing?.complete && outgoing.naturalWidth) playScentMotion(outgoing, [
+    { opacity: 1, transform: 'translateX(0) rotateY(0deg) scale(1)' },
+    { opacity: .25, transform: `translateX(${-direction * 34}px) rotateY(${-direction * 6}deg) scale(.975)` }
+  ], 360);
+  animateScentPhoto(card, direction, false);
 }
 function tiltScentPhoto(event) {
   if (event.pointerType !== 'mouse' || !matchMedia('(hover: hover) and (pointer: fine)').matches || reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) return;
@@ -148,15 +163,17 @@ function tiltScentPhoto(event) {
 }
 function queueScentPhotoMotion() {
   const track = $('#product-grid');
-  if (track.oreynScentTimer) clearTimeout(track.oreynScentTimer);
-  if (reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) return;
-  // Let native scrolling settle before animating inside the newly active card.
+  if (track.oreynScentTimer) return;
+  // Follow the active card during native scrolling without animating its geometry.
   track.oreynScentTimer = setTimeout(() => {
     track.oreynScentTimer = null;
     const index = carouselIndex(), previous = track.oreynScentIndex ?? 0;
     track.oreynScentIndex = index;
-    if (index >= 0 && index !== previous) animateScentPhoto(carouselCards()[index], index > previous ? 1 : -1);
-  }, 120);
+    if (index >= 0 && index !== previous) {
+      const cards = carouselCards();
+      transitionScents(cards[index], cards[previous], index > previous ? 1 : -1);
+    }
+  }, 40);
 }
 function animateFilteredCards() {
   const track = $('#product-grid');
@@ -183,7 +200,7 @@ function renderProducts(animate = false) {
   const matches = Object.entries(products).filter(([id, p]) => id !== 'discovery' && (filter === 'all' || filter === 'saved' && saved.has(id) || filter === '45dh' && p.currency === 'MAD' && p.sizes[defaultSize(id)] === 45 || p.family === filter));
   $('#product-grid').innerHTML = matches.map(([id, p]) => {
     const size = defaultSize(id);
-    return `<article class="product-card ${id}${p.brand ? ' brand-card' : ''}" data-card="${id}"><div class="card-heading"><span class="card-brand">${p.brand || 'OREYN SIGNATURE'}</span><h3><button data-product="${id}" aria-label="Explore ${p.name}">${p.cardName || p.name}</button></h3><p>${p.notes}</p></div>${saveButton(id)}<button class="card-photo" data-product="${id}" aria-label="Explore ${p.name}"><span class="card-bottle">${bottleMarkup(id)}</span><span class="card-glint" aria-hidden="true"></span><svg class="card-photo-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><div class="card-purchase"><div class="card-price${p.currency === 'MAD' ? ' confirmed-price' : ''}"><strong>${productMoney(id, p.sizes[size])}</strong><span>${sizeText(size)}</span></div><button class="card-bag" data-add="${id}" data-size="${size}" aria-label="Add ${p.name}, ${sizeText(size)}, to bag">Add to bag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></button></div></article>`;
+    return `<article class="product-card ${id}${p.brand ? ' brand-card' : ''}" data-card="${id}"><span class="card-colour" aria-hidden="true"></span><div class="card-heading"><span class="card-brand">${p.brand || 'OREYN SIGNATURE'}</span><h3><button data-product="${id}" aria-label="Explore ${p.name}">${p.cardName || p.name}</button></h3><p>${p.notes}</p></div>${saveButton(id)}<button class="card-photo" data-product="${id}" aria-label="Explore ${p.name}"><span class="card-bottle">${bottleMarkup(id)}</span><span class="card-glint" aria-hidden="true"></span><svg class="card-photo-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><div class="card-purchase"><div class="card-price${p.currency === 'MAD' ? ' confirmed-price' : ''}"><strong>${productMoney(id, p.sizes[size])}</strong><span>${sizeText(size)}</span></div><button class="card-bag" data-add="${id}" data-size="${size}" aria-label="Add ${p.name}, ${sizeText(size)}, to bag">Add to bag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></button></div></article>`;
   }).join('') || '<div class="empty-state"><h3>A feeling worth keeping.</h3><p>Tap a heart on any scent to keep it here.</p><button class="pill dark" data-filter="all">Explore the collection <span>↗︎</span></button></div>';
   prepareCarousel();
   $('#saved-count').textContent = saved.size;
@@ -838,6 +855,28 @@ $('#product-grid').addEventListener('keydown', event => {
   }
 });
 window.addEventListener('resize', () => { sizeCarouselTail(); syncCarousel(); });
+
+// The decorative ribbon uses the same motion preferences as the store.
+const brandRibbon = $('#brand-ribbon'), ribbonToggle = $('#brand-ribbon-toggle');
+if (brandRibbon && ribbonToggle) {
+  let ribbonVisible = false, ribbonPaused = false;
+  const syncRibbon = () => {
+    const suppressed = reducedMotion.matches || window.oreynMotionPaused;
+    brandRibbon.dataset.running = String(ribbonVisible && !document.hidden && !suppressed && !window.oreynModalOpen);
+    brandRibbon.classList.toggle('is-paused', ribbonPaused);
+    ribbonToggle.hidden = suppressed;
+    ribbonToggle.setAttribute('aria-pressed', String(ribbonPaused));
+    ribbonToggle.setAttribute('aria-label', `${ribbonPaused ? 'Resume' : 'Pause'} brand ribbon animation`);
+  };
+  ribbonToggle.addEventListener('click', () => { ribbonPaused = !ribbonPaused; syncRibbon(); });
+  window.addEventListener('oreyn-motion', syncRibbon);
+  document.addEventListener('visibilitychange', syncRibbon);
+  if (typeof IntersectionObserver === 'function') new IntersectionObserver(entries => {
+    ribbonVisible = entries[0].isIntersecting; syncRibbon();
+  }).observe(brandRibbon);
+  else ribbonVisible = true;
+  syncRibbon();
+}
 
 // Keep these confirmed details separate from the priced perfume catalogue.
 const essentialsCatalogue = {

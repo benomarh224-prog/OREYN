@@ -1,5 +1,12 @@
 # Oreyn validation
 
+## Paired scent transitions and signature ribbon — 11 October 2026
+
+- Coordinated real outgoing/incoming bottle animations with the active card during native swipe/arrow scrolling. A decorative layer fades the previous card's actual palette into the incoming card's unchanged base color/gradient. No photograph clones, layout transforms, autoplay navigation or changes to catalogue/controls were introduced.
+- Added a 44 px signature ribbon between the hero and collection, repeating only OREYN / slice of life. It has a native 44 px pause/resume button, pauses on hover/focus, and stops outside the viewport, in background tabs, during dialogs, with the global motion control and with reduced motion. Repeated decorative text is hidden from assistive technology.
+- Chromium at 320, 375, 390, 430, 768 and 1440 px: no page overflow or overlapping hero/ribbon/collection boundaries. Verified paired forward/reverse effects, palette transition, native touch swipe, stable card height, rapid filters, empty/populated Saved, favorites, Add to bag, details/Escape, pause/resume, reduced motion, desktop tilt and animation cleanup. Ribbon touch/keyboard toggling, hover/focus pause and reduced-motion static rendering passed. Inspected mobile screenshots; no runtime errors. Checks used emulation rather than a physical phone.
+- Syntax validation, all 24 existing tests, production build and whitespace checks passed.
+
 ## Refined collection bottle motion — 11 October 2026
 
 - Removed the cloth artwork and its legacy CSS from perfume cards. Kept pastel card colors with a transparent photo stage. Added a restrained 760 ms bottle rotation/settle and a single light sweep after swipe/arrow navigation or filtering. Original photos, dimensions and catalogue prices are unchanged.

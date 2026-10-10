@@ -548,6 +548,24 @@ dialog { border-radius: 17px; }
 .footer-motion #motion-toggle { min-height: 44px; color: inherit; font-size: 9px; }
 
 
+/* A compact, decorative signature ribbon between the hero and collection. */
+.brand-ribbon { display: flex; align-items: center; border-block: 1px solid var(--line); background: #eeece3; color: var(--ink); }
+.brand-ribbon-window { flex: 1; min-width: 0; overflow: hidden; }
+.brand-ribbon-track { display: flex; width: max-content; animation: brand-ribbon-drift 44s linear infinite; animation-play-state: paused; }
+.brand-ribbon-group { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-around; gap: 22px; width: max(100vw,840px); height: 44px; }
+.brand-ribbon-group span { font-size: 11px; font-weight: 500; letter-spacing: 3px; }
+.brand-ribbon-group em { font: italic 17px 'Cormorant Garamond',Georgia,serif; }
+.brand-ribbon-group i { width: 4px; height: 4px; border-radius: 50%; background: var(--orange); }
+.brand-ribbon[data-running=true] .brand-ribbon-track { animation-play-state: running; }
+.brand-ribbon #brand-ribbon-toggle { flex: 0 0 44px; width: 44px; height: 44px; border-left: 1px solid var(--line); }
+#brand-ribbon-toggle svg { width: 16px; height: 16px; }
+#brand-ribbon-toggle:focus-visible { outline: 2px solid var(--orange); outline-offset: -4px; }
+.ribbon-play-icon, .is-paused .ribbon-pause-icon { display: none; }
+.is-paused .ribbon-play-icon { display: block; }
+.brand-ribbon.is-paused .brand-ribbon-track, .brand-ribbon:hover .brand-ribbon-track, .brand-ribbon:focus-within .brand-ribbon-track, .motion-paused .brand-ribbon .brand-ribbon-track { animation-play-state: paused; }
+@keyframes brand-ribbon-drift { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .brand-ribbon-track { animation: none; } }
+
 /* Editorial hero. Every row contributes to the section's natural height. */
 .hero { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); grid-template-areas: 'kicker bottle' 'title bottle' 'copy bottle'; column-gap: clamp(32px,5vw,72px); row-gap: 22px; align-items: center; max-width: 1360px; margin-inline: auto; padding: 36px var(--page-gutter) 36px; background: none; }
 .hero-kicker { grid-area: kicker; display: flex; align-items: center; gap: 12px; margin: 0; font-size: 9px; letter-spacing: 1.4px; }
@@ -646,6 +664,7 @@ dialog { border-radius: 17px; }
 #product-grid:focus-visible:not(.pointer-focus) { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 10px; }
 #product-grid.has-many:after { content: ''; flex: 0 0 var(--carousel-tail,0px); }
 .product-card { --card-accent: var(--ink); --card-line: #24282022; flex: 0 0 min(82%,320px); min-width: 0; display: flex; flex-direction: column; position: relative; isolation: isolate; scroll-snap-align: start; border-radius: 20px; padding: 18px; color: var(--ink); border: 1px solid var(--card-line); box-shadow: 0 5px 12px #24282008; }
+.card-colour { position: absolute; inset: 0; z-index: -1; border-radius: inherit; opacity: 0; pointer-events: none; }
 .product-card.solar { background: #efe7d3; }
 .product-card.after { background: #e6e0ed; }
 .product-card.soft { background: #e1e8dc; }
