@@ -762,3 +762,21 @@ $('#product-grid').addEventListener('keydown', event => {
   }
 });
 window.addEventListener('resize', () => { sizeCarouselTail(); syncCarousel(); });
+
+// Keep these confirmed details separate from the priced perfume catalogue.
+const essentialsCatalogue = {
+  musk: { name: 'Musk', arabic: 'المسك', volume: '10 ml', description: 'Discover our musk in a 10 ml format.' },
+  oud: { name: 'Oud', arabic: 'العود', volume: 'To confirm', description: 'Explore the oud collection.' }
+};
+function selectEssential(id) {
+  const scent = essentialsCatalogue[id], feature = $('#essentials-feature');
+  if (!scent || !feature || feature.dataset.scent === id) return;
+  feature.dataset.scent = id;
+  $('#essentials-name').textContent = scent.name;
+  $('#essentials-arabic').textContent = scent.arabic;
+  $('#essentials-description').textContent = scent.description;
+  $('#essentials-volume').textContent = scent.volume;
+  $$('[data-essential]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.essential === id)));
+  $('#essentials-status').textContent = `${scent.name} selected. Volume: ${scent.volume}. Price to confirm.`;
+}
+$$('[data-essential]').forEach(button => button.addEventListener('click', () => selectEssential(button.dataset.essential)));

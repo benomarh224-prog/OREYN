@@ -1,5 +1,12 @@
 # Oreyn validation
 
+## Oud and musk editorial redesign — 10 October 2026
+
+- Replaced the two empty-looking category cards and their legacy CSS with one editorial module. Native Oud/Musk buttons select a coherent presentation: ivory silk artwork for Musk, olive/gold artwork for Oud, English/Arabic names, and structured volume/price details. Musk remains 10 ml; price and Oud volume remain explicitly unconfirmed. No sale, stock, scent-note, or product-photo claims were added.
+- Generated decorative abstract material artwork with imagegen, exported to a 155 KB WebP in the project, and marked it decorative for assistive technology. This is brand artwork rather than a photograph of an offered bottle. Existing product photos and prices are unchanged.
+- Verified touch selection at 320, 375, 390, 430, 768, and 1440 px: exactly one button stays pressed; names, volume, artwork and live announcements update correctly. Module height stays constant when switching and there is no horizontal overflow, clipped copy, or overlapping section boundary. Mobile module height is approximately 211 px, excluding its heading.
+- Keyboard Tab/Enter, visible focus, reduced-motion behavior, image loading and all local/network requests passed. No runtime errors. Existing 24 tests, syntax validation, build and whitespace checks passed. Verification used browser emulation, not a physical phone; this client-only feature has no API or database boundary.
+
 ## Oud and musk publication — 9 October 2026
 
 - Prepared the category section for publication at the user's request. Musk uses the generic category name and the confirmed 10 ml volume. Its price is explicitly pending; Oud size and price remain pending. No invented product photograph, scent notes, or purchasable item with an unknown price was added.
