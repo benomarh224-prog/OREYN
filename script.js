@@ -94,9 +94,46 @@ function animateSavedHeart(button, isSaved) {
   pulse.oncancel = cleanup;
 }
 function stopFilterTransition() {
+  stopScentPhotoMotion();
   const track = $('#product-grid'), animations = track.oreynFilterAnimations || [];
   track.oreynFilterAnimations = [];
   animations.forEach(animation => animation.cancel());
+}
+function stopScentPhotoMotion() {
+  const track = $('#product-grid');
+  if (track.oreynScentTimer) clearTimeout(track.oreynScentTimer);
+  track.oreynScentTimer = null;
+  const animations = track.oreynScentAnimations || [];
+  track.oreynScentAnimations = [];
+  animations.forEach(animation => animation.cancel());
+}
+function animateScentPhoto(card, direction = 1, reset = true) {
+  if (reset) stopScentPhotoMotion();
+  if (!card?.querySelector || reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) return;
+  const photo = card.querySelector('.original-product-photo'), scenery = card.querySelector('.card-scenery');
+  if (!photo?.complete || !photo.naturalWidth || typeof photo.animate !== 'function') return;
+  const bounds = card.getBoundingClientRect();
+  if (bounds.bottom <= 0 || bounds.top >= innerHeight) return;
+  const animations = $('#product-grid').oreynScentAnimations ||= [];
+  const play = (element, frames) => {
+    const animation = element.animate(frames, { duration: 520, easing: 'cubic-bezier(.22,1,.36,1)' });
+    animations.push(animation);
+    animation.onfinish = animation.oncancel = () => { const index = animations.indexOf(animation); if (index !== -1) animations.splice(index, 1); };
+  };
+  play(photo, [{ opacity: .72, transform: `translateX(${direction * 18}px) scale(.985)` }, { opacity: 1, transform: 'translateX(0) scale(1)' }]);
+  if (scenery) play(scenery, [{ opacity: .08, transform: `translateX(${-direction * 14}px)` }, { opacity: .18, transform: 'translateX(0)' }]);
+}
+function queueScentPhotoMotion() {
+  const track = $('#product-grid');
+  if (track.oreynScentTimer) clearTimeout(track.oreynScentTimer);
+  if (reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) return;
+  // Let native scrolling settle before animating inside the newly active card.
+  track.oreynScentTimer = setTimeout(() => {
+    track.oreynScentTimer = null;
+    const index = carouselIndex(), previous = track.oreynScentIndex ?? 0;
+    track.oreynScentIndex = index;
+    if (index >= 0 && index !== previous) animateScentPhoto(carouselCards()[index], index > previous ? 1 : -1);
+  }, 120);
 }
 function animateFilteredCards() {
   const track = $('#product-grid');
@@ -107,6 +144,7 @@ function animateFilteredCards() {
     const rect = card.getBoundingClientRect();
     return rect.right > bounds.left && rect.left < bounds.right;
   }).forEach((card, index) => {
+    animateScentPhoto(card, 1, false);
     const animation = card.animate([
       { opacity: .65 },
       { opacity: 1 }
@@ -122,7 +160,7 @@ function renderProducts(animate = false) {
   const matches = Object.entries(products).filter(([id, p]) => id !== 'discovery' && (filter === 'all' || filter === 'saved' && saved.has(id) || filter === '45dh' && p.currency === 'MAD' && p.sizes[defaultSize(id)] === 45 || p.family === filter));
   $('#product-grid').innerHTML = matches.map(([id, p]) => {
     const size = defaultSize(id);
-    return `<article class="product-card ${id}${p.brand ? ' brand-card' : ''}" data-card="${id}"><div class="card-heading"><span class="card-brand">${p.brand || 'OREYN SIGNATURE'}</span><h3><button data-product="${id}" aria-label="Explore ${p.name}">${p.cardName || p.name}</button></h3><p>${p.notes}</p></div>${saveButton(id)}<button class="card-photo" data-product="${id}" aria-label="Explore ${p.name}">${bottleMarkup(id)}<svg class="card-photo-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><div class="card-purchase"><div class="card-price${p.currency === 'MAD' ? ' confirmed-price' : ''}"><strong>${productMoney(id, p.sizes[size])}</strong><span>${sizeText(size)}</span></div><button class="card-bag" data-add="${id}" data-size="${size}" aria-label="Add ${p.name}, ${sizeText(size)}, to bag">Add to bag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></button></div></article>`;
+    return `<article class="product-card ${id}${p.brand ? ' brand-card' : ''}" data-card="${id}"><div class="card-heading"><span class="card-brand">${p.brand || 'OREYN SIGNATURE'}</span><h3><button data-product="${id}" aria-label="Explore ${p.name}">${p.cardName || p.name}</button></h3><p>${p.notes}</p></div>${saveButton(id)}<button class="card-photo" data-product="${id}" aria-label="Explore ${p.name}"><span class="card-scenery" aria-hidden="true"></span>${bottleMarkup(id)}<svg class="card-photo-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><div class="card-purchase"><div class="card-price${p.currency === 'MAD' ? ' confirmed-price' : ''}"><strong>${productMoney(id, p.sizes[size])}</strong><span>${sizeText(size)}</span></div><button class="card-bag" data-add="${id}" data-size="${size}" aria-label="Add ${p.name}, ${sizeText(size)}, to bag">Add to bag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></button></div></article>`;
   }).join('') || '<div class="empty-state"><h3>A feeling worth keeping.</h3><p>Tap a heart on any scent to keep it here.</p><button class="pill dark" data-filter="all">Explore the collection <span>↗︎</span></button></div>';
   prepareCarousel();
   $('#saved-count').textContent = saved.size;
@@ -738,6 +776,7 @@ function sizeCarouselTail() {
 function prepareCarousel() {
   sizeCarouselTail();
   const track = $('#product-grid');
+  track.oreynScentIndex = 0;
   if (typeof track.scrollTo === 'function') track.scrollTo({ left: 0, behavior: 'instant' });
   else track.scrollLeft = 0;
   syncCarousel();
@@ -751,6 +790,12 @@ function stepCarousel(direction) {
 $('#scents-next').addEventListener('click', () => stepCarousel(1));
 $('#scents-previous').addEventListener('click', () => stepCarousel(-1));
 $('#product-grid').addEventListener('scroll', syncCarousel, {passive: true});
+$('#product-grid').addEventListener('scroll', queueScentPhotoMotion, {passive: true});
+$('#product-grid').addEventListener('pointerdown', stopScentPhotoMotion, {passive: true});
+window.addEventListener('oreyn-motion', () => {
+  if (reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) stopScentPhotoMotion();
+});
+window.addEventListener('resize', stopScentPhotoMotion);
 // A scroll container can retain :focus-visible after a touch on the same element.
 document.addEventListener('pointerdown', () => $('#product-grid').classList.add('pointer-focus'), { passive: true });
 document.addEventListener('keydown', event => {

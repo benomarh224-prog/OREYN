@@ -1,5 +1,12 @@
 # Oreyn validation
 
+## Fragrance collection motion — 10 October 2026
+
+- Added a subtle 520 ms photo entrance and counter-moving decorative background when a fragrance card settles after native scrolling or arrow navigation, and when filters change. Reused the existing abstract material artwork; original bottle photographs, card dimensions, prices and shopping controls are preserved.
+- Motion is canceled during rapid filtering, touch interaction, resize, modal opening and motion pause. Reduced-motion preferences suppress it. Only the photograph and decorative layer move, so native scroll snap and card geometry remain unchanged.
+- Chromium touch emulation: tested a native touch swipe, forward/reverse arrows, filter transitions, empty Saved results, favorites, Add to bag, product details and Escape. Verified animation cleanup, unchanged card height, pause/resume and reduced motion. No runtime errors or horizontal page overflow at 320, 375, 390, 430, 768 and 1440 px. Visually inspected the mobile card screenshot. These checks used browser emulation, not a physical phone.
+- Syntax validation, all 24 existing tests, production build and whitespace checks passed.
+
 ## Oud and musk editorial redesign — 10 October 2026
 
 - Replaced the two empty-looking category cards and their legacy CSS with one editorial module. Native Oud/Musk buttons select a coherent presentation: ivory silk artwork for Musk, olive/gold artwork for Oud, English/Arabic names, and structured volume/price details. Musk remains 10 ml; price and Oud volume remain explicitly unconfirmed. No sale, stock, scent-note, or product-photo claims were added.
