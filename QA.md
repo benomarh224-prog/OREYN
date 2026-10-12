@@ -1,5 +1,12 @@
 # Oreyn validation
 
+## Compact glass perfume cards — 12 October 2026
+
+- Replaced the solid/gradient card skins with translucent cream surfaces, restrained fragrance-specific pastel lighting, fine bright edges and soft shadows. Original product photography remains unchanged. Added a small decorative catalogue number and subtle floor shadow; existing swipe transitions, palette changes, light sweeps and desktop tilt remain intact.
+- Rebuilt the purchase area as a compact glass panel with price/volume beside a native Add to bag button. Cards remain in normal flow, with readable wrapping at 320 px and 44 px favorite/bag targets. Mobile card heights are approximately 409–432 px. Added a restrained coarse-pointer pressed state, respecting paused/reduced motion. No product data or pricing changed.
+- Chromium touch emulation at 320, 375, 390, 430, 768 and 1440 px: all six cards have no internal overflow, overlapping names/favorites/photos or intersecting price/button areas. No page overflow or overlapping hero/ribbon/collection boundaries. Native swipe, both arrows, filters, empty/populated Saved, favorites, bag, details, animation cleanup, ribbon controls, pause and reduced motion passed. Desktop tilt/reset passed. Inspected 320 px, 390 px and desktop screenshots; no runtime errors.
+- Keyboard Tab focus is visible and contained on favorites, photos and bag buttons at 320 px. Enter adds a product, Enter/Escape opens/closes details and restores focus; bag total is 45 DH. Checks used browser emulation, not a physical phone. Syntax checks, all 24 existing tests, production build and whitespace validation passed.
+
 ## Paired scent transitions and signature ribbon — 11 October 2026
 
 - Coordinated real outgoing/incoming bottle animations with the active card during native swipe/arrow scrolling. A decorative layer fades the previous card's actual palette into the incoming card's unchanged base color/gradient. No photograph clones, layout transforms, autoplay navigation or changes to catalogue/controls were introduced.
