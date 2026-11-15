@@ -29,7 +29,7 @@ test('OREYN Trio uses the supplied artwork and 129 DH price', () => {
 });
 
 test('cart totals combine fragrances and the trio in MAD', () => {
-  const context = { cart: [{ id: 'solar', size: '50', quantity: 1 }, { id: 'discovery', size: 'set', quantity: 1 }] };
+  const context = { cart: [{ id: 'stock-sauvage', size: 'unit', quantity: 1 }, { id: 'discovery', size: 'set', quantity: 1 }] };
   vm.createContext(context);
   const data = source.slice(source.indexOf('const products ='), source.indexOf('function readStored'));
   const totals = source.slice(source.indexOf('function cartTotals()'), source.indexOf('function addToCart('));

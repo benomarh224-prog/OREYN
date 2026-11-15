@@ -1,5 +1,13 @@
 # Oreyn validation
 
+## Seven-bottle catalogue cleanup — 15 November 2026
+
+- Interpreted the extra bottles as the six earlier catalogue entries. Removed Le Male Le Parfum, Sauvage Elixir, Libre Le Parfum, Solar Drift, After Hours and Soft Static from individual-product data. The collection, search and comparison now use the seven supplied bottles. The hero uses supplied Sauvage, Acqua di Giò and You photographs. The separately requested 129 DH Trio stays available.
+- Removed collection photo tilt, incoming/outgoing bottle effects, light sweep, palette fade, filter entrances, touch tilt and glass card gradients. Cards use a flat cream surface. Native carousel scrolling and shopping controls remain functional. This change targets the collection effects. Hero, Trio and ribbon motion retain their existing behavior.
+- Replaced the scent-finder entry points with the existing comparison dialog because the questionnaire recommended the removed products. Removed empty scent-family filters and updated relevant help/search copy. Existing storage validation excludes retired products and preserves valid supplied-bottle items.
+- Syntax, production build, whitespace validation and all 25 tests passed. Chromium checks passed at 320, 360, 390, 768, 1024 and 1440 px. Verified all seven details, exclusive supplied photos, carousel bounds, zero photo animations, saved filtering, comparison, Arabic search, mobile navigation, retired deep links and bags/favorites seeded with retired items. No browser runtime errors. These checks use emulation.
+- Inspected all six desktop/tablet/mobile fold and page screenshots from the production build. No horizontal page overflow or broken images at 1440, 768 or 390 px. The full-page design inspector continues to flag existing typography, ornamental labels, borders, ribbon cropping and motion conventions. Its whole-page style gate does not pass.
+
 ## Owner-confirmed Amouage name — 15 November 2026
 
 - Renamed photo 6 (large rectangular blue bottle) to Amouage as specified by the owner. Updated image alt text, description and Arabic/English search terms, and removed the last name-pending message. All seven supplied bottles now have owner-provided names. No specific Amouage variant, scent notes, volume or official source was inferred. The existing ID, transparent image and 45 DH price remain unchanged, preserving saved/bag data.

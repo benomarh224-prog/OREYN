@@ -9,12 +9,6 @@ const products = {
   'stock-photo-5': { name: 'Black Afgano', number: '011', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Black Afgano in the large rectangular dark-glass bottle with a black cap. Contact us to confirm the volume and fragrance details.', keywords: 'black afgano afghano large bottle rectangular square cap بلاك افغانو أفغانو القرعة الكحلة الكبيرة المستطيلة', currency: 'MAD', sizes: { unit: 45 } },
   'stock-photo-6': { name: 'Amouage', number: '012', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Amouage in the large rectangular blue-glass bottle with a blue cap. Contact us to confirm the volume and fragrance details.', keywords: 'amouage amwaj large blue bottle rectangular square cap امواج أمواج القرعة الزرقاء الكبيرة المستطيلة', currency: 'MAD', sizes: { unit: 45 } },
   'stock-photo-7': { name: 'Tom Ford', number: '013', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Tom Ford in the clear faceted bottle with a black cap and gold neck bands. Contact us to confirm the volume and fragrance details.', keywords: 'tom ford clear bottle transparent faceted black gold cap طومب فورذ طوم فورد توم فورد القرعة الشفافة الزجاجة', currency: 'MAD', sizes: { unit: 45 } },
-  'le-male': { name: 'Jean Paul Gaultier Le Male Le Parfum', cardName: 'Le Male Le Parfum', brand: 'Jean Paul Gaultier', number: '004', family: 'woody', descriptor: 'JEAN PAUL GAULTIER', tagline: 'Cardamom, iris, and a warm vanilla finish.', notes: 'Cardamom · Lavender & iris · Vanilla', top: 'Cardamom', heart: 'Lavender, iris', base: 'Vanilla', description: 'A woody fragrance with a spicy opening, a lavender and iris heart, and a warm vanilla base. Contact us to confirm the offered volume and presentation.', keywords: 'jean paul gaultier jpg le male parfum cardamom lavender iris vanilla woody', currency: 'MAD', sizes: { unit: 45 }, source: 'https://www.jeanpaulgaultier.com/ww/en/p/range-le-male/le-male-le-parfum-eau-de-parfum-intense-000000000065156533' },
-  'sauvage-elixir': { name: 'Dior Sauvage Elixir', cardName: 'Sauvage Elixir', brand: 'Dior', number: '005', family: 'woody', descriptor: 'DIOR', tagline: 'Spices, lavender, and rich woods.', notes: 'Grapefruit & spices · Lavender · Woods', top: 'Grapefruit, cinnamon, nutmeg, cardamom', heart: 'Lavender', base: 'Rich woods, licorice, vetiver, patchouli', description: 'Spicy grapefruit meets lavender and a rich woody base. Contact us to confirm the offered volume and presentation.', keywords: 'dior sauvage elixir grapefruit spices lavender woods woody', currency: 'MAD', sizes: { unit: 45 }, source: 'https://www.dior.com/en_int/beauty/products/sauvage-elixir-C099700242.html' },
-  'libre-le-parfum': { name: 'YSL Libre Le Parfum', cardName: 'Libre Le Parfum', brand: 'Yves Saint Laurent', number: '006', family: 'floral', descriptor: 'YVES SAINT LAURENT', tagline: 'Floral lavender with a warm saffron accent.', notes: 'Saffron · Orange blossom · Lavender', top: 'Bergamot, mandarin, ginger, saffron accord', heart: 'Lavender, orange blossom', base: 'Vetiver, tonka bean, honey accord, vanilla', description: 'Lavender and orange blossom meet a warm saffron accord. Contact us to confirm the offered volume and presentation.', keywords: 'ysl yves saint laurent libre parfum floral saffron orange blossom lavender', currency: 'MAD', sizes: { unit: 45 }, source: 'https://www.yslbeauty.com/int/fragrance/feminine-fragrance/libre/libre-le-parfum/WW-51020YSL.html' },
-  solar: { name: 'Solar Drift', number: '001', family: 'fresh', descriptor: 'THE GOLDEN ONE', tagline: 'Sun on skin. Now bottled.', mood: 'a little sunshine<br>goes a long way.', notes: 'Bergamot · Neroli · Soft musk', top: 'Bergamot, mandarin', heart: 'Neroli, orange blossom', base: 'Soft musk, blonde woods', description: 'The windows are open. There is nowhere you need to be. Bright citrus drifts into a heart of orange blossom, settling into the soft warmth of skin. A little golden hour, whenever you need it.', keywords: 'sun sunshine sunny bright luminous citrus floral golden fresh summer morning', currency: 'MAD', sizes: { '50': 45, '100': 45 } },
-  after: { name: 'After Hours', number: '002', family: 'woody', descriptor: 'THE UNEXPECTED ONE', tagline: 'Stay a little longer.', mood: 'one more<br>last night.', notes: 'Black tea · Iris · Sandalwood', top: 'Black tea, pink pepper', heart: 'Iris, violet leaf', base: 'Sandalwood, amber', description: 'The city is quieter now. The conversation is getting better. Smoky tea and a spark of pepper unfold into powdery iris and warm, textured woods. For the nights that become stories.', keywords: 'night evening deep dark warm woody amber smoky tea mysterious', currency: 'MAD', sizes: { '50': 45, '100': 45 } },
-  soft: { name: 'Soft Static', number: '003', family: 'soft', descriptor: 'THE QUIET ONE', tagline: 'Close to skin. Closer to you.', mood: 'the art of<br>doing nothing.', notes: 'Pear · Ambrette · White woods', top: 'Pear, bergamot', heart: 'Ambrette, white iris', base: 'White woods, skin musk', description: 'Fresh sheets. A slow Sunday. The lovely luxury of having nothing planned. Crisp pear melts into ambrette and whisper-soft woods. An intimate fragrance that feels like your favorite version of home.', keywords: 'quiet clean soft intimate skin delicate gentle cozy musk pear sunday', currency: 'MAD', sizes: { '50': 45, '100': 45 } },
   discovery: { name: 'The OREYN Trio', number: '000', family: 'all', descriptor: 'THREE MOODS. ONE SIGNATURE.', notes: 'Solar Drift · After Hours · Soft Static', keywords: 'trio pack box gift set discovery all three fragrances', currency: 'MAD', sizes: { set: 129 } }
 };
 const productImages = {
@@ -25,12 +19,6 @@ const productImages = {
   'stock-photo-5': { src: 'assets/stock-photo-5-cutout.webp', alt: 'Black Afgano in the large rectangular dark-glass bottle with a square black cap', width: 1200, height: 1600 },
   'stock-photo-6': { src: 'assets/stock-photo-6-cutout.webp', alt: 'Amouage in the large rectangular blue-glass bottle with a square blue cap', width: 1200, height: 1600 },
   'stock-photo-7': { src: 'assets/stock-photo-7-cutout.webp', alt: 'Tom Ford in the clear faceted bottle with a black cap and two gold neck bands', width: 1200, height: 1600 },
-  'le-male': { src: 'assets/le-male-le-parfum.jpg', alt: 'Jean Paul Gaultier Le Male Le Parfum catalogue bottle', width: 800, height: 800 },
-  'sauvage-elixir': { src: 'assets/sauvage-elixir.png', alt: 'Dior Sauvage Elixir catalogue bottle', width: 800, height: 800 },
-  'libre-le-parfum': { src: 'assets/libre-le-parfum.webp', alt: 'YSL Libre Le Parfum catalogue bottle', width: 800, height: 800 },
-  solar: { src: 'assets/oreyn-solar-gold.jpg', alt: 'Solar Drift OREYN perfume bottle with soft gold liquid' },
-  after: { src: 'assets/oreyn-after-lavender.jpg', alt: 'After Hours OREYN perfume bottle with muted lavender liquid' },
-  soft: { src: 'assets/oreyn-soft-sage.jpg', alt: 'Soft Static OREYN perfume bottle with pale sage green liquid' },
   discovery: { src: 'assets/oreyn-fragrance-trio.jpg', alt: 'OREYN fragrance trio gift box with Solar Drift, After Hours, and Soft Static bottles', width: 1254, height: 1254 }
 };
 const sizeText = size => size === 'set' ? 'OREYN Trio' : size === 'unit' ? 'Size to confirm' : `${size} ml`;
@@ -49,9 +37,9 @@ if (!cart.length && localStorageAvailable() && localStorage.getItem('oreyn-cart-
 function localStorageAvailable() { try { return Boolean(window.localStorage); } catch { return false; } }
 const savedRaw = readStored('oreyn-saved', []);
 let saved = new Set(Array.isArray(savedRaw) ? savedRaw.filter(id => typeof id === 'string' && Object.hasOwn(products, id) && id !== 'discovery') : []);
-let filter = 'all', heroId = 'solar', detailId = 'solar', detailSize = '50';
+let filter = 'all', heroId = 'stock-sauvage', detailId = 'stock-sauvage', detailSize = 'unit';
 let toastTimer, lastModalTrigger;
-let compareIds = ['le-male', 'sauvage-elixir'];
+let compareIds = ['stock-sauvage', 'stock-acqua-di-gio'];
 let compareSizes = compareIds.map(defaultSize);
 const heart = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z"/></svg>';
 function bottleMarkup(id, size = '50') {
@@ -107,121 +95,17 @@ function animateSavedHeart(button, isSaved) {
   pulse.onfinish = cleanup;
   pulse.oncancel = cleanup;
 }
-function stopFilterTransition() {
-  stopScentPhotoMotion();
-  const track = $('#product-grid'), animations = track.oreynFilterAnimations || [];
-  track.oreynFilterAnimations = [];
-  animations.forEach(animation => animation.cancel());
-}
-function stopScentPhotoMotion() {
-  const track = $('#product-grid');
-  if (track.oreynScentTimer) clearTimeout(track.oreynScentTimer);
-  track.oreynScentTimer = null;
-  const animations = track.oreynScentAnimations || [];
-  track.oreynScentAnimations = [];
-  animations.forEach(animation => animation.cancel());
-  $$('.card-bottle').forEach(bottle => {
-    bottle.style.removeProperty('--scent-tilt-x');
-    bottle.style.removeProperty('--scent-tilt-y');
-  });
-}
-function animateScentPhoto(card, direction = 1, reset = true) {
-  if (reset) stopScentPhotoMotion();
-  if (!card?.querySelector || reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) return;
-  const photo = card.querySelector('.original-product-photo'), glint = card.querySelector('.card-glint');
-  if (!photo?.complete || !photo.naturalWidth || typeof photo.animate !== 'function') return;
-  const bounds = card.getBoundingClientRect();
-  if (bounds.bottom <= 0 || bounds.top >= innerHeight) return;
-  playScentMotion(photo, [
-    { opacity: .6, transform: `translateX(${direction * 34}px) rotateY(${direction * 6}deg) scale(.975)` },
-    { opacity: 1, transform: 'translateX(0) rotateY(0deg) scale(1)' }
-  ]);
-  if (glint) playScentMotion(glint, [
-    { opacity: 0, transform: 'translateX(-85%)', offset: 0 },
-    { opacity: .45, transform: 'translateX(-15%)', offset: .3 },
-    { opacity: .3, transform: 'translateX(35%)', offset: .65 },
-    { opacity: 0, transform: 'translateX(85%)', offset: 1 }
-  ]);
-}
-function playScentMotion(element, frames, duration = 640) {
-  if (!element || typeof element.animate !== 'function') return;
-  const animations = $('#product-grid').oreynScentAnimations ||= [];
-  const animation = element.animate(frames, { duration, easing: 'cubic-bezier(.22,1,.36,1)' });
-  animations.push(animation);
-  animation.onfinish = animation.oncancel = () => { const index = animations.indexOf(animation); if (index !== -1) animations.splice(index, 1); };
-}
-function transitionScents(card, previous, direction) {
-  stopScentPhotoMotion();
-  if (!card || card === previous || reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) return;
-  const colour = card.querySelector('.card-colour'), outgoing = previous?.querySelector('.original-product-photo');
-  if (colour && previous) {
-    // Fade the real previous palette over the new card's unchanged base palette.
-    colour.style.background = getComputedStyle(previous).background;
-    playScentMotion(colour, [{ opacity: .85 }, { opacity: 0 }]);
-  }
-  if (outgoing?.complete && outgoing.naturalWidth) playScentMotion(outgoing, [
-    { opacity: 1, transform: 'translateX(0) rotateY(0deg) scale(1)' },
-    { opacity: .25, transform: `translateX(${-direction * 34}px) rotateY(${-direction * 6}deg) scale(.975)` }
-  ], 360);
-  animateScentPhoto(card, direction, false);
-}
-function tiltScentPhoto(event) {
-  if (event.pointerType !== 'mouse' || !matchMedia('(hover: hover) and (pointer: fine)').matches || reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) return;
-  const stage = event.target.closest('.card-photo'), bottle = stage?.querySelector('.card-bottle');
-  if (!bottle) return;
-  const bounds = stage.getBoundingClientRect();
-  const x = Math.max(-.5, Math.min(.5, (event.clientX - bounds.left) / bounds.width - .5));
-  const y = Math.max(-.5, Math.min(.5, (event.clientY - bounds.top) / bounds.height - .5));
-  bottle.style.setProperty('--scent-tilt-x', `${(-y * 5).toFixed(2)}deg`);
-  bottle.style.setProperty('--scent-tilt-y', `${(x * 8).toFixed(2)}deg`);
-}
-function queueScentPhotoMotion() {
-  const track = $('#product-grid');
-  if (track.oreynScentTimer) return;
-  // Follow the active card during native scrolling without animating its geometry.
-  track.oreynScentTimer = setTimeout(() => {
-    track.oreynScentTimer = null;
-    const index = carouselIndex(), previous = track.oreynScentIndex ?? 0;
-    track.oreynScentIndex = index;
-    if (index >= 0 && index !== previous) {
-      const cards = carouselCards();
-      transitionScents(cards[index], cards[previous], index > previous ? 1 : -1);
-    }
-  }, 40);
-}
-function animateFilteredCards() {
-  const track = $('#product-grid');
-  if (reducedMotion.matches || window.oreynMotionPaused || typeof track.animate !== 'function') return;
-  const bounds = track.getBoundingClientRect(), animations = [];
-  track.oreynFilterAnimations = animations;
-  [...track.children].filter(card => {
-    const rect = card.getBoundingClientRect();
-    return rect.right > bounds.left && rect.left < bounds.right;
-  }).forEach((card, index) => {
-    animateScentPhoto(card, 1, false);
-    const animation = card.animate([
-      { opacity: .65 },
-      { opacity: 1 }
-    ], { duration: 180, delay: Math.min(index * 20, 40), easing: 'ease-out', fill: 'backwards' });
-    animations.push(animation);
-    animation.onfinish = animation.oncancel = () => {
-      if (track.oreynFilterAnimations === animations) animations.splice(animations.indexOf(animation), 1);
-    };
-  });
-}
-function renderProducts(animate = false) {
-  stopFilterTransition();
+function renderProducts() {
   const matches = Object.entries(products).filter(([id, p]) => id !== 'discovery' && (filter === 'all' || filter === 'saved' && saved.has(id) || filter === '45dh' && p.currency === 'MAD' && p.sizes[defaultSize(id)] === 45 || p.family === filter));
   $('#product-grid').innerHTML = matches.map(([id, p]) => {
     const size = defaultSize(id);
-    return `<article class="product-card ${id}${p.brand || p.customerPhoto ? ' brand-card' : ''}" data-card="${id}"><span class="card-colour" aria-hidden="true"></span><div class="card-heading"><span class="card-brand">${p.brand || (p.customerPhoto ? 'OREYN COLLECTION' : 'OREYN SIGNATURE')}</span><h3><button data-product="${id}" aria-label="Explore ${p.name}">${p.cardName || p.name}</button></h3><p>${p.notes}</p></div>${saveButton(id)}<button class="card-photo" data-product="${id}" aria-label="Explore ${p.name}"><span class="card-bottle">${bottleMarkup(id)}</span><span class="card-glint" aria-hidden="true"></span><span class="card-photo-code" aria-hidden="true">SCENT / ${p.number}</span><svg class="card-photo-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><div class="card-purchase"><div class="card-price${p.currency === 'MAD' ? ' confirmed-price' : ''}"><strong>${productMoney(id, p.sizes[size])}</strong><span>${sizeText(size)}</span></div><button class="card-bag" data-add="${id}" data-size="${size}" aria-label="Add ${p.name}, ${sizeText(size)}, to bag">Add to bag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></button></div></article>`;
+    return `<article class="product-card ${id}${p.brand || p.customerPhoto ? ' brand-card' : ''}" data-card="${id}"><div class="card-heading"><span class="card-brand">${p.brand || (p.customerPhoto ? 'OREYN COLLECTION' : 'OREYN SIGNATURE')}</span><h3><button data-product="${id}" aria-label="Explore ${p.name}">${p.cardName || p.name}</button></h3><p>${p.notes}</p></div>${saveButton(id)}<button class="card-photo" data-product="${id}" aria-label="Explore ${p.name}"><span class="card-bottle">${bottleMarkup(id)}</span><span class="card-photo-code" aria-hidden="true">SCENT / ${p.number}</span><svg class="card-photo-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></button><div class="card-purchase"><div class="card-price${p.currency === 'MAD' ? ' confirmed-price' : ''}"><strong>${productMoney(id, p.sizes[size])}</strong><span>${sizeText(size)}</span></div><button class="card-bag" data-add="${id}" data-size="${size}" aria-label="Add ${p.name}, ${sizeText(size)}, to bag">Add to bag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></button></div></article>`;
   }).join('') || '<div class="empty-state"><h3>A feeling worth keeping.</h3><p>Tap a heart on any scent to keep it here.</p><button class="pill dark" data-filter="all">Explore the collection <span>↗︎</span></button></div>';
   prepareCarousel();
   $('#saved-count').textContent = saved.size;
   $('.filters [data-filter="all"] span').textContent = String(Object.keys(products).filter(id => id !== 'discovery').length).padStart(2, '0');
   $$('.filters [data-filter]').forEach(button => { const active = button.dataset.filter === filter; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); });
   syncMobileFilter();
-  if (animate) animateFilteredCards();
 }
 function syncMobileFilter() {
   const select = $('#mobile-scent-filter');
@@ -236,10 +120,10 @@ function focusCollectionFilter() {
   target?.focus({ preventScroll: true });
 }
 function setCollectionFilter(next) {
-  if (!['all', '45dh', 'fresh', 'woody', 'floral', 'soft', 'saved'].includes(next)) return;
+  if (!['all', '45dh', 'saved'].includes(next)) return;
   if (filter === next) { prepareCarousel(); return; }
   filter = next;
-  renderProducts(true);
+  renderProducts();
 }
 function toggleSave(id, trigger) {
   const gridFocused = Boolean(document.activeElement?.closest('#product-grid'));
@@ -474,31 +358,16 @@ function openCheckout() {
   openModal('#checkout-dialog');
   $('#preview-form').addEventListener('submit', event => { event.preventDefault(); const name = $('#preview-name').value.trim(); $('#checkout-content').innerHTML = '<div class="preview-success"><span class="star-mark">✳</span><h3 id="preview-title"></h3><p>Your preview is complete. Your chosen scents are still saved in your bag, ready for your next visit.</p><p>No order has been placed and no personal details have been saved.</p><button class="pill dark" data-continue>Back to your world <span>↗︎</span></button></div>'; $('#preview-title').textContent = name ? `A little more you, ${name}.` : 'A little more you.'; $('#preview-title').tabIndex = -1; $('#preview-title').focus(); });
 }
-const questions = [
-  { title: 'What does your kind of day feel like?', choices: [['solar', 'Wide open.', 'Bright energy. Windows down. Anything could happen.'], ['after', 'A little unexpected.', 'Depth, intrigue, and a plan that changes.'], ['soft', 'Beautifully unhurried.', 'Quiet comforts. Room to breathe.']] },
-  { title: 'Choose somewhere to disappear.', choices: [['soft', 'A sunlit room.', 'Linen sheets, a book, and no notifications.'], ['solar', 'A citrus grove.', 'Warm air, green leaves, and a glimpse of the sea.'], ['after', 'The city after midnight.', 'Low lights, good company, one more conversation.']] },
-  { title: 'What would you like to leave behind?', choices: [['after', 'A little mystery.', 'An unexpected presence that stays in the memory.'], ['soft', 'A sense of closeness.', 'Something soft and quietly familiar.'], ['solar', 'A little light.', 'An easy warmth that brightens the room.']] }
-];
-let quizAnswers = [];
-function renderQuiz() {
-  const step = quizAnswers.length;
-  if (step === questions.length) {
-    const scores = { solar: 0, after: 0, soft: 0 }; quizAnswers.forEach(id => scores[id]++);
-    const winner = Object.keys(scores).sort((a, b) => scores[b] - scores[a] || quizAnswers.lastIndexOf(b) - quizAnswers.lastIndexOf(a))[0]; const p = products[winner];
-    $('#quiz-content').innerHTML = `<div class="quiz-result"><span class="eyebrow">YOUR INSTINCT LED YOU HERE</span><h2>${p.name}</h2><span class="detail-tagline">${p.tagline}</span><div class="result-art ${winner}">${bottleMarkup(winner)}</div><p>${p.description}</p><button class="pill dark" data-product="${winner}">Meet your match <span>↗︎</span></button><p class="small-note" style="margin-top:18px">A starting point based on your answers. Your skin gets the final say.</p><button class="quiz-back" data-quiz-restart>Follow a different feeling — start again</button></div>`;
-  } else { const question = questions[step]; $('#quiz-content').innerHTML = `<div class="quiz-progress" aria-hidden="true">${questions.map((_, i) => `<i class="${i <= step ? 'done' : ''}"></i>`).join('')}</div><span class="quiz-step">QUESTION 0${step + 1} / 03</span><h2 tabindex="-1" id="quiz-question">${question.title}</h2>${question.choices.map(([id, title, description], i) => `<button class="quiz-option" data-quiz-answer="${id}"><span>0${i + 1}</span><div><b>${title}</b><small>${description}</small></div></button>`).join('')}${step ? '<button class="quiz-back" data-quiz-back>← Previous question</button>' : '<p class="small-note" style="margin-top:20px">There are no wrong answers. Go with the first feeling.</p>'}`; }
-  if ($('#quiz-dialog').open) { const heading = $('#quiz-content h2'); heading.tabIndex = -1; heading.focus({ preventScroll: true }); $('#quiz-dialog').scrollTop = 0; }
-}
 function searchProducts() {
   const query = $('#search-input').value.trim().toLowerCase();
   const matches = Object.entries(products).filter(([, p]) => `${p.name} ${p.notes} ${p.keywords} ${p.top || ''} ${p.heart || ''} ${p.base || ''}`.toLowerCase().includes(query));
-  $('#search-results').innerHTML = matches.map(([id, p]) => `<button class="search-result" ${id === 'discovery' ? 'data-discovery-link' : `data-product="${id}"`}><div class="${id}">${bottleMarkup(id)}</div><div><strong>${p.name}</strong><small>${p.notes}</small></div><span>↗︎</span></button>`).join('') || '<p class="search-empty">No scent found just yet. Try a note like “iris” or a feeling like “warm”.</p>';
+  $('#search-results').innerHTML = matches.map(([id, p]) => `<button class="search-result" ${id === 'discovery' ? 'data-discovery-link' : `data-product="${id}"`}><div class="${id}">${bottleMarkup(id)}</div><div><strong>${p.name}</strong><small>${p.notes}</small></div><span>↗︎</span></button>`).join('') || '<p class="search-empty">No fragrance found. Try a name such as Sauvage, Amouage, or Tom Ford.</p>';
 }
 const info = {
   shipping: { title: 'The finer details.', paragraphs: ['OREYN is preparing to launch. Explore the fragrances and build your bag; orders and shipments are not available yet.', 'Delivery fees, delivery times, and return conditions will be confirmed before orders open.'] },
-  privacy: { title: 'Your space. Your privacy.', paragraphs: ['This concept site stores your bag and saved fragrances in your browser using localStorage so they can remain available when you return. You can remove individual items or clear the site’s browser data at any time.', 'Search and scent-finder answers stay in this page. The optional name in the order preview is not stored or sent to a server. No newsletter signup is available.', 'Google Fonts supplies the site’s typography and may receive standard connection information such as your IP address. No analytics or advertising scripts have been added.'] },
+  privacy: { title: 'Your space. Your privacy.', paragraphs: ['This concept site stores your bag and saved fragrances in your browser using localStorage so they can remain available when you return. You can remove individual items or clear the site’s browser data at any time.', 'Search stays in this page. The optional name in the order preview is not stored or sent to a server. No newsletter signup is available.', 'Google Fonts supplies the site’s typography and may receive standard connection information such as your IP address. No analytics or advertising scripts have been added.'] },
   terms: { title: 'A note on this experience.', paragraphs: ['Oreyn is an original perfume-store concept. The fragrance compositions, prices, product imagery, and editorial content illustrate a proposed brand experience.', 'Adding items to your bag or completing an order preview does not create an order or a contract. No payment details are requested and no payments are processed.', 'Final product specifications, ingredients, pricing, availability, and sale terms will need to be confirmed before a commercial launch.'] },
-  contact: { title: 'Stay in our orbit.', paragraphs: ['The Oreyn world is taking shape. A dedicated customer-care address will be added when the store launches.', 'In the meantime, explore the collection or take the scent finder. We hope you find a little moment that feels like you.'] }
+  contact: { title: 'Stay in our orbit.', paragraphs: ['The Oreyn world is taking shape. A dedicated customer-care address will be added when the store launches.', 'In the meantime, explore the collection or compare fragrances. We hope you find a little moment that feels like you.'] }
 };
 function openInfo(id) { const content = info[id]; if (!content) return; $('#editorial-content').innerHTML = `<span class="eyebrow">OREYN / THE DETAILS</span><h2>${content.title}</h2>${content.paragraphs.map(p => `<p>${p}</p>`).join('')}`; openModal('#editorial-dialog'); }
 async function swapHeroPhoto(photo, image) {
@@ -639,7 +508,6 @@ document.addEventListener('click', async event => {
   if (button.dataset.zoomProduct) openProductImage(button.dataset.zoomProduct, button);
   if (button.dataset.add) addToCart(button.dataset.add, button.dataset.size, button);
   if (button.dataset.hero) setHero(button.dataset.hero);
-  if (button.hasAttribute('data-open-quiz')) { quizAnswers = []; renderQuiz(); openModal('#quiz-dialog'); }
   if (button.hasAttribute('data-open-search')) { $('#search-input').value = ''; searchProducts(); openModal('#search-dialog'); $('#search-input').focus(); }
   if (button.dataset.detailSize) {
     detailSize = button.dataset.detailSize;
@@ -652,9 +520,6 @@ document.addEventListener('click', async event => {
   }
   if (button.hasAttribute('data-quantity')) { const index = Number(button.dataset.quantity); const delta = Number(button.dataset.delta); if (cart[index]) { cart[index].quantity = Math.min(99, cart[index].quantity + delta); if (cart[index].quantity <= 0) cart.splice(index, 1); renderBag(); const next = $(`[data-quantity="${index}"][data-delta="${delta}"]:not(:disabled)`) || $('#bag-items [data-continue]') || $('#continue-shopping'); next?.focus({ preventScroll: true }); } }
   if (button.hasAttribute('data-remove')) { cart.splice(Number(button.dataset.remove), 1); renderBag(); ($('#bag-items [data-continue]') || $('#continue-shopping')).focus({ preventScroll: true }); }
-  if (button.dataset.quizAnswer && quizAnswers.length < 3) { quizAnswers.push(button.dataset.quizAnswer); renderQuiz(); }
-  if (button.hasAttribute('data-quiz-back')) { quizAnswers.pop(); renderQuiz(); }
-  if (button.hasAttribute('data-quiz-restart')) { quizAnswers = []; renderQuiz(); }
   if (button.hasAttribute('data-continue')) continueShopping();
   if (button.hasAttribute('data-view-bag')) { renderBag(); openModal('#bag-dialog'); $('#toast').classList.remove('visible'); }
   if (button.hasAttribute('data-discovery-link')) { $$('dialog[open]').forEach(closeModal); scrollToPageSection('#discovery'); }
@@ -709,7 +574,6 @@ window.oreynMotionPaused = reducedMotion.matches;
 function updateMotion() { document.body.classList.toggle('motion-paused', window.oreynMotionPaused); $('#motion-toggle').setAttribute('aria-pressed', String(window.oreynMotionPaused)); $('#motion-label').textContent = window.oreynMotionPaused ? 'RESUME MOTION' : 'PAUSE MOTION'; window.dispatchEvent(new Event('oreyn-motion')); }
 window.addEventListener('oreyn-motion', () => {
   if (!reducedMotion.matches && !window.oreynMotionPaused) return;
-  stopFilterTransition();
   $('#mobile-nav').oreynMenuAnimations?.forEach(animation => animation.cancel());
   $('#bag-summary').oreynTotalAnimations?.forEach(animation => animation.cancel());
   $('#hero-name').oreynSelectionAnimations?.forEach(animation => animation.cancel());
@@ -830,7 +694,6 @@ function sizeCarouselTail() {
 function prepareCarousel() {
   sizeCarouselTail();
   const track = $('#product-grid');
-  track.oreynScentIndex = 0;
   if (typeof track.scrollTo === 'function') track.scrollTo({ left: 0, behavior: 'instant' });
   else track.scrollLeft = 0;
   syncCarousel();
@@ -844,20 +707,6 @@ function stepCarousel(direction) {
 $('#scents-next').addEventListener('click', () => stepCarousel(1));
 $('#scents-previous').addEventListener('click', () => stepCarousel(-1));
 $('#product-grid').addEventListener('scroll', syncCarousel, {passive: true});
-$('#product-grid').addEventListener('scroll', queueScentPhotoMotion, {passive: true});
-$('#product-grid').addEventListener('pointerdown', stopScentPhotoMotion, {passive: true});
-$('#product-grid').addEventListener('pointermove', tiltScentPhoto, {passive: true});
-$('#product-grid').addEventListener('pointerout', event => {
-  const stage = event.target.closest('.card-photo');
-  if (!stage || stage.contains(event.relatedTarget)) return;
-  const bottle = stage.querySelector('.card-bottle');
-  bottle?.style.removeProperty('--scent-tilt-x');
-  bottle?.style.removeProperty('--scent-tilt-y');
-}, {passive: true});
-window.addEventListener('oreyn-motion', () => {
-  if (reducedMotion.matches || window.oreynMotionPaused || window.oreynModalOpen) stopScentPhotoMotion();
-});
-window.addEventListener('resize', stopScentPhotoMotion);
 // A scroll container can retain :focus-visible after a touch on the same element.
 document.addEventListener('pointerdown', () => $('#product-grid').classList.add('pointer-focus'), { passive: true });
 document.addEventListener('keydown', event => {

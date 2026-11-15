@@ -15,7 +15,7 @@ test('homepage references working local styles, scripts, and original artwork', 
   assert.match(html, /OREYN — slice of life/);
   const urls = [...html.matchAll(/(?:src|href)="([^"#][^"]*)"/g)]
     .map(match => match[1]).filter(url => !url.startsWith('http'));
-  assert.ok(urls.includes('assets/oreyn-solar-gold.jpg'));
+  assert.ok(urls.includes('assets/stock-sauvage-cutout.webp'));
   for (const url of urls) {
     const asset = await fetch(`${origin}/${url}`);
     assert.equal(asset.status, 200, url);
@@ -33,11 +33,11 @@ test('HEAD serves asset metadata without a body', async () => {
   assert.equal((await response.arrayBuffer()).byteLength, 0);
 });
 
-test('all three fragrance choices serve their matching bottle artwork', async () => {
-  for (const assetName of ['oreyn-solar-gold.jpg', 'oreyn-after-lavender.jpg', 'oreyn-soft-sage.jpg']) {
+test('all seven supplied fragrances serve their matching bottle artwork', async () => {
+  for (const assetName of ['stock-sauvage-cutout.webp', 'stock-acqua-di-gio-cutout.webp', 'stock-you-cutout.webp', 'stock-black-afgano-cutout.webp', 'stock-photo-5-cutout.webp', 'stock-photo-6-cutout.webp', 'stock-photo-7-cutout.webp']) {
     const response = await fetch(`${origin}/assets/${assetName}`);
     assert.equal(response.status, 200, assetName);
-    assert.equal(response.headers.get('content-type'), 'image/jpeg');
+    assert.equal(response.headers.get('content-type'), 'image/webp');
     assert.ok(Number(response.headers.get('content-length')) > 90000, assetName);
     await response.arrayBuffer();
   }

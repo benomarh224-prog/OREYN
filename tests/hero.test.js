@@ -29,7 +29,7 @@ test('mobile navigation has an independent accessible shell and working storefro
 
 test('a page load starts at the top instead of restoring a stale scroll position', () => {
   const js = read('script.js');
-  for (const [type, hash] of [['reload', '#collection'], ['navigate', ''], ['navigate', '#scent/solar']]) {
+  for (const [type, hash] of [['reload', '#collection'], ['navigate', ''], ['navigate', '#scent/stock-sauvage']]) {
     const listeners = {}, scrollCalls = [], replaceCalls = [];
     const context = {
       performance: { getEntriesByType: () => [{ type }] },
@@ -73,16 +73,12 @@ test('hero copy stays in normal flow without legacy positioning at any breakpoin
 
 test('every hero swatch updates its name, exclusive pressed state, announcement and details target', () => {
   const js = read('script.js');
-  const ids = ['solar', 'after', 'soft'];
-  const names = ['Solar Drift', 'After Hours', 'Soft Static'];
-  const productImages = {
-    solar: { src: 'assets/oreyn-solar-gold.jpg', alt: 'Solar Drift OREYN perfume bottle with soft gold liquid' },
-    after: { src: 'assets/oreyn-after-lavender.jpg', alt: 'After Hours OREYN perfume bottle with muted lavender liquid' },
-    soft: { src: 'assets/oreyn-soft-sage.jpg', alt: 'Soft Static OREYN perfume bottle with pale sage green liquid' }
-  };
+  const ids = ['stock-sauvage', 'stock-acqua-di-gio', 'stock-you'];
+  const names = ['Sauvage', 'Acqua di Giò', 'You'];
+  const productImages = Object.fromEntries(ids.map((id, index) => [id, {src: 'assets/' + id + '-cutout.webp', alt: names[index]}]));
   const buttons = ids.map(id => ({dataset: {hero: id}, classList: {toggle() {}}, attrs: {}, setAttribute(k,v) { this.attrs[k] = v; }}));
   const nodes = {'.hero': {dataset: {}}, '#hero-name': {}, '#hero-status': {}, '#hero-bottle-photo': {}, '#hero-details': {addEventListener(type, fn) { this.click = fn; }}};
-  const context = {heroId: 'solar', productImages, products: Object.fromEntries(ids.map((id,i) => [id,{name:names[i]}])), $:s=>nodes[s], $$:()=>buttons, openProduct:id=>{ context.opened=id; }};
+  const context = {heroId: 'stock-sauvage', productImages, products: Object.fromEntries(ids.map((id,i) => [id,{name:names[i]}])), $:s=>nodes[s], $$:()=>buttons, openProduct:id=>{ context.opened=id; }};
   vm.createContext(context);
   vm.runInContext(js.slice(js.indexOf('function setHero(id)'),js.indexOf('function closeMenu(')),context);
   vm.runInContext(js.match(/\$\('#hero-details'\)\.addEventListener[^\n]+/)[0],context);
