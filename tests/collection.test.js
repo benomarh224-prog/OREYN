@@ -13,7 +13,7 @@ test('carousel navigation and indicator handle scroll positions, boundaries and 
  }
 });
 test('filters, empty Saved, favorites and bag quantities preserve product actions',()=>{
- const nodes={'#product-grid':{},'#saved-count':{},'#detail-view-bag':{},'#compare-dialog':{open:false},'.filters [data-filter="all"] span':{}};
+ const nodes={'#product-grid':{},'#saved-count':{},'#detail-view-bag':{},'.filters [data-filter="all"] span':{}};
  const mobileOptions={'[value="all"]':{},'[value="saved"]':{}};
  nodes['#mobile-scent-filter']={querySelector:selector=>mobileOptions[selector]};
  const filters=['all','45dh','saved'].map(filter=>({dataset:{filter},classList:{toggle(){}},setAttribute(k,v){this[k]=v;}}));

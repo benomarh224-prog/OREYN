@@ -1,5 +1,12 @@
 # Oreyn validation
 
+## Comparison removed — 15 November 2026
+
+- Removed comparison controls from the desktop and mobile navigation, hero, collection, footer and fragrance details. Removed the dialog, JavaScript state, event handlers, bag-update integration and comparison CSS. Updated help/contact copy that referred to comparison. The single remaining mobile shortcut fills its row.
+- Updated the existing comparison regression to assert complete feature removal and removed the obsolete comparison fixture from collection tests. Syntax, build and all 25 tests passed.
+- Chromium checks at 320, 360, 390, 768, 1024 and 1440 px passed. Verified seven bottles, comparison absence, mobile menu navigation, carousel, details, Add to bag, bag total, Saved, search and direct product links. No runtime errors. Checks use browser emulation.
+- Inspected desktop/tablet/mobile fold and page screenshots. No page overflow or broken images at the inspector's three widths. Existing unrelated whole-page style findings remain recorded in the earlier validation sections.
+
 ## Seven-bottle catalogue cleanup — 15 November 2026
 
 - Interpreted the extra bottles as the six earlier catalogue entries. Removed Le Male Le Parfum, Sauvage Elixir, Libre Le Parfum, Solar Drift, After Hours and Soft Static from individual-product data. The collection, search and comparison now use the seven supplied bottles. The hero uses supplied Sauvage, Acqua di Giò and You photographs. The separately requested 129 DH Trio stays available.

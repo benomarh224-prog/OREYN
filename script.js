@@ -39,8 +39,6 @@ const savedRaw = readStored('oreyn-saved', []);
 let saved = new Set(Array.isArray(savedRaw) ? savedRaw.filter(id => typeof id === 'string' && Object.hasOwn(products, id) && id !== 'discovery') : []);
 let filter = 'all', heroId = 'stock-sauvage', detailId = 'stock-sauvage', detailSize = 'unit';
 let toastTimer, lastModalTrigger;
-let compareIds = ['stock-sauvage', 'stock-acqua-di-gio'];
-let compareSizes = compareIds.map(defaultSize);
 const heart = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z"/></svg>';
 function bottleMarkup(id, size = '50') {
   const image = productImages[id] || { src: 'assets/oreyn-original.jpg', alt: 'OREYN perfume bottle' };
@@ -153,31 +151,6 @@ function toggleSave(id, trigger) {
 function detailAddMarkup(added = false) {
   return added ? 'Added <span aria-hidden="true">✓</span>' : 'Add to bag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg>';
 }
-function renderComparison() {
-  compareIds.forEach((id, slot) => {
-    const select = $(`[data-compare-slot="${slot}"]`);
-    select.innerHTML = Object.entries(products).filter(([key]) => key !== 'discovery').map(([key, p]) => `<option value="${key}" ${key === id ? 'selected' : ''} ${key === compareIds[1 - slot] ? 'disabled' : ''}>${p.name}</option>`).join('');
-  });
-  const row = (label, values) => `<tr><th scope="row">${label}</th>${values.map(value => `<td>${value}</td>`).join('')}</tr>`;
-  $('#compare-content').innerHTML = `<div class="compare-photos">${compareIds.map(id => `<div class="compare-photo ${id}">${bottleMarkup(id)}</div>`).join('')}</div>
-    <table class="compare-table"><caption class="sr-only">Fragrance prices, sizes, and scent notes</caption><thead><tr><td></td>${compareIds.map(id => `<th scope="col">${products[id].name}</th>`).join('')}</tr></thead><tbody>
-    ${row('Price', compareIds.map((id, slot) => `<strong>${productMoney(id, products[id].sizes[compareSizes[slot]])}</strong>`))}
-    ${row('Size', compareIds.map((id, slot) => compareSizes[slot] === 'unit' ? 'Size to confirm' : `<select data-compare-size="${slot}" aria-label="Size for ${products[id].name}">${Object.keys(products[id].sizes).map(size => `<option value="${size}" ${size === compareSizes[slot] ? 'selected' : ''}>${sizeText(size)}</option>`).join('')}</select>`))}
-    ${['Opening', 'Heart', 'Base'].map((label, index) => row(label, compareIds.map(id => products[id][['top', 'heart', 'base'][index]] || 'To confirm'))).join('')}
-    </tbody></table><div class="compare-actions">${compareIds.map((id, slot) => `<button class="pill dark" data-add="${id}" data-size="${compareSizes[slot]}" aria-label="Add ${products[id].name}, ${sizeText(compareSizes[slot])}, to bag">Add to bag <span aria-hidden="true">+</span></button>`).join('')}</div>
-    <p class="compare-note">${compareIds.some(id => products[id].customerPhoto) ? 'Contact us to confirm the volume and fragrance details.' : compareIds.some(id => products[id].brand) ? 'Catalogue photos. Offered volume and presentation to confirm.' : 'Choose a size to compare its price.'}</p><button class="compare-view-bag" data-view-bag hidden>View your bag <span aria-hidden="true">↗︎</span></button>`;
-}
-function openComparison(id) {
-  if ($('#product-dialog').open && location.hash.startsWith('#scent/')) history.replaceState(null, '', location.pathname + location.search);
-  if (id && products[id] && id !== 'discovery') {
-    compareIds[0] = id;
-    if (compareIds[1] === id) compareIds[1] = Object.keys(products).find(key => key !== id && key !== 'discovery');
-    compareSizes = compareIds.map(defaultSize);
-  }
-  renderComparison();
-  $('#compare-status').textContent = '';
-  openModal('#compare-dialog');
-}
 function emptyBagMarkup() {
   return `<div class="bag-empty"><div class="bag-empty-art" aria-hidden="true"><span class="bag-empty-halo"></span><svg viewBox="0 0 120 120" fill="none"><path d="M30 43h60l6 61H24l6-61Z" stroke="currentColor" stroke-width="2"/><path d="M43 47V31a17 17 0 0 1 34 0v16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M57 68v15M50 75h14" stroke="currentColor" stroke-width="1.5"/></svg><i class="gold"></i><i class="lavender"></i><i class="sage"></i></div><span class="eyebrow">A LITTLE ROOM FOR YOU</span><h3>Your next scent<br>starts here.</h3><p>Find the fragrance that feels like you.</p><button class="pill dark" data-continue>Explore fragrances <span aria-hidden="true">↗︎</span></button></div>`;
 }
@@ -224,7 +197,7 @@ function openProduct(id, updateUrl = true) {
       ${p.top && p.heart && p.base ? `<dl class="scent-profile"><div><dt>Opening</dt><dd>${p.top}</dd></div><div><dt>Heart</dt><dd>${p.heart}</dd></div><div><dt>Base</dt><dd>${p.base}</dd></div></dl>` : ''}
       ${detailSize === 'unit' ? `<p class="detail-format-note">${p.customerPhoto ? 'Volume to confirm.' : 'Catalogue image. Volume and presentation to confirm.'}</p>` : `<div class="detail-format"><span class="size-label">CHOOSE YOUR SIZE</span><div class="size-options" role="group" aria-label="Bottle size">${Object.keys(p.sizes).map(size => `<button data-detail-size="${size}" class="${size === detailSize ? 'active' : ''}" aria-pressed="${size === detailSize}">${sizeText(size)}</button>`).join('')}</div></div>`}
       <details class="detail-about"><summary>About this scent <span aria-hidden="true">+</span></summary><p class="detail-description">${p.description}</p>${p.source ? `<a class="text-link fragrance-source" href="${p.source}" target="_blank" rel="noopener noreferrer">Fragrance profile from the brand ↗︎</a>` : ''}</details>
-      <div class="detail-links"><button data-open-compare="${id}" aria-haspopup="dialog" aria-controls="compare-dialog">Compare this scent <span aria-hidden="true">↗︎</span></button><button data-share="${id}">Copy scent link <span aria-hidden="true">↗︎</span></button>${p.brand || p.customerPhoto ? '' : '<button data-discovery-link>Explore the OREYN Trio <span aria-hidden="true">↗︎</span></button>'}<button class="detail-view-bag" id="detail-view-bag" data-view-bag hidden>View your bag <span aria-hidden="true">↗︎</span></button></div>
+      <div class="detail-links"><button data-share="${id}">Copy scent link <span aria-hidden="true">↗︎</span></button>${p.brand || p.customerPhoto ? '' : '<button data-discovery-link>Explore the OREYN Trio <span aria-hidden="true">↗︎</span></button>'}<button class="detail-view-bag" id="detail-view-bag" data-view-bag hidden>View your bag <span aria-hidden="true">↗︎</span></button></div>
     </div></div>
     <div class="detail-purchase-bar"><div class="detail-price-block"><small id="detail-volume">${sizeText(detailSize)}</small><strong id="detail-price" aria-live="polite">${productMoney(id, p.sizes[detailSize])}</strong></div><button class="pill dark" id="detail-add" data-add="${id}" data-size="${detailSize}" aria-label="Add ${p.name}, ${sizeText(detailSize)}, to bag">${detailAddMarkup()}</button>${saveButton(id)}</div>`;
   $('#product-dialog').setAttribute('aria-label', `${p.name} fragrance details`);
@@ -292,10 +265,6 @@ function addToCart(id, size, trigger) {
   if (item?.quantity === 99) { notify('Maximum 99 of each size per bag.'); return; }
   item ? item.quantity++ : cart.push({ id, size, quantity: 1 }); renderBag(); notify(`${products[id].name} added to your bag`, true); const bagLink = $('#detail-view-bag'); if (bagLink) bagLink.hidden = false;
   if (trigger) animateAddedProduct(id, trigger);
-  if ($('#compare-dialog').open) {
-    $('#compare-status').textContent = `${products[id].name}, ${sizeText(size)}, added to your bag. Bag quantity: ${cart.reduce((sum, entry) => sum + entry.quantity, 0)}.`;
-    $('#compare-content [data-view-bag]').hidden = false;
-  }
   const button = $('#detail-add'); if (button && $('#product-dialog').open) {
     clearTimeout(button.oreynAddedTimer); button.innerHTML = detailAddMarkup(true);
     button.oreynAddedTimer = setTimeout(() => { if (button.isConnected) button.innerHTML = detailAddMarkup(); }, 1200);
@@ -367,7 +336,7 @@ const info = {
   shipping: { title: 'The finer details.', paragraphs: ['OREYN is preparing to launch. Explore the fragrances and build your bag; orders and shipments are not available yet.', 'Delivery fees, delivery times, and return conditions will be confirmed before orders open.'] },
   privacy: { title: 'Your space. Your privacy.', paragraphs: ['This concept site stores your bag and saved fragrances in your browser using localStorage so they can remain available when you return. You can remove individual items or clear the site’s browser data at any time.', 'Search stays in this page. The optional name in the order preview is not stored or sent to a server. No newsletter signup is available.', 'Google Fonts supplies the site’s typography and may receive standard connection information such as your IP address. No analytics or advertising scripts have been added.'] },
   terms: { title: 'A note on this experience.', paragraphs: ['Oreyn is an original perfume-store concept. The fragrance compositions, prices, product imagery, and editorial content illustrate a proposed brand experience.', 'Adding items to your bag or completing an order preview does not create an order or a contract. No payment details are requested and no payments are processed.', 'Final product specifications, ingredients, pricing, availability, and sale terms will need to be confirmed before a commercial launch.'] },
-  contact: { title: 'Stay in our orbit.', paragraphs: ['The Oreyn world is taking shape. A dedicated customer-care address will be added when the store launches.', 'In the meantime, explore the collection or compare fragrances. We hope you find a little moment that feels like you.'] }
+  contact: { title: 'Stay in our orbit.', paragraphs: ['The Oreyn world is taking shape. A dedicated customer-care address will be added when the store launches.', 'In the meantime, explore the collection. We hope you find a little moment that feels like you.'] }
 };
 function openInfo(id) { const content = info[id]; if (!content) return; $('#editorial-content').innerHTML = `<span class="eyebrow">OREYN / THE DETAILS</span><h2>${content.title}</h2>${content.paragraphs.map(p => `<p>${p}</p>`).join('')}`; openModal('#editorial-dialog'); }
 async function swapHeroPhoto(photo, image) {
@@ -504,7 +473,6 @@ document.addEventListener('click', async event => {
   }
   if (button.dataset.save) toggleSave(button.dataset.save, button);
   if (button.dataset.product) openProduct(button.dataset.product);
-  if (button.hasAttribute('data-open-compare')) openComparison(button.dataset.openCompare);
   if (button.dataset.zoomProduct) openProductImage(button.dataset.zoomProduct, button);
   if (button.dataset.add) addToCart(button.dataset.add, button.dataset.size, button);
   if (button.dataset.hero) setHero(button.dataset.hero);
@@ -530,20 +498,6 @@ document.addEventListener('click', async event => {
 document.addEventListener('change', event => {
   const select = event.target;
   if (select.id === 'mobile-scent-filter') setCollectionFilter(select.value);
-  if (select.hasAttribute('data-compare-slot')) {
-    const slot = Number(select.dataset.compareSlot), id = select.value;
-    if (!products[id] || id === 'discovery' || id === compareIds[1 - slot]) return;
-    compareIds[slot] = id; compareSizes[slot] = defaultSize(id); renderComparison();
-    select.focus({ preventScroll: true });
-    $('#compare-status').textContent = `Comparing ${products[compareIds[0]].name} and ${products[compareIds[1]].name}.`;
-  }
-  if (select.hasAttribute('data-compare-size')) {
-    const slot = Number(select.dataset.compareSize);
-    if (!Object.hasOwn(products[compareIds[slot]].sizes, select.value)) return;
-    compareSizes[slot] = select.value; renderComparison();
-    $(`[data-compare-size="${slot}"]`).focus({ preventScroll: true });
-    $('#compare-status').textContent = `${products[compareIds[slot]].name}, ${sizeText(compareSizes[slot])}, ${productMoney(compareIds[slot], products[compareIds[slot]].sizes[compareSizes[slot]])}.`;
-  }
 });
 $('#open-bag').addEventListener('click', () => { renderBag(); openModal('#bag-dialog'); });
 $('#continue-shopping').addEventListener('click', continueShopping);
