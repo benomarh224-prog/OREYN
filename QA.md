@@ -1,5 +1,12 @@
 # Oreyn validation
 
+## Transparent stock bottle cutouts — 15 November 2026
+
+- Removed the desk/monitor/keyboard surroundings from the four newly supplied stock photographs with imagegen background extraction. Inspected the outputs against the supplied bottles and the cream/pastel cards; retained the visible bottle designs, cap types and colours without adding brand labels. Original supplied exports remain unchanged; selected alpha assets ship as separate 1200 × 1600 WebP files (189–232 KB).
+- Updated catalogue image sources throughout cards, details, comparison, search and bag. Replaced the temporary square/cover photo framing with contained transparent images in the original compact 5:4 stage. Kept existing bottle transitions/tilt, all names, prices, sizes and shopping behavior. Mobile card heights return to approximately 409–432 px.
+- Verified alpha channels in all four exported files and decoded each image in browser canvas: corner alpha values are zero, not opaque white/black. Visually inspected all four final cards over their actual backgrounds; caps and bases are fully visible with no office scene or opaque image rectangle.
+- Chromium at 320, 375, 390, 430, 768 and 1440 px: no page overflow or price/button collisions. Details, favorites, 4-product bag totaling 180 DH, filters, both arrows, native touch swipe, Arabic search, comparison and reduced motion passed. No runtime errors or failed image requests. Syntax/build, all 25 tests and whitespace checks passed. These checks use browser emulation, not a physical phone.
+
 ## Supplied stock photographs — 15 November 2026
 
 - Added the four unambiguous photo/name mappings provided by the owner: small blue bottle → Sauvage, green → Acqua di Giò, red → You, black/gold cap → Black Afgano. These are separate catalogue entries, so the existing Sauvage Elixir and other products remain intact. All use the previously requested 45 DH perfume price; the Trio remains 129 DH. Photos 5–7 remain pending the owner's exact name mapping and are not published under guessed names.

@@ -44,7 +44,7 @@ test('supplied stock photos retain confirmed names and prices without invented v
  for(const [id,name] of [['stock-sauvage','Sauvage'],['stock-acqua-di-gio','Acqua di Giò'],['stock-you','You'],['stock-black-afgano','Black Afgano']]){
   const product=c.catalogue[id];assert.equal(product.name,name);assert.equal(product.customerPhoto,true);assert.equal(product.family,'unspecified');assert.equal(product.sizes.unit,45);
   assert.deepEqual(Object.keys(product.sizes),['unit']);assert.equal(product.top,undefined);assert.equal(product.heart,undefined);assert.equal(product.base,undefined);assert.equal(product.source,undefined);
-  assert.ok(fs.existsSync(path.join(__dirname,'..',c.images[id].src)));assert.equal(c.images[id].width,1200);assert.equal(c.images[id].height,1600);
+  assert.ok(fs.existsSync(path.join(__dirname,'..',c.images[id].src)));assert.match(c.images[id].src,/-cutout\.webp$/);assert.equal(c.images[id].width,1200);assert.equal(c.images[id].height,1600);
  }
 });
 

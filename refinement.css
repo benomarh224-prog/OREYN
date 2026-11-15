@@ -692,10 +692,8 @@ dialog { border-radius: 17px; }
 .card-glint { position: absolute; inset: 0; z-index: 1; background: linear-gradient(110deg, transparent 38%, #fff0 42%, #ffffff50 49%, #fff0 56%, transparent 60%); opacity: 0; pointer-events: none; }
 .card-photo .original-product-photo { position: relative; min-height: 0; width: 100%; height: 100%; object-fit: contain; padding: 8px; }
 .product-card:not(.brand-card) .card-photo .original-product-photo { width: 100%; height: 120%; max-width: none; padding: 0; object-fit: contain; }
-.card-photo:has(.customer-product-photo) { aspect-ratio: 1; }
 .card-bottle:has(.customer-product-photo) { mix-blend-mode: normal; border-radius: inherit; overflow: hidden; }
-.product-card .card-photo .customer-product-photo { width: 100%; height: 100%; padding: 0; object-fit: cover; object-position: center bottom; }
-.card-photo:has(.customer-product-photo) .card-photo-code { padding: 3px 5px; border-radius: 4px; background: #f7f5eced; }
+.product-card .card-photo .customer-product-photo { width: 100%; height: 100%; padding: 8px; object-fit: contain; }
 .detail-image-button:has(.customer-product-photo):before { display: none; }
 .detail-image-button .customer-product-photo, .compare-photo .customer-product-photo { mix-blend-mode: normal; }
 .card-photo-code { position: absolute; left: 6px; bottom: 10px; font-size: 8px; letter-spacing: 1.3px; color: var(--card-accent); pointer-events: none; }

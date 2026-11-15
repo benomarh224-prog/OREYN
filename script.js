@@ -15,10 +15,10 @@ const products = {
   discovery: { name: 'The OREYN Trio', number: '000', family: 'all', descriptor: 'THREE MOODS. ONE SIGNATURE.', notes: 'Solar Drift · After Hours · Soft Static', keywords: 'trio pack box gift set discovery all three fragrances', currency: 'MAD', sizes: { set: 129 } }
 };
 const productImages = {
-  'stock-sauvage': { src: 'assets/stock-sauvage.webp', alt: 'Sauvage in the small blue bottle supplied by OREYN', width: 1200, height: 1600 },
-  'stock-acqua-di-gio': { src: 'assets/stock-acqua-di-gio.webp', alt: 'Acqua di Giò in the green bottle supplied by OREYN', width: 1200, height: 1600 },
-  'stock-you': { src: 'assets/stock-you.webp', alt: 'You in the red bottle supplied by OREYN', width: 1200, height: 1600 },
-  'stock-black-afgano': { src: 'assets/stock-black-afgano.webp', alt: 'Black Afgano in the black bottle with a gold cap supplied by OREYN', width: 1200, height: 1600 },
+  'stock-sauvage': { src: 'assets/stock-sauvage-cutout.webp', alt: 'Sauvage in the small blue bottle supplied by OREYN', width: 1200, height: 1600 },
+  'stock-acqua-di-gio': { src: 'assets/stock-acqua-di-gio-cutout.webp', alt: 'Acqua di Giò in the green bottle supplied by OREYN', width: 1200, height: 1600 },
+  'stock-you': { src: 'assets/stock-you-cutout.webp', alt: 'You in the red bottle supplied by OREYN', width: 1200, height: 1600 },
+  'stock-black-afgano': { src: 'assets/stock-black-afgano-cutout.webp', alt: 'Black Afgano in the black bottle with a gold cap supplied by OREYN', width: 1200, height: 1600 },
   'le-male': { src: 'assets/le-male-le-parfum.jpg', alt: 'Jean Paul Gaultier Le Male Le Parfum catalogue bottle', width: 800, height: 800 },
   'sauvage-elixir': { src: 'assets/sauvage-elixir.png', alt: 'Dior Sauvage Elixir catalogue bottle', width: 800, height: 800 },
   'libre-le-parfum': { src: 'assets/libre-le-parfum.webp', alt: 'YSL Libre Le Parfum catalogue bottle', width: 800, height: 800 },
