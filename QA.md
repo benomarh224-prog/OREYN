@@ -1,5 +1,14 @@
 # Oreyn validation
 
+## Confirmed 30 ml bottles and WhatsApp ordering — 15 November 2026
+
+- Applied the owner's 30 ml confirmation to all seven individual fragrances, including card sizes, details, descriptions, bag rows, hero price copy and help text. Retained the existing `unit` storage keys so previous bags continue to work. Each individual bottle is 45 DH. The separately priced Trio remains 129 DH and is identified as a set in order messages.
+- Interpreted the supplied Moroccan local number `0605945848` as international `+212 605 945 848`. The bag's Order on WhatsApp link opens `wa.me/212605945848` with a URL-encoded Darija message containing product names, catalogue references, sizes, quantities, line totals and the products total. References distinguish the two Black Afgano photographs. Quantity changes, removals and reloads regenerate the link. An empty bag hides the order action and removes its destination.
+- Replaced the concept-order preview with the WhatsApp link, added the business contact link in the footer and updated ordering, delivery, privacy and terms copy. Delivery fees, delivery timing and payment details are left for confirmation in the WhatsApp conversation.
+- Checked the official WhatsApp click-to-chat documentation. Added regression tests for destination, Arabic/diacritic encoding, 30 ml, quantities, references, mixed Trio totals and removal of the old preview. Syntax, build, whitespace validation and all 27 tests passed.
+- Chromium checks passed for all seven card/detail volumes, old unit-sized bags, quantity/removal/reload updates, the Trio and empty bags. Checked page and bag overflow and order-link visibility at 320, 390, 768 and 1440 px. Verified actual anchor navigation through an intercepted popup. The test does not send a message or verify WhatsApp account registration. No runtime errors. Browser checks use emulation.
+- Inspected desktop/tablet/mobile fold screenshots and mobile/desktop bag screenshots. The production-build inspector found no page overflow or broken images at 1440, 768 and 390 px. Its existing unrelated whole-page style findings remain.
+
 ## Comparison removed — 15 November 2026
 
 - Removed comparison controls from the desktop and mobile navigation, hero, collection, footer and fragrance details. Removed the dialog, JavaScript state, event handlers, bag-update integration and comparison CSS. Updated help/contact copy that referred to comparison. The single remaining mobile shortcut fills its row.

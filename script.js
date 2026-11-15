@@ -2,13 +2,13 @@
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 const products = {
-  'stock-sauvage': { name: 'Sauvage', number: '007', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Contact us to confirm the volume and fragrance details.', keywords: 'sauvage blue small سوفاج زرقاء', currency: 'MAD', sizes: { unit: 45 } },
-  'stock-acqua-di-gio': { name: 'Acqua di Giò', number: '008', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Contact us to confirm the volume and fragrance details.', keywords: 'acqua di gio green اكوا دي جيو خضراء', currency: 'MAD', sizes: { unit: 45 } },
-  'stock-you': { name: 'You', number: '009', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Contact us to confirm the volume and fragrance details.', keywords: 'you red يو حمراء', currency: 'MAD', sizes: { unit: 45 } },
-  'stock-black-afgano': { name: 'Black Afgano', number: '010', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Contact us to confirm the volume and fragrance details.', keywords: 'black afgano afghano gold cap بلاك افغانو كحلة', currency: 'MAD', sizes: { unit: 45 } },
-  'stock-photo-5': { name: 'Black Afgano', number: '011', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Black Afgano in the large rectangular dark-glass bottle with a black cap. Contact us to confirm the volume and fragrance details.', keywords: 'black afgano afghano large bottle rectangular square cap بلاك افغانو أفغانو القرعة الكحلة الكبيرة المستطيلة', currency: 'MAD', sizes: { unit: 45 } },
-  'stock-photo-6': { name: 'Amouage', number: '012', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Amouage in the large rectangular blue-glass bottle with a blue cap. Contact us to confirm the volume and fragrance details.', keywords: 'amouage amwaj large blue bottle rectangular square cap امواج أمواج القرعة الزرقاء الكبيرة المستطيلة', currency: 'MAD', sizes: { unit: 45 } },
-  'stock-photo-7': { name: 'Tom Ford', number: '013', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Tom Ford in the clear faceted bottle with a black cap and gold neck bands. Contact us to confirm the volume and fragrance details.', keywords: 'tom ford clear bottle transparent faceted black gold cap طومب فورذ طوم فورد توم فورد القرعة الشفافة الزجاجة', currency: 'MAD', sizes: { unit: 45 } },
+  'stock-sauvage': { name: 'Sauvage', number: '007', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: '30 ml bottle. Contact us for fragrance details.', keywords: 'sauvage blue small سوفاج زرقاء', currency: 'MAD', sizes: { unit: 45 } },
+  'stock-acqua-di-gio': { name: 'Acqua di Giò', number: '008', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: '30 ml bottle. Contact us for fragrance details.', keywords: 'acqua di gio green اكوا دي جيو خضراء', currency: 'MAD', sizes: { unit: 45 } },
+  'stock-you': { name: 'You', number: '009', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: '30 ml bottle. Contact us for fragrance details.', keywords: 'you red يو حمراء', currency: 'MAD', sizes: { unit: 45 } },
+  'stock-black-afgano': { name: 'Black Afgano', number: '010', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: '30 ml bottle. Contact us for fragrance details.', keywords: 'black afgano afghano gold cap بلاك افغانو كحلة', currency: 'MAD', sizes: { unit: 45 } },
+  'stock-photo-5': { name: 'Black Afgano', number: '011', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Black Afgano in the large rectangular dark-glass bottle with a black cap. 30 ml bottle. Contact us for fragrance details.', keywords: 'black afgano afghano large bottle rectangular square cap بلاك افغانو أفغانو القرعة الكحلة الكبيرة المستطيلة', currency: 'MAD', sizes: { unit: 45 } },
+  'stock-photo-6': { name: 'Amouage', number: '012', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Amouage in the large rectangular blue-glass bottle with a blue cap. 30 ml bottle. Contact us for fragrance details.', keywords: 'amouage amwaj large blue bottle rectangular square cap امواج أمواج القرعة الزرقاء الكبيرة المستطيلة', currency: 'MAD', sizes: { unit: 45 } },
+  'stock-photo-7': { name: 'Tom Ford', number: '013', family: 'unspecified', customerPhoto: true, descriptor: 'OREYN COLLECTION', tagline: 'Contact us for fragrance details.', notes: 'Contact us for details.', description: 'Tom Ford in the clear faceted bottle with a black cap and gold neck bands. 30 ml bottle. Contact us for fragrance details.', keywords: 'tom ford clear bottle transparent faceted black gold cap طومب فورذ طوم فورد توم فورد القرعة الشفافة الزجاجة', currency: 'MAD', sizes: { unit: 45 } },
   discovery: { name: 'The OREYN Trio', number: '000', family: 'all', descriptor: 'THREE MOODS. ONE SIGNATURE.', notes: 'Solar Drift · After Hours · Soft Static', keywords: 'trio pack box gift set discovery all three fragrances', currency: 'MAD', sizes: { set: 129 } }
 };
 const productImages = {
@@ -21,10 +21,32 @@ const productImages = {
   'stock-photo-7': { src: 'assets/stock-photo-7-cutout.webp', alt: 'Tom Ford in the clear faceted bottle with a black cap and two gold neck bands', width: 1200, height: 1600 },
   discovery: { src: 'assets/oreyn-fragrance-trio.jpg', alt: 'OREYN fragrance trio gift box with Solar Drift, After Hours, and Soft Static bottles', width: 1254, height: 1254 }
 };
-const sizeText = size => size === 'set' ? 'OREYN Trio' : size === 'unit' ? 'Size to confirm' : `${size} ml`;
+const sizeText = size => size === 'set' ? 'OREYN Trio' : size === 'unit' ? '30 ml' : `${size} ml`;
 const defaultSize = id => Object.keys(products[id].sizes)[0];
 const dirham = value => `${new Intl.NumberFormat('en-MA', { maximumFractionDigits: 0 }).format(value)} DH`;
 const productMoney = (id, value) => dirham(value);
+const WHATSAPP_NUMBER = '212605945848';
+
+function whatsappUrl(message) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+function orderMessage() {
+  const lines = cart.map(item => {
+    const product = products[item.id];
+    const total = productMoney(item.id, product.sizes[item.size] * item.quantity);
+    return `${product.name} (${product.number}) — ${sizeText(item.size)} × ${item.quantity} — ${total}`;
+  });
+  return [
+    'سلام، بغيت نطلب من OREYN.',
+    '',
+    ...lines,
+    '',
+    `مجموع المنتجات ${dirham(cartTotals().total)}`,
+    '',
+    'بغيت نتأكد من التوصيل وطريقة الأداء.'
+  ].join('\n');
+}
 function readStored(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } }
 function persist(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* The store remains usable with storage disabled. */ } }
 const rawCart = readStored('oreyn-cart-v2', []);
@@ -195,7 +217,7 @@ function openProduct(id, updateUrl = true) {
     <div class="detail-art ${id}"><span class="eyebrow">${p.number} / OREYN COLLECTION</span><button class="detail-image-button" data-zoom-product="${id}" aria-label="Enlarge ${p.name} photo" aria-haspopup="dialog" aria-controls="image-dialog">${bottleMarkup(id)}<span class="detail-zoom-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5M10 7v6M7 10h6"/></svg>View larger</span></button></div>
     <div class="detail-content"><span class="eyebrow">${p.brand || 'OREYN / slice of life'}</span><h2>${p.cardName || p.name}</h2><p class="detail-lede">${p.tagline}</p>
       ${p.top && p.heart && p.base ? `<dl class="scent-profile"><div><dt>Opening</dt><dd>${p.top}</dd></div><div><dt>Heart</dt><dd>${p.heart}</dd></div><div><dt>Base</dt><dd>${p.base}</dd></div></dl>` : ''}
-      ${detailSize === 'unit' ? `<p class="detail-format-note">${p.customerPhoto ? 'Volume to confirm.' : 'Catalogue image. Volume and presentation to confirm.'}</p>` : `<div class="detail-format"><span class="size-label">CHOOSE YOUR SIZE</span><div class="size-options" role="group" aria-label="Bottle size">${Object.keys(p.sizes).map(size => `<button data-detail-size="${size}" class="${size === detailSize ? 'active' : ''}" aria-pressed="${size === detailSize}">${sizeText(size)}</button>`).join('')}</div></div>`}
+      ${detailSize === 'unit' ? `<p class="detail-format-note">${sizeText(detailSize)}</p>` : `<div class="detail-format"><span class="size-label">CHOOSE YOUR SIZE</span><div class="size-options" role="group" aria-label="Bottle size">${Object.keys(p.sizes).map(size => `<button data-detail-size="${size}" class="${size === detailSize ? 'active' : ''}" aria-pressed="${size === detailSize}">${sizeText(size)}</button>`).join('')}</div></div>`}
       <details class="detail-about"><summary>About this scent <span aria-hidden="true">+</span></summary><p class="detail-description">${p.description}</p>${p.source ? `<a class="text-link fragrance-source" href="${p.source}" target="_blank" rel="noopener noreferrer">Fragrance profile from the brand ↗︎</a>` : ''}</details>
       <div class="detail-links"><button data-share="${id}">Copy scent link <span aria-hidden="true">↗︎</span></button>${p.brand || p.customerPhoto ? '' : '<button data-discovery-link>Explore the OREYN Trio <span aria-hidden="true">↗︎</span></button>'}<button class="detail-view-bag" id="detail-view-bag" data-view-bag hidden>View your bag <span aria-hidden="true">↗︎</span></button></div>
     </div></div>
@@ -274,9 +296,12 @@ function renderBag() {
   const previousTotals = new Map($$('#bag-summary [data-bag-total]').map(el => [el.dataset.bagTotal, { value: el.dataset.value, text: el.querySelector('.bag-total-value').textContent }]));
   $('#bag-summary').oreynTotalAnimations?.forEach(animation => animation.cancel());
   persist('oreyn-cart-v2', cart); const count = cart.reduce((sum, item) => sum + item.quantity, 0); const t = cartTotals();
-  $('#bag-count').textContent = count; $('#drawer-count').textContent = `(${count})`; $('#bag-dialog .bag-bottom').hidden = count === 0; $('#checkout-button').disabled = count === 0;
+  $('#bag-count').textContent = count; $('#drawer-count').textContent = `(${count})`; $('#bag-dialog .bag-bottom').hidden = count === 0;
+  const orderLink = $('#checkout-button');
+  if (count) orderLink.href = whatsappUrl(orderMessage());
+  else orderLink.removeAttribute('href');
   $('#bag-items').innerHTML = cart.map((item, index) => { const p = products[item.id]; return `<div class="bag-row"><div class="bag-thumb ${item.id}">${bottleMarkup(item.id, item.size)}</div><div><h3>${p.name}</h3><small>${sizeText(item.size)} / ${item.id === 'discovery' ? 'THREE FRAGRANCES' : p.brand || (p.customerPhoto ? 'FRAGRANCE' : 'EAU DE PARFUM')}</small><div class="quantity"><button data-quantity="${index}" data-delta="-1" aria-label="Remove one ${p.name}, ${sizeText(item.size)}">−</button><span>${item.quantity}</span><button data-quantity="${index}" data-delta="1" aria-label="Add one ${p.name}, ${sizeText(item.size)}" ${item.quantity >= 99 ? 'disabled' : ''}>+</button><button class="remove-item" data-remove="${index}" aria-label="Remove ${p.name}, ${sizeText(item.size)}, from bag">Remove</button></div></div><span class="price">${productMoney(item.id, p.sizes[item.size] * item.quantity)}</span></div>`; }).join('') || emptyBagMarkup();
-  $('#bag-summary').innerHTML = count ? `<div class="summary-line total"><span>Total (MAD)</span><span class="bag-total-amount" data-bag-total="MAD" data-value="${t.total}"><span class="bag-total-value">${dirham(t.total)}</span></span></div>` : '';
+  $('#bag-summary').innerHTML = count ? `<div class="summary-line total"><span>Products total (MAD)</span><span class="bag-total-amount" data-bag-total="MAD" data-value="${t.total}"><span class="bag-total-value">${dirham(t.total)}</span></span></div>` : '';
   animateBagTotals(previousTotals);
 }
 function animateBagTotals(previousTotals) {
@@ -320,23 +345,15 @@ function scrollToPageSection(selector) {
   }
   if (location.hash) history.replaceState(null, '', `${location.pathname}${location.search}`);
 }
-function openCheckout() {
-  if (!cart.length) return; const t = cartTotals();
-  const summary = `<div class="summary-line total"><span>Total (MAD)</span><span>${dirham(t.total)}</span></div>`;
-  $('#checkout-content').innerHTML = `<p class="checkout-intro">A look at your next chapter. This is a concept-store preview: no order is placed, no payment is taken, and nothing is sent to a server.</p><div class="checkout-lines">${cart.map(item => `<div class="checkout-product"><div>${products[item.id].name}<small>${sizeText(item.size)} · Quantity ${item.quantity}</small></div><span>${productMoney(item.id, products[item.id].sizes[item.size] * item.quantity)}</span></div>`).join('')}${summary}</div><form class="checkout-form" id="preview-form"><label for="preview-name">Make this preview yours (optional first name)</label><input id="preview-name" placeholder="Your first name" autocomplete="off" maxlength="40"><button class="pill dark full-width" type="submit">Finish my preview <span>↗︎</span></button></form>`;
-  openModal('#checkout-dialog');
-  $('#preview-form').addEventListener('submit', event => { event.preventDefault(); const name = $('#preview-name').value.trim(); $('#checkout-content').innerHTML = '<div class="preview-success"><span class="star-mark">✳</span><h3 id="preview-title"></h3><p>Your preview is complete. Your chosen scents are still saved in your bag, ready for your next visit.</p><p>No order has been placed and no personal details have been saved.</p><button class="pill dark" data-continue>Back to your world <span>↗︎</span></button></div>'; $('#preview-title').textContent = name ? `A little more you, ${name}.` : 'A little more you.'; $('#preview-title').tabIndex = -1; $('#preview-title').focus(); });
-}
 function searchProducts() {
   const query = $('#search-input').value.trim().toLowerCase();
   const matches = Object.entries(products).filter(([, p]) => `${p.name} ${p.notes} ${p.keywords} ${p.top || ''} ${p.heart || ''} ${p.base || ''}`.toLowerCase().includes(query));
   $('#search-results').innerHTML = matches.map(([id, p]) => `<button class="search-result" ${id === 'discovery' ? 'data-discovery-link' : `data-product="${id}"`}><div class="${id}">${bottleMarkup(id)}</div><div><strong>${p.name}</strong><small>${p.notes}</small></div><span>↗︎</span></button>`).join('') || '<p class="search-empty">No fragrance found. Try a name such as Sauvage, Amouage, or Tom Ford.</p>';
 }
 const info = {
-  shipping: { title: 'The finer details.', paragraphs: ['OREYN is preparing to launch. Explore the fragrances and build your bag; orders and shipments are not available yet.', 'Delivery fees, delivery times, and return conditions will be confirmed before orders open.'] },
-  privacy: { title: 'Your space. Your privacy.', paragraphs: ['This concept site stores your bag and saved fragrances in your browser using localStorage so they can remain available when you return. You can remove individual items or clear the site’s browser data at any time.', 'Search stays in this page. The optional name in the order preview is not stored or sent to a server. No newsletter signup is available.', 'Google Fonts supplies the site’s typography and may receive standard connection information such as your IP address. No analytics or advertising scripts have been added.'] },
-  terms: { title: 'A note on this experience.', paragraphs: ['Oreyn is an original perfume-store concept. The fragrance compositions, prices, product imagery, and editorial content illustrate a proposed brand experience.', 'Adding items to your bag or completing an order preview does not create an order or a contract. No payment details are requested and no payments are processed.', 'Final product specifications, ingredients, pricing, availability, and sale terms will need to be confirmed before a commercial launch.'] },
-  contact: { title: 'Stay in our orbit.', paragraphs: ['The Oreyn world is taking shape. A dedicated customer-care address will be added when the store launches.', 'In the meantime, explore the collection. We hope you find a little moment that feels like you.'] }
+  shipping: { title: 'Delivery & returns.', paragraphs: ['Place your order through WhatsApp. We will confirm availability, delivery fees, delivery times and payment details with you.', 'Ask us about the return conditions on WhatsApp before confirming your order.'] },
+  privacy: { title: 'Your space. Your privacy.', paragraphs: ['This concept site stores your bag and saved fragrances in your browser using localStorage so they can remain available when you return. You can remove individual items or clear the site’s browser data at any time.', 'Search stays in this page. The WhatsApp order link prepares a message containing your selected products, quantities and product total. You can review and send it in WhatsApp.', 'Google Fonts supplies the site’s typography and may receive standard connection information such as your IP address. No analytics or advertising scripts have been added.'] },
+  terms: { title: 'Ordering with OREYN.', paragraphs: ['Our individual fragrances are offered in 30 ml bottles at 45 DH each. The OREYN Trio is 129 DH.', 'Send your bag through WhatsApp to request an order. We will confirm product availability, delivery, payment details and the final total with you.', 'Delivery fees and return conditions are confirmed on WhatsApp before you finalize your order.'] }
 };
 function openInfo(id) { const content = info[id]; if (!content) return; $('#editorial-content').innerHTML = `<span class="eyebrow">OREYN / THE DETAILS</span><h2>${content.title}</h2>${content.paragraphs.map(p => `<p>${p}</p>`).join('')}`; openModal('#editorial-dialog'); }
 async function swapHeroPhoto(photo, image) {
@@ -501,7 +518,6 @@ document.addEventListener('change', event => {
 });
 $('#open-bag').addEventListener('click', () => { renderBag(); openModal('#bag-dialog'); });
 $('#continue-shopping').addEventListener('click', continueShopping);
-$('#checkout-button').addEventListener('click', openCheckout);
 $('#hero-details').addEventListener('click', () => openProduct(heroId));
 $('#search-input').addEventListener('input', searchProducts);
 $('#menu-toggle').addEventListener('click', () => { if ($('#mobile-nav').hidden) openMenu(); else closeMenu(true); });

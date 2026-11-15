@@ -46,6 +46,7 @@ test('supplied stock photos retain confirmed names and prices without invented v
  assert.doesNotMatch(source,/stopScentPhotoMotion|tiltScentPhoto|card-glint|card-colour/);
  for(const [id,name] of [['stock-sauvage','Sauvage'],['stock-acqua-di-gio','Acqua di Giò'],['stock-you','You'],['stock-black-afgano','Black Afgano'],['stock-photo-5','Black Afgano'],['stock-photo-6','Amouage'],['stock-photo-7','Tom Ford']]){
   const product=c.catalogue[id];assert.equal(product.name,name);assert.equal(product.customerPhoto,true);assert.equal(product.family,'unspecified');assert.equal(product.sizes.unit,45);
+  assert.match(product.description,/30 ml bottle/);assert.doesNotMatch(product.description,/confirm the volume/);
   assert.notEqual(product.namePending,true);assert.doesNotMatch(product.notes,/Name to confirm/);
   assert.deepEqual(Object.keys(product.sizes),['unit']);assert.equal(product.top,undefined);assert.equal(product.heart,undefined);assert.equal(product.base,undefined);assert.equal(product.source,undefined);
   assert.ok(fs.existsSync(path.join(__dirname,'..',c.images[id].src)));assert.match(c.images[id].src,/-cutout\.webp$/);assert.equal(c.images[id].width,1200);assert.equal(c.images[id].height,1600);
@@ -57,7 +58,7 @@ test('all fragrances cost 45 MAD, with quantity-aware totals and the 129 DH trio
  vm.runInContext(source.slice(source.indexOf('const products ='),source.indexOf('function readStored')),c);
  vm.runInContext(source.slice(source.indexOf('function cartTotals()'),source.indexOf('function addToCart(')),c);
  vm.runInContext("globalThis.catalogue = products; globalThis.images = productImages; globalThis.total = cartTotals(); globalThis.volume = sizeText('unit');",c);
- assert.equal(c.total.total,135);assert.equal(c.total.subtotal,135);assert.equal(c.volume,'Size to confirm');
+ assert.equal(c.total.total,135);assert.equal(c.total.subtotal,135);assert.equal(c.volume,'30 ml');
  for(const [id,product] of Object.entries(c.catalogue)){assert.equal(product.currency,'MAD');for(const price of Object.values(product.sizes))assert.equal(price,id==='discovery'?129:45);}
  for(const id of ['stock-sauvage','stock-photo-7','stock-you']){assert.equal(c.catalogue[id].currency,'MAD');assert.deepEqual(Object.keys(c.catalogue[id].sizes),['unit']);assert.equal(c.catalogue[id].sizes.unit,45);assert.ok(fs.existsSync(path.join(__dirname,'..',c.images[id].src)));}
  c.cart.push({id:'discovery',size:'set',quantity:1},{id:'stock-photo-5',size:'unit',quantity:1},{id:'stock-photo-6',size:'unit',quantity:2});vm.runInContext('globalThis.total = cartTotals();',c);assert.equal(c.total.total,399);assert.equal(c.total.subtotal,399);
