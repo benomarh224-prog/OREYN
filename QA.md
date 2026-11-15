@@ -1,5 +1,11 @@
 # Oreyn validation
 
+## Owner-confirmed bottle names — 15 November 2026
+
+- Updated photo 5 (large rectangular dark bottle) to Black Afgano and photo 7 (clear faceted bottle) to Tom Ford, as specified by the owner. Removed their name-pending messaging, updated alt text/descriptions and Arabic/English search terms, and retained the same product IDs so existing bag/favorite/link data continues to work. No specific Tom Ford variant or scent notes were inferred; photo 6 remains explicitly unnamed. Prices remain 45 DH each and the Trio remains 129 DH.
+- Stock-photo bag rows use the neutral “FRAGRANCE” label instead of an unconfirmed concentration. Existing catalogue images and transparent bottle assets are unchanged.
+- Syntax, build, all 26 tests and whitespace checks passed; the existing catalogue regression now covers both confirmed name/photo mappings and the one remaining pending name.
+
 ## Complete seven-bottle photo set — 15 November 2026
 
 - Completed built-in imagegen background extraction for supplied photos 5, 6 and 7, retaining the rectangular dark bottle/black cap, rectangular blue bottle/blue cap, and faceted clear bottle/black-and-gold neck. The extraction prompt removes only the office surroundings, keeps each whole bottle and its visible design, and requires transparent alpha with no added labels, scenery or shadow. Generated sources remain under the default Codex generated_images folder. Final project assets: `assets/stock-photo-5-cutout.webp`, `assets/stock-photo-6-cutout.webp`, `assets/stock-photo-7-cutout.webp` (1200 × 1600, 200–282 KB). Together with the four previous cutouts, all seven supplied bottles are now represented in the same carousel.
