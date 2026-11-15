@@ -21,10 +21,10 @@ test('filters, empty Saved, favorites and bag quantities preserve product action
  vm.runInContext(source.slice(source.indexOf('const products ='),source.indexOf('function readStored')),c);
  vm.runInContext(source.slice(source.indexOf('function stopFilterTransition()'),source.indexOf('function openProduct(')),c);
  vm.runInContext(source.slice(source.indexOf('function addToCart('),source.indexOf('function renderBag(')),c);
- c.renderProducts();assert.equal((nodes['#product-grid'].innerHTML.match(/data-card=/g)||[]).length,10);
- assert.equal(nodes['.filters [data-filter="all"] span'].textContent,'10');
- for(const [family,count] of [['fresh',1],['woody',3],['floral',1],['soft',1],['45dh',10]]){c.filter=family;c.renderProducts();assert.equal((nodes['#product-grid'].innerHTML.match(/data-card=/g)||[]).length,count);assert.equal(filters.find(f=>f.dataset.filter===family)['aria-pressed'],true);assert.equal(nodes['#mobile-scent-filter'].value,family);}
- assert.equal((nodes['#product-grid'].innerHTML.match(/45 DH/g)||[]).length,10);
+ c.renderProducts();assert.equal((nodes['#product-grid'].innerHTML.match(/data-card=/g)||[]).length,13);
+ assert.equal(nodes['.filters [data-filter="all"] span'].textContent,'13');
+ for(const [family,count] of [['fresh',1],['woody',3],['floral',1],['soft',1],['45dh',13]]){c.filter=family;c.renderProducts();assert.equal((nodes['#product-grid'].innerHTML.match(/data-card=/g)||[]).length,count);assert.equal(filters.find(f=>f.dataset.filter===family)['aria-pressed'],true);assert.equal(nodes['#mobile-scent-filter'].value,family);}
+ assert.equal((nodes['#product-grid'].innerHTML.match(/45 DH/g)||[]).length,13);
  assert.doesNotMatch(nodes['#product-grid'].innerHTML,/€|undefined|NaN/);
  c.filter='saved';c.renderProducts();assert.match(nodes['#product-grid'].innerHTML,/empty-state/);
  c.toggleSave('after');assert.match(nodes['#product-grid'].innerHTML,/data-card="after"/);assert.equal(nodes['#saved-count'].textContent,1);
@@ -45,6 +45,16 @@ test('supplied stock photos retain confirmed names and prices without invented v
   const product=c.catalogue[id];assert.equal(product.name,name);assert.equal(product.customerPhoto,true);assert.equal(product.family,'unspecified');assert.equal(product.sizes.unit,45);
   assert.deepEqual(Object.keys(product.sizes),['unit']);assert.equal(product.top,undefined);assert.equal(product.heart,undefined);assert.equal(product.base,undefined);assert.equal(product.source,undefined);
   assert.ok(fs.existsSync(path.join(__dirname,'..',c.images[id].src)));assert.match(c.images[id].src,/-cutout\.webp$/);assert.equal(c.images[id].width,1200);assert.equal(c.images[id].height,1600);
+ }
+});
+
+test('remaining supplied bottles are shown with honest pending names and real photo assets',()=>{
+ const c={};vm.createContext(c);
+ vm.runInContext(source.slice(source.indexOf('const products ='),source.indexOf('function readStored')),c);
+ vm.runInContext('globalThis.catalogue=products;globalThis.images=productImages;',c);
+ for(const number of [5,6,7]){
+  const id=`stock-photo-${number}`,product=c.catalogue[id];assert.equal(product.namePending,true);assert.equal(product.customerPhoto,true);assert.equal(product.family,'unspecified');assert.equal(product.sizes.unit,45);assert.match(product.notes,/Name to confirm/);assert.equal(product.brand,undefined);assert.equal(product.top,undefined);assert.equal(product.source,undefined);
+  assert.ok(fs.existsSync(path.join(__dirname,'..',c.images[id].src)));assert.match(c.images[id].src,/-cutout\.webp$/);
  }
 });
 

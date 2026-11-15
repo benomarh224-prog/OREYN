@@ -673,6 +673,9 @@ dialog { border-radius: 17px; }
 .product-card.stock-acqua-di-gio { --card-tint: #acc3a775; --card-accent: #445b43; }
 .product-card.stock-you { --card-tint: #dba5a560; --card-accent: #733b3d; }
 .product-card.stock-black-afgano { --card-tint: #b6b7a960; --card-accent: #41443b; }
+.product-card.stock-photo-5 { --card-tint: #b2bba570; --card-accent: #41443b; }
+.product-card.stock-photo-6 { --card-tint: #789fce70; --card-accent: #29435e; }
+.product-card.stock-photo-7 { --card-tint: #dbc59050; --card-accent: #5d4c2a; }
 .product-card.le-male, .detail-art.le-male { --card-accent: #655025; --card-line: #bba77450; --card-tint: #d9c48770; }
 .product-card.sauvage-elixir, .detail-art.sauvage-elixir { --card-accent: #29435e; --card-line: #8aa0b750; --card-tint: #a7bfd270; }
 .product-card.libre-le-parfum, .detail-art.libre-le-parfum { --card-accent: #715036; --card-line: #c2a58950; --card-tint: #dfb78c70; }
