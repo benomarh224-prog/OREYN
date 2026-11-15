@@ -669,6 +669,10 @@ dialog { border-radius: 17px; }
 .product-card.solar { --card-tint: #dbc59070; --card-accent: #5d4c2a; }
 .product-card.after { --card-tint: #b6a2d375; --card-accent: #514666; }
 .product-card.soft { --card-tint: #acc3a775; --card-accent: #445b43; }
+.product-card.stock-sauvage { --card-tint: #789fce70; --card-accent: #29435e; }
+.product-card.stock-acqua-di-gio { --card-tint: #acc3a775; --card-accent: #445b43; }
+.product-card.stock-you { --card-tint: #dba5a560; --card-accent: #733b3d; }
+.product-card.stock-black-afgano { --card-tint: #b6b7a960; --card-accent: #41443b; }
 .product-card.le-male, .detail-art.le-male { --card-accent: #655025; --card-line: #bba77450; --card-tint: #d9c48770; }
 .product-card.sauvage-elixir, .detail-art.sauvage-elixir { --card-accent: #29435e; --card-line: #8aa0b750; --card-tint: #a7bfd270; }
 .product-card.libre-le-parfum, .detail-art.libre-le-parfum { --card-accent: #715036; --card-line: #c2a58950; --card-tint: #dfb78c70; }
@@ -688,6 +692,12 @@ dialog { border-radius: 17px; }
 .card-glint { position: absolute; inset: 0; z-index: 1; background: linear-gradient(110deg, transparent 38%, #fff0 42%, #ffffff50 49%, #fff0 56%, transparent 60%); opacity: 0; pointer-events: none; }
 .card-photo .original-product-photo { position: relative; min-height: 0; width: 100%; height: 100%; object-fit: contain; padding: 8px; }
 .product-card:not(.brand-card) .card-photo .original-product-photo { width: 100%; height: 120%; max-width: none; padding: 0; object-fit: contain; }
+.card-photo:has(.customer-product-photo) { aspect-ratio: 1; }
+.card-bottle:has(.customer-product-photo) { mix-blend-mode: normal; border-radius: inherit; overflow: hidden; }
+.product-card .card-photo .customer-product-photo { width: 100%; height: 100%; padding: 0; object-fit: cover; object-position: center bottom; }
+.card-photo:has(.customer-product-photo) .card-photo-code { padding: 3px 5px; border-radius: 4px; background: #f7f5eced; }
+.detail-image-button:has(.customer-product-photo):before { display: none; }
+.detail-image-button .customer-product-photo, .compare-photo .customer-product-photo { mix-blend-mode: normal; }
 .card-photo-code { position: absolute; left: 6px; bottom: 10px; font-size: 8px; letter-spacing: 1.3px; color: var(--card-accent); pointer-events: none; }
 .card-photo-arrow { position: absolute; z-index: 2; bottom: 10px; right: 6px; width: 32px; height: 32px; padding: 8px; border-radius: 50%; background: #ffffffa8; border: 1px solid #fff; }
 .motion-paused .card-bottle { transform: none; transition: none; }

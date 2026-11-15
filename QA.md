@@ -1,5 +1,12 @@
 # Oreyn validation
 
+## Supplied stock photographs — 15 November 2026
+
+- Added the four unambiguous photo/name mappings provided by the owner: small blue bottle → Sauvage, green → Acqua di Giò, red → You, black/gold cap → Black Afgano. These are separate catalogue entries, so the existing Sauvage Elixir and other products remain intact. All use the previously requested 45 DH perfume price; the Trio remains 129 DH. Photos 5–7 remain pending the owner's exact name mapping and are not published under guessed names.
+- Exported complete supplied photos to 1200 × 1600 WebP files (233–284 KB), preserving bottle appearance and the original scene. Card framing uses CSS; larger-photo views retain the complete source composition. Kept the existing glass card style and interactions. Offered sizes, fragrance families and notes were not supplied: volume remains explicitly unconfirmed, new families are unspecified, and no scent profile or external brand-source claim is invented. Comparison shows “To confirm” for missing notes.
+- Chromium at 320, 375, 390, 430, 768 and 1440 px: no horizontal page overflow or price/button collision. Visually inspected all four cards and the built-page desktop/tablet/mobile fold and page screenshots; every photographed bottle is complete in its card. Verified all four details dialogs, favorite states, 4-item bag totaling 180 DH, 10-result All/45 DH filters, existing family filters, both arrows, Arabic search, comparison and reduced motion. No runtime errors or failed image requests. These checks used browser emulation, not a physical phone.
+- Syntax/build, whitespace checks and all 25 tests passed, including a regression for confirmed name/photo/price mappings and missing notes/volumes. The design inspector ran on the production build: no page overflow or broken images at its three widths. Its full-page house-style gate still flags existing user-requested glass/gradients, small labels, carousel, numbering and existing page typography/motion; this catalogue addition does not redesign those unrelated sections. No claim of a passing full-page style gate is made.
+
 ## Compact glass perfume cards — 12 October 2026
 
 - Replaced the solid/gradient card skins with translucent cream surfaces, restrained fragrance-specific pastel lighting, fine bright edges and soft shadows. Original product photography remains unchanged. Added a small decorative catalogue number and subtle floor shadow; existing swipe transitions, palette changes, light sweeps and desktop tilt remain intact.
