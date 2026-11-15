@@ -1,5 +1,10 @@
 # Oreyn validation
 
+## Owner-confirmed Amouage name — 15 November 2026
+
+- Renamed photo 6 (large rectangular blue bottle) to Amouage as specified by the owner. Updated image alt text, description and Arabic/English search terms, and removed the last name-pending message. All seven supplied bottles now have owner-provided names. No specific Amouage variant, scent notes, volume or official source was inferred. The existing ID, transparent image and 45 DH price remain unchanged, preserving saved/bag data.
+- Consolidated this confirmed mapping into the existing seven-photo catalogue regression and removed the obsolete pending-name test. Syntax, build, all 25 tests and whitespace checks passed.
+
 ## Owner-confirmed bottle names — 15 November 2026
 
 - Updated photo 5 (large rectangular dark bottle) to Black Afgano and photo 7 (clear faceted bottle) to Tom Ford, as specified by the owner. Removed their name-pending messaging, updated alt text/descriptions and Arabic/English search terms, and retained the same product IDs so existing bag/favorite/link data continues to work. No specific Tom Ford variant or scent notes were inferred; photo 6 remains explicitly unnamed. Prices remain 45 DH each and the Trio remains 129 DH.
